@@ -2,14 +2,6 @@
 using System;
 namespace HeatManagement;
 
-class Debug
-{
-    public static string UnitTestTest()
-    {
-        return "test";
-    }
-}
-
 class Program
 {
     // Initialization code. Don't use any Avalonia, third-party APIs or any
