@@ -35,5 +35,5 @@ jobs:
       working-directory: HeatManagement/
       
     - name: Run HeatManagement.tests
-      run: dotnet test --verbosity normal
+      run: dotnet test --no-restore
       working-directory: HeatManagement.tests/
