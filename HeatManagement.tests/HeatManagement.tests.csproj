@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HeatManagement\HeatManagement.csproj" />
+    <ProjectReference Include="../HeatManagement/HeatManagement.csproj" />
   </ItemGroup>
 
 </Project>
