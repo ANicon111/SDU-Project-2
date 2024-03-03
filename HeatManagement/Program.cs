@@ -1,6 +1,6 @@
-﻿using Avalonia;
+﻿namespace HeatManagement;
+using Avalonia;
 using System;
-namespace HeatManagement;
 
 class Program
 {

@@ -1,0 +1,2292 @@
+[
+    {
+        "StartTime": "2023-07-08T00:00:00",
+        "EndTime": "2023-07-08T01:00:00",
+        "Cost": 895,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 384.85,
+        "AdditionalResources": {
+            "gas": 1.9690000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.79
+        }
+    },
+    {
+        "StartTime": "2023-07-08T01:00:00",
+        "EndTime": "2023-07-08T02:00:00",
+        "Cost": 925,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 397.75,
+        "AdditionalResources": {
+            "gas": 2.035
+        },
+        "AssetUsage": {
+            "GB": 1.85
+        }
+    },
+    {
+        "StartTime": "2023-07-08T02:00:00",
+        "EndTime": "2023-07-08T03:00:00",
+        "Cost": 880,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 378.4,
+        "AdditionalResources": {
+            "gas": 1.9360000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.76
+        }
+    },
+    {
+        "StartTime": "2023-07-08T03:00:00",
+        "EndTime": "2023-07-08T04:00:00",
+        "Cost": 835,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 359.05,
+        "AdditionalResources": {
+            "gas": 1.837
+        },
+        "AssetUsage": {
+            "GB": 1.67
+        }
+    },
+    {
+        "StartTime": "2023-07-08T04:00:00",
+        "EndTime": "2023-07-08T05:00:00",
+        "Cost": 865,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 371.95,
+        "AdditionalResources": {
+            "gas": 1.903
+        },
+        "AssetUsage": {
+            "GB": 1.73
+        }
+    },
+    {
+        "StartTime": "2023-07-08T05:00:00",
+        "EndTime": "2023-07-08T06:00:00",
+        "Cost": 895,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 384.85,
+        "AdditionalResources": {
+            "gas": 1.9690000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.79
+        }
+    },
+    {
+        "StartTime": "2023-07-08T06:00:00",
+        "EndTime": "2023-07-08T07:00:00",
+        "Cost": 910,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 391.3,
+        "AdditionalResources": {
+            "gas": 2.0020000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.82
+        }
+    },
+    {
+        "StartTime": "2023-07-08T07:00:00",
+        "EndTime": "2023-07-08T08:00:00",
+        "Cost": 905,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 389.15000000000003,
+        "AdditionalResources": {
+            "gas": 1.9910000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.81
+        }
+    },
+    {
+        "StartTime": "2023-07-08T08:00:00",
+        "EndTime": "2023-07-08T09:00:00",
+        "Cost": 920,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 395.6,
+        "AdditionalResources": {
+            "gas": 2.0240000000000005
+        },
+        "AssetUsage": {
+            "GB": 1.84
+        }
+    },
+    {
+        "StartTime": "2023-07-08T09:00:00",
+        "EndTime": "2023-07-08T10:00:00",
+        "Cost": 940,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 404.2,
+        "AdditionalResources": {
+            "gas": 2.068
+        },
+        "AssetUsage": {
+            "GB": 1.88
+        }
+    },
+    {
+        "StartTime": "2023-07-08T10:00:00",
+        "EndTime": "2023-07-08T11:00:00",
+        "Cost": 1000,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 430,
+        "AdditionalResources": {
+            "gas": 2.2
+        },
+        "AssetUsage": {
+            "GB": 2
+        }
+    },
+    {
+        "StartTime": "2023-07-08T11:00:00",
+        "EndTime": "2023-07-08T12:00:00",
+        "Cost": 739.164,
+        "ElectricityUsage": -1.86,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.86
+        }
+    },
+    {
+        "StartTime": "2023-07-08T12:00:00",
+        "EndTime": "2023-07-08T13:00:00",
+        "Cost": 559.187,
+        "ElectricityUsage": -1.78,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.78
+        }
+    },
+    {
+        "StartTime": "2023-07-08T13:00:00",
+        "EndTime": "2023-07-08T14:00:00",
+        "Cost": 280.52799999999996,
+        "ElectricityUsage": -1.6,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.6
+        }
+    },
+    {
+        "StartTime": "2023-07-08T14:00:00",
+        "EndTime": "2023-07-08T15:00:00",
+        "Cost": 275.50360000000006,
+        "ElectricityUsage": -1.57,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.57
+        }
+    },
+    {
+        "StartTime": "2023-07-08T15:00:00",
+        "EndTime": "2023-07-08T16:00:00",
+        "Cost": 542.5,
+        "ElectricityUsage": -1.55,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-08T16:00:00",
+        "EndTime": "2023-07-08T17:00:00",
+        "Cost": 785,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 337.55,
+        "AdditionalResources": {
+            "gas": 1.7270000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.57
+        }
+    },
+    {
+        "StartTime": "2023-07-08T17:00:00",
+        "EndTime": "2023-07-08T18:00:00",
+        "Cost": 765,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 328.95,
+        "AdditionalResources": {
+            "gas": 1.6830000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.53
+        }
+    },
+    {
+        "StartTime": "2023-07-08T18:00:00",
+        "EndTime": "2023-07-08T19:00:00",
+        "Cost": 754.5849999999998,
+        "ElectricityUsage": 1.1400000000000001,
+        "UncoveredUsage": 0,
+        "CO2": 972.8,
+        "AdditionalResources": {
+            "gas": 2.888
+        },
+        "AssetUsage": {
+            "GM": 1.52
+        }
+    },
+    {
+        "StartTime": "2023-07-08T19:00:00",
+        "EndTime": "2023-07-08T20:00:00",
+        "Cost": 629.0625,
+        "ElectricityUsage": 1.125,
+        "UncoveredUsage": 0,
+        "CO2": 960,
+        "AdditionalResources": {
+            "gas": 2.8499999999999996
+        },
+        "AssetUsage": {
+            "GM": 1.5
+        }
+    },
+    {
+        "StartTime": "2023-07-08T20:00:00",
+        "EndTime": "2023-07-08T21:00:00",
+        "Cost": 563.5874999999999,
+        "ElectricityUsage": 1.125,
+        "UncoveredUsage": 0,
+        "CO2": 960,
+        "AdditionalResources": {
+            "gas": 2.8499999999999996
+        },
+        "AssetUsage": {
+            "GM": 1.5
+        }
+    },
+    {
+        "StartTime": "2023-07-08T21:00:00",
+        "EndTime": "2023-07-08T22:00:00",
+        "Cost": 521.9404999999998,
+        "ElectricityUsage": 1.1099999999999999,
+        "UncoveredUsage": 0,
+        "CO2": 947.2,
+        "AdditionalResources": {
+            "gas": 2.812
+        },
+        "AssetUsage": {
+            "GM": 1.48
+        }
+    },
+    {
+        "StartTime": "2023-07-08T22:00:00",
+        "EndTime": "2023-07-08T23:00:00",
+        "Cost": 559.1907500000001,
+        "ElectricityUsage": 1.1325,
+        "UncoveredUsage": 0,
+        "CO2": 966.4,
+        "AdditionalResources": {
+            "gas": 2.8689999999999998
+        },
+        "AssetUsage": {
+            "GM": 1.51
+        }
+    },
+    {
+        "StartTime": "2023-07-08T23:00:00",
+        "EndTime": "2023-07-09T00:00:00",
+        "Cost": 694.3224999999999,
+        "ElectricityUsage": 1.1625,
+        "UncoveredUsage": 0,
+        "CO2": 992,
+        "AdditionalResources": {
+            "gas": 2.945
+        },
+        "AssetUsage": {
+            "GM": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-09T00:00:00",
+        "EndTime": "2023-07-09T01:00:00",
+        "Cost": 745.9760000000001,
+        "ElectricityUsage": 1.155,
+        "UncoveredUsage": 0,
+        "CO2": 985.6,
+        "AdditionalResources": {
+            "gas": 2.9259999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.54
+        }
+    },
+    {
+        "StartTime": "2023-07-09T01:00:00",
+        "EndTime": "2023-07-09T02:00:00",
+        "Cost": 735,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 316.05,
+        "AdditionalResources": {
+            "gas": 1.617
+        },
+        "AssetUsage": {
+            "GB": 1.47
+        }
+    },
+    {
+        "StartTime": "2023-07-09T02:00:00",
+        "EndTime": "2023-07-09T03:00:00",
+        "Cost": 705,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 303.15,
+        "AdditionalResources": {
+            "gas": 1.551
+        },
+        "AssetUsage": {
+            "GB": 1.41
+        }
+    },
+    {
+        "StartTime": "2023-07-09T03:00:00",
+        "EndTime": "2023-07-09T04:00:00",
+        "Cost": 715,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 307.45,
+        "AdditionalResources": {
+            "gas": 1.573
+        },
+        "AssetUsage": {
+            "GB": 1.43
+        }
+    },
+    {
+        "StartTime": "2023-07-09T04:00:00",
+        "EndTime": "2023-07-09T05:00:00",
+        "Cost": 715,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 307.45,
+        "AdditionalResources": {
+            "gas": 1.573
+        },
+        "AssetUsage": {
+            "GB": 1.43
+        }
+    },
+    {
+        "StartTime": "2023-07-09T05:00:00",
+        "EndTime": "2023-07-09T06:00:00",
+        "Cost": 725,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 311.75,
+        "AdditionalResources": {
+            "gas": 1.595
+        },
+        "AssetUsage": {
+            "GB": 1.45
+        }
+    },
+    {
+        "StartTime": "2023-07-09T06:00:00",
+        "EndTime": "2023-07-09T07:00:00",
+        "Cost": 735,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 316.05,
+        "AdditionalResources": {
+            "gas": 1.617
+        },
+        "AssetUsage": {
+            "GB": 1.47
+        }
+    },
+    {
+        "StartTime": "2023-07-09T07:00:00",
+        "EndTime": "2023-07-09T08:00:00",
+        "Cost": 750,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 322.5,
+        "AdditionalResources": {
+            "gas": 1.6500000000000001
+        },
+        "AssetUsage": {
+            "GB": 1.5
+        }
+    },
+    {
+        "StartTime": "2023-07-09T08:00:00",
+        "EndTime": "2023-07-09T09:00:00",
+        "Cost": 810,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 348.3,
+        "AdditionalResources": {
+            "gas": 1.7820000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-09T09:00:00",
+        "EndTime": "2023-07-09T10:00:00",
+        "Cost": 850,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 365.5,
+        "AdditionalResources": {
+            "gas": 1.87
+        },
+        "AssetUsage": {
+            "GB": 1.7
+        }
+    },
+    {
+        "StartTime": "2023-07-09T10:00:00",
+        "EndTime": "2023-07-09T11:00:00",
+        "Cost": 870,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 374.1,
+        "AdditionalResources": {
+            "gas": 1.9140000000000001
+        },
+        "AssetUsage": {
+            "GB": 1.74
+        }
+    },
+    {
+        "StartTime": "2023-07-09T11:00:00",
+        "EndTime": "2023-07-09T12:00:00",
+        "Cost": 715.512,
+        "ElectricityUsage": -1.68,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.68
+        }
+    },
+    {
+        "StartTime": "2023-07-09T12:00:00",
+        "EndTime": "2023-07-09T13:00:00",
+        "Cost": 620.4344,
+        "ElectricityUsage": -1.58,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.58
+        }
+    },
+    {
+        "StartTime": "2023-07-09T13:00:00",
+        "EndTime": "2023-07-09T14:00:00",
+        "Cost": 474.7735,
+        "ElectricityUsage": -1.45,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.45
+        }
+    },
+    {
+        "StartTime": "2023-07-09T14:00:00",
+        "EndTime": "2023-07-09T15:00:00",
+        "Cost": 552.5233999999999,
+        "ElectricityUsage": -1.43,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.43
+        }
+    },
+    {
+        "StartTime": "2023-07-09T15:00:00",
+        "EndTime": "2023-07-09T16:00:00",
+        "Cost": 658.3546,
+        "ElectricityUsage": -1.42,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.42
+        }
+    },
+    {
+        "StartTime": "2023-07-09T16:00:00",
+        "EndTime": "2023-07-09T17:00:00",
+        "Cost": 735,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 316.05,
+        "AdditionalResources": {
+            "gas": 1.617
+        },
+        "AssetUsage": {
+            "GB": 1.47
+        }
+    },
+    {
+        "StartTime": "2023-07-09T17:00:00",
+        "EndTime": "2023-07-09T18:00:00",
+        "Cost": 730,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 313.9,
+        "AdditionalResources": {
+            "gas": 1.606
+        },
+        "AssetUsage": {
+            "GB": 1.46
+        }
+    },
+    {
+        "StartTime": "2023-07-09T18:00:00",
+        "EndTime": "2023-07-09T19:00:00",
+        "Cost": 750,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 322.5,
+        "AdditionalResources": {
+            "gas": 1.6500000000000001
+        },
+        "AssetUsage": {
+            "GB": 1.5
+        }
+    },
+    {
+        "StartTime": "2023-07-09T19:00:00",
+        "EndTime": "2023-07-09T20:00:00",
+        "Cost": 618.8474999999999,
+        "ElectricityUsage": 1.125,
+        "UncoveredUsage": 0,
+        "CO2": 960,
+        "AdditionalResources": {
+            "gas": 2.8499999999999996
+        },
+        "AssetUsage": {
+            "GM": 1.5
+        }
+    },
+    {
+        "StartTime": "2023-07-09T20:00:00",
+        "EndTime": "2023-07-09T21:00:00",
+        "Cost": 514.8,
+        "ElectricityUsage": 1.08,
+        "UncoveredUsage": 0,
+        "CO2": 921.5999999999999,
+        "AdditionalResources": {
+            "gas": 2.7359999999999998
+        },
+        "AssetUsage": {
+            "GM": 1.44
+        }
+    },
+    {
+        "StartTime": "2023-07-09T21:00:00",
+        "EndTime": "2023-07-09T22:00:00",
+        "Cost": 501.246875,
+        "ElectricityUsage": 1.0875,
+        "UncoveredUsage": 0,
+        "CO2": 928,
+        "AdditionalResources": {
+            "gas": 2.755
+        },
+        "AssetUsage": {
+            "GM": 1.45
+        }
+    },
+    {
+        "StartTime": "2023-07-09T22:00:00",
+        "EndTime": "2023-07-09T23:00:00",
+        "Cost": 513.8279999999999,
+        "ElectricityUsage": 1.08,
+        "UncoveredUsage": 0,
+        "CO2": 921.5999999999999,
+        "AdditionalResources": {
+            "gas": 2.7359999999999998
+        },
+        "AssetUsage": {
+            "GM": 1.44
+        }
+    },
+    {
+        "StartTime": "2023-07-09T23:00:00",
+        "EndTime": "2023-07-10T00:00:00",
+        "Cost": 628.0575,
+        "ElectricityUsage": 1.1025,
+        "UncoveredUsage": 0,
+        "CO2": 940.8,
+        "AdditionalResources": {
+            "gas": 2.7929999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.47
+        }
+    },
+    {
+        "StartTime": "2023-07-10T00:00:00",
+        "EndTime": "2023-07-10T01:00:00",
+        "Cost": 654.136,
+        "ElectricityUsage": 1.0499999999999998,
+        "UncoveredUsage": 0,
+        "CO2": 896,
+        "AdditionalResources": {
+            "gas": 2.6599999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.4
+        }
+    },
+    {
+        "StartTime": "2023-07-10T01:00:00",
+        "EndTime": "2023-07-10T02:00:00",
+        "Cost": 660,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 283.8,
+        "AdditionalResources": {
+            "gas": 1.4520000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.32
+        }
+    },
+    {
+        "StartTime": "2023-07-10T02:00:00",
+        "EndTime": "2023-07-10T03:00:00",
+        "Cost": 640,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 275.2,
+        "AdditionalResources": {
+            "gas": 1.4080000000000001
+        },
+        "AssetUsage": {
+            "GB": 1.28
+        }
+    },
+    {
+        "StartTime": "2023-07-10T03:00:00",
+        "EndTime": "2023-07-10T04:00:00",
+        "Cost": 665,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 285.95,
+        "AdditionalResources": {
+            "gas": 1.4630000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.33
+        }
+    },
+    {
+        "StartTime": "2023-07-10T04:00:00",
+        "EndTime": "2023-07-10T05:00:00",
+        "Cost": 675,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 290.25,
+        "AdditionalResources": {
+            "gas": 1.4850000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.35
+        }
+    },
+    {
+        "StartTime": "2023-07-10T05:00:00",
+        "EndTime": "2023-07-10T06:00:00",
+        "Cost": 675,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 290.25,
+        "AdditionalResources": {
+            "gas": 1.4850000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.35
+        }
+    },
+    {
+        "StartTime": "2023-07-10T06:00:00",
+        "EndTime": "2023-07-10T07:00:00",
+        "Cost": 590.15555,
+        "ElectricityUsage": 1.065,
+        "UncoveredUsage": 0,
+        "CO2": 908.8,
+        "AdditionalResources": {
+            "gas": 2.698
+        },
+        "AssetUsage": {
+            "GM": 1.42
+        }
+    },
+    {
+        "StartTime": "2023-07-10T07:00:00",
+        "EndTime": "2023-07-10T08:00:00",
+        "Cost": 526.137625,
+        "ElectricityUsage": 1.1175,
+        "UncoveredUsage": 0,
+        "CO2": 953.6,
+        "AdditionalResources": {
+            "gas": 2.831
+        },
+        "AssetUsage": {
+            "GM": 1.49
+        }
+    },
+    {
+        "StartTime": "2023-07-10T08:00:00",
+        "EndTime": "2023-07-10T09:00:00",
+        "Cost": 534.327625,
+        "ElectricityUsage": 1.1625,
+        "UncoveredUsage": 0,
+        "CO2": 992,
+        "AdditionalResources": {
+            "gas": 2.945
+        },
+        "AssetUsage": {
+            "GM": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-10T09:00:00",
+        "EndTime": "2023-07-10T10:00:00",
+        "Cost": 689.7134499999999,
+        "ElectricityUsage": 1.185,
+        "UncoveredUsage": 0,
+        "CO2": 1011.2,
+        "AdditionalResources": {
+            "gas": 3.002
+        },
+        "AssetUsage": {
+            "GM": 1.58
+        }
+    },
+    {
+        "StartTime": "2023-07-10T10:00:00",
+        "EndTime": "2023-07-10T11:00:00",
+        "Cost": 840,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 361.2,
+        "AdditionalResources": {
+            "gas": 1.848
+        },
+        "AssetUsage": {
+            "GB": 1.68
+        }
+    },
+    {
+        "StartTime": "2023-07-10T11:00:00",
+        "EndTime": "2023-07-10T12:00:00",
+        "Cost": 865,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 371.95,
+        "AdditionalResources": {
+            "gas": 1.903
+        },
+        "AssetUsage": {
+            "GB": 1.73
+        }
+    },
+    {
+        "StartTime": "2023-07-10T12:00:00",
+        "EndTime": "2023-07-10T13:00:00",
+        "Cost": 840,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 361.2,
+        "AdditionalResources": {
+            "gas": 1.848
+        },
+        "AssetUsage": {
+            "GB": 1.68
+        }
+    },
+    {
+        "StartTime": "2023-07-10T13:00:00",
+        "EndTime": "2023-07-10T14:00:00",
+        "Cost": 810,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 348.3,
+        "AdditionalResources": {
+            "gas": 1.7820000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-10T14:00:00",
+        "EndTime": "2023-07-10T15:00:00",
+        "Cost": 755,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 324.65,
+        "AdditionalResources": {
+            "gas": 1.6610000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.51
+        }
+    },
+    {
+        "StartTime": "2023-07-10T15:00:00",
+        "EndTime": "2023-07-10T16:00:00",
+        "Cost": 765,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 328.95,
+        "AdditionalResources": {
+            "gas": 1.6830000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.53
+        }
+    },
+    {
+        "StartTime": "2023-07-10T16:00:00",
+        "EndTime": "2023-07-10T17:00:00",
+        "Cost": 730,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 313.9,
+        "AdditionalResources": {
+            "gas": 1.606
+        },
+        "AssetUsage": {
+            "GB": 1.46
+        }
+    },
+    {
+        "StartTime": "2023-07-10T17:00:00",
+        "EndTime": "2023-07-10T18:00:00",
+        "Cost": 755,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 324.65,
+        "AdditionalResources": {
+            "gas": 1.6610000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.51
+        }
+    },
+    {
+        "StartTime": "2023-07-10T18:00:00",
+        "EndTime": "2023-07-10T19:00:00",
+        "Cost": 641.5682500000001,
+        "ElectricityUsage": 1.1625,
+        "UncoveredUsage": 0,
+        "CO2": 992,
+        "AdditionalResources": {
+            "gas": 2.945
+        },
+        "AssetUsage": {
+            "GM": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-10T19:00:00",
+        "EndTime": "2023-07-10T20:00:00",
+        "Cost": 258.7459499999998,
+        "ElectricityUsage": 1.1475,
+        "UncoveredUsage": 0,
+        "CO2": 979.2,
+        "AdditionalResources": {
+            "gas": 2.907
+        },
+        "AssetUsage": {
+            "GM": 1.53
+        }
+    },
+    {
+        "StartTime": "2023-07-10T20:00:00",
+        "EndTime": "2023-07-10T21:00:00",
+        "Cost": 165.92249999999984,
+        "ElectricityUsage": 1.125,
+        "UncoveredUsage": 0,
+        "CO2": 960,
+        "AdditionalResources": {
+            "gas": 2.8499999999999996
+        },
+        "AssetUsage": {
+            "GM": 1.5
+        }
+    },
+    {
+        "StartTime": "2023-07-10T21:00:00",
+        "EndTime": "2023-07-10T22:00:00",
+        "Cost": 129.78272499999994,
+        "ElectricityUsage": 1.1175,
+        "UncoveredUsage": 0,
+        "CO2": 953.6,
+        "AdditionalResources": {
+            "gas": 2.831
+        },
+        "AssetUsage": {
+            "GM": 1.49
+        }
+    },
+    {
+        "StartTime": "2023-07-10T22:00:00",
+        "EndTime": "2023-07-10T23:00:00",
+        "Cost": 269.8552499999997,
+        "ElectricityUsage": 1.1025,
+        "UncoveredUsage": 0,
+        "CO2": 940.8,
+        "AdditionalResources": {
+            "gas": 2.7929999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.47
+        }
+    },
+    {
+        "StartTime": "2023-07-10T23:00:00",
+        "EndTime": "2023-07-11T00:00:00",
+        "Cost": 546.261875,
+        "ElectricityUsage": 1.1775,
+        "UncoveredUsage": 0,
+        "CO2": 1004.8000000000001,
+        "AdditionalResources": {
+            "gas": 2.983
+        },
+        "AssetUsage": {
+            "GM": 1.57
+        }
+    },
+    {
+        "StartTime": "2023-07-11T00:00:00",
+        "EndTime": "2023-07-11T01:00:00",
+        "Cost": 612.2906999999999,
+        "ElectricityUsage": 1.1475,
+        "UncoveredUsage": 0,
+        "CO2": 979.2,
+        "AdditionalResources": {
+            "gas": 2.907
+        },
+        "AssetUsage": {
+            "GM": 1.53
+        }
+    },
+    {
+        "StartTime": "2023-07-11T01:00:00",
+        "EndTime": "2023-07-11T02:00:00",
+        "Cost": 691.40225,
+        "ElectricityUsage": 1.155,
+        "UncoveredUsage": 0,
+        "CO2": 985.6,
+        "AdditionalResources": {
+            "gas": 2.9259999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.54
+        }
+    },
+    {
+        "StartTime": "2023-07-11T02:00:00",
+        "EndTime": "2023-07-11T03:00:00",
+        "Cost": 710,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 305.3,
+        "AdditionalResources": {
+            "gas": 1.562
+        },
+        "AssetUsage": {
+            "GB": 1.42
+        }
+    },
+    {
+        "StartTime": "2023-07-11T03:00:00",
+        "EndTime": "2023-07-11T04:00:00",
+        "Cost": 730,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 313.9,
+        "AdditionalResources": {
+            "gas": 1.606
+        },
+        "AssetUsage": {
+            "GB": 1.46
+        }
+    },
+    {
+        "StartTime": "2023-07-11T04:00:00",
+        "EndTime": "2023-07-11T05:00:00",
+        "Cost": 740,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 318.2,
+        "AdditionalResources": {
+            "gas": 1.6280000000000001
+        },
+        "AssetUsage": {
+            "GB": 1.48
+        }
+    },
+    {
+        "StartTime": "2023-07-11T05:00:00",
+        "EndTime": "2023-07-11T06:00:00",
+        "Cost": 726.7065,
+        "ElectricityUsage": 1.17,
+        "UncoveredUsage": 0,
+        "CO2": 998.4000000000001,
+        "AdditionalResources": {
+            "gas": 2.964
+        },
+        "AssetUsage": {
+            "GM": 1.56
+        }
+    },
+    {
+        "StartTime": "2023-07-11T06:00:00",
+        "EndTime": "2023-07-11T07:00:00",
+        "Cost": 648.0439999999999,
+        "ElectricityUsage": 1.2000000000000002,
+        "UncoveredUsage": 0,
+        "CO2": 1024,
+        "AdditionalResources": {
+            "gas": 3.04
+        },
+        "AssetUsage": {
+            "GM": 1.6
+        }
+    },
+    {
+        "StartTime": "2023-07-11T07:00:00",
+        "EndTime": "2023-07-11T08:00:00",
+        "Cost": 663.0581999999999,
+        "ElectricityUsage": 1.26,
+        "UncoveredUsage": 0,
+        "CO2": 1075.2,
+        "AdditionalResources": {
+            "gas": 3.1919999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.68
+        }
+    },
+    {
+        "StartTime": "2023-07-11T08:00:00",
+        "EndTime": "2023-07-11T09:00:00",
+        "Cost": 755.3744999999999,
+        "ElectricityUsage": 1.35,
+        "UncoveredUsage": 0,
+        "CO2": 1152,
+        "AdditionalResources": {
+            "gas": 3.42
+        },
+        "AssetUsage": {
+            "GM": 1.8
+        }
+    },
+    {
+        "StartTime": "2023-07-11T09:00:00",
+        "EndTime": "2023-07-11T10:00:00",
+        "Cost": 890,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 382.7,
+        "AdditionalResources": {
+            "gas": 1.9580000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.78
+        }
+    },
+    {
+        "StartTime": "2023-07-11T10:00:00",
+        "EndTime": "2023-07-11T11:00:00",
+        "Cost": 915,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 393.45,
+        "AdditionalResources": {
+            "gas": 2.0130000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.83
+        }
+    },
+    {
+        "StartTime": "2023-07-11T11:00:00",
+        "EndTime": "2023-07-11T12:00:00",
+        "Cost": 960,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 412.8,
+        "AdditionalResources": {
+            "gas": 2.112
+        },
+        "AssetUsage": {
+            "GB": 1.92
+        }
+    },
+    {
+        "StartTime": "2023-07-11T12:00:00",
+        "EndTime": "2023-07-11T13:00:00",
+        "Cost": 912.6005,
+        "ElectricityUsage": -1.93,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.93
+        }
+    },
+    {
+        "StartTime": "2023-07-11T13:00:00",
+        "EndTime": "2023-07-11T14:00:00",
+        "Cost": 760.0463,
+        "ElectricityUsage": -1.91,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.91
+        }
+    },
+    {
+        "StartTime": "2023-07-11T14:00:00",
+        "EndTime": "2023-07-11T15:00:00",
+        "Cost": 697.3396,
+        "ElectricityUsage": -1.72,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.72
+        }
+    },
+    {
+        "StartTime": "2023-07-11T15:00:00",
+        "EndTime": "2023-07-11T16:00:00",
+        "Cost": 793.924,
+        "ElectricityUsage": -1.64,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.64
+        }
+    },
+    {
+        "StartTime": "2023-07-11T16:00:00",
+        "EndTime": "2023-07-11T17:00:00",
+        "Cost": 795,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 341.85,
+        "AdditionalResources": {
+            "gas": 1.7490000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.59
+        }
+    },
+    {
+        "StartTime": "2023-07-11T17:00:00",
+        "EndTime": "2023-07-11T18:00:00",
+        "Cost": 765,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 328.95,
+        "AdditionalResources": {
+            "gas": 1.6830000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.53
+        }
+    },
+    {
+        "StartTime": "2023-07-11T18:00:00",
+        "EndTime": "2023-07-11T19:00:00",
+        "Cost": 738.5875000000001,
+        "ElectricityUsage": 1.2075,
+        "UncoveredUsage": 0,
+        "CO2": 1030.4,
+        "AdditionalResources": {
+            "gas": 3.059
+        },
+        "AssetUsage": {
+            "GM": 1.61
+        }
+    },
+    {
+        "StartTime": "2023-07-11T19:00:00",
+        "EndTime": "2023-07-11T20:00:00",
+        "Cost": 513.3839749999999,
+        "ElectricityUsage": 1.2675,
+        "UncoveredUsage": 0,
+        "CO2": 1081.6,
+        "AdditionalResources": {
+            "gas": 3.211
+        },
+        "AssetUsage": {
+            "GM": 1.69
+        }
+    },
+    {
+        "StartTime": "2023-07-11T20:00:00",
+        "EndTime": "2023-07-11T21:00:00",
+        "Cost": 329.8143749999997,
+        "ElectricityUsage": 1.2374999999999998,
+        "UncoveredUsage": 0,
+        "CO2": 1056,
+        "AdditionalResources": {
+            "gas": 3.135
+        },
+        "AssetUsage": {
+            "GM": 1.65
+        }
+    },
+    {
+        "StartTime": "2023-07-11T21:00:00",
+        "EndTime": "2023-07-11T22:00:00",
+        "Cost": 560.0987999999999,
+        "ElectricityUsage": 1.215,
+        "UncoveredUsage": 0,
+        "CO2": 1036.8000000000002,
+        "AdditionalResources": {
+            "gas": 3.078
+        },
+        "AssetUsage": {
+            "GM": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-11T22:00:00",
+        "EndTime": "2023-07-11T23:00:00",
+        "Cost": 671.775,
+        "ElectricityUsage": 1.17,
+        "UncoveredUsage": 0,
+        "CO2": 998.4000000000001,
+        "AdditionalResources": {
+            "gas": 2.964
+        },
+        "AssetUsage": {
+            "GM": 1.56
+        }
+    },
+    {
+        "StartTime": "2023-07-11T23:00:00",
+        "EndTime": "2023-07-12T00:00:00",
+        "Cost": 810,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 348.3,
+        "AdditionalResources": {
+            "gas": 1.7820000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-12T00:00:00",
+        "EndTime": "2023-07-12T01:00:00",
+        "Cost": 850,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 365.5,
+        "AdditionalResources": {
+            "gas": 1.87
+        },
+        "AssetUsage": {
+            "GB": 1.7
+        }
+    },
+    {
+        "StartTime": "2023-07-12T01:00:00",
+        "EndTime": "2023-07-12T02:00:00",
+        "Cost": 830,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 356.9,
+        "AdditionalResources": {
+            "gas": 1.826
+        },
+        "AssetUsage": {
+            "GB": 1.66
+        }
+    },
+    {
+        "StartTime": "2023-07-12T02:00:00",
+        "EndTime": "2023-07-12T03:00:00",
+        "Cost": 810,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 348.3,
+        "AdditionalResources": {
+            "gas": 1.7820000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-12T03:00:00",
+        "EndTime": "2023-07-12T04:00:00",
+        "Cost": 775,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 333.25,
+        "AdditionalResources": {
+            "gas": 1.7050000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-12T04:00:00",
+        "EndTime": "2023-07-12T05:00:00",
+        "Cost": 790,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 339.7,
+        "AdditionalResources": {
+            "gas": 1.7380000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.58
+        }
+    },
+    {
+        "StartTime": "2023-07-12T05:00:00",
+        "EndTime": "2023-07-12T06:00:00",
+        "Cost": 805,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 346.15000000000003,
+        "AdditionalResources": {
+            "gas": 1.7710000000000004
+        },
+        "AssetUsage": {
+            "GB": 1.61
+        }
+    },
+    {
+        "StartTime": "2023-07-12T06:00:00",
+        "EndTime": "2023-07-12T07:00:00",
+        "Cost": 830,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 356.9,
+        "AdditionalResources": {
+            "gas": 1.826
+        },
+        "AssetUsage": {
+            "GB": 1.66
+        }
+    },
+    {
+        "StartTime": "2023-07-12T07:00:00",
+        "EndTime": "2023-07-12T08:00:00",
+        "Cost": 789.0312499999998,
+        "ElectricityUsage": 1.3125,
+        "UncoveredUsage": 0,
+        "CO2": 1120,
+        "AdditionalResources": {
+            "gas": 3.3249999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.75
+        }
+    },
+    {
+        "StartTime": "2023-07-12T08:00:00",
+        "EndTime": "2023-07-12T09:00:00",
+        "Cost": 756.5,
+        "ElectricityUsage": 1.335,
+        "UncoveredUsage": 0,
+        "CO2": 1139.2,
+        "AdditionalResources": {
+            "gas": 3.3819999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.78
+        }
+    },
+    {
+        "StartTime": "2023-07-12T09:00:00",
+        "EndTime": "2023-07-12T10:00:00",
+        "Cost": 880,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 378.4,
+        "AdditionalResources": {
+            "gas": 1.9360000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.76
+        }
+    },
+    {
+        "StartTime": "2023-07-12T10:00:00",
+        "EndTime": "2023-07-12T11:00:00",
+        "Cost": 880,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 378.4,
+        "AdditionalResources": {
+            "gas": 1.9360000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.76
+        }
+    },
+    {
+        "StartTime": "2023-07-12T11:00:00",
+        "EndTime": "2023-07-12T12:00:00",
+        "Cost": 835.7131999999999,
+        "ElectricityUsage": -1.94,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.94
+        }
+    },
+    {
+        "StartTime": "2023-07-12T12:00:00",
+        "EndTime": "2023-07-12T13:00:00",
+        "Cost": 314.3958,
+        "ElectricityUsage": -1.86,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.86
+        }
+    },
+    {
+        "StartTime": "2023-07-12T13:00:00",
+        "EndTime": "2023-07-12T14:00:00",
+        "Cost": 262.951,
+        "ElectricityUsage": -1.79,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.79
+        }
+    },
+    {
+        "StartTime": "2023-07-12T14:00:00",
+        "EndTime": "2023-07-12T15:00:00",
+        "Cost": 315.8676,
+        "ElectricityUsage": -1.62,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-12T15:00:00",
+        "EndTime": "2023-07-12T16:00:00",
+        "Cost": 391.7315,
+        "ElectricityUsage": -1.55,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-12T16:00:00",
+        "EndTime": "2023-07-12T17:00:00",
+        "Cost": 420.329,
+        "ElectricityUsage": -1.55,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-12T17:00:00",
+        "EndTime": "2023-07-12T18:00:00",
+        "Cost": 579.3344999999999,
+        "ElectricityUsage": -1.53,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.53
+        }
+    },
+    {
+        "StartTime": "2023-07-12T18:00:00",
+        "EndTime": "2023-07-12T19:00:00",
+        "Cost": 663.702,
+        "ElectricityUsage": -1.56,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.56
+        }
+    },
+    {
+        "StartTime": "2023-07-12T19:00:00",
+        "EndTime": "2023-07-12T20:00:00",
+        "Cost": 795,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 341.85,
+        "AdditionalResources": {
+            "gas": 1.7490000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.59
+        }
+    },
+    {
+        "StartTime": "2023-07-12T20:00:00",
+        "EndTime": "2023-07-12T21:00:00",
+        "Cost": 511.27562500000005,
+        "ElectricityUsage": 1.2075,
+        "UncoveredUsage": 0,
+        "CO2": 1030.4,
+        "AdditionalResources": {
+            "gas": 3.059
+        },
+        "AssetUsage": {
+            "GM": 1.61
+        }
+    },
+    {
+        "StartTime": "2023-07-12T21:00:00",
+        "EndTime": "2023-07-12T22:00:00",
+        "Cost": 637.1575,
+        "ElectricityUsage": 1.2075,
+        "UncoveredUsage": 0,
+        "CO2": 1030.4,
+        "AdditionalResources": {
+            "gas": 3.059
+        },
+        "AssetUsage": {
+            "GM": 1.61
+        }
+    },
+    {
+        "StartTime": "2023-07-12T22:00:00",
+        "EndTime": "2023-07-12T23:00:00",
+        "Cost": 653.2872999999998,
+        "ElectricityUsage": 1.2525,
+        "UncoveredUsage": 0,
+        "CO2": 1068.8,
+        "AdditionalResources": {
+            "gas": 3.1729999999999996
+        },
+        "AssetUsage": {
+            "GM": 1.67
+        }
+    },
+    {
+        "StartTime": "2023-07-12T23:00:00",
+        "EndTime": "2023-07-13T00:00:00",
+        "Cost": 762.3591499999999,
+        "ElectricityUsage": 1.2449999999999999,
+        "UncoveredUsage": 0,
+        "CO2": 1062.3999999999999,
+        "AdditionalResources": {
+            "gas": 3.154
+        },
+        "AssetUsage": {
+            "GM": 1.66
+        }
+    },
+    {
+        "StartTime": "2023-07-13T00:00:00",
+        "EndTime": "2023-07-13T01:00:00",
+        "Cost": 835,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 359.05,
+        "AdditionalResources": {
+            "gas": 1.837
+        },
+        "AssetUsage": {
+            "GB": 1.67
+        }
+    },
+    {
+        "StartTime": "2023-07-13T01:00:00",
+        "EndTime": "2023-07-13T02:00:00",
+        "Cost": 825,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 354.75,
+        "AdditionalResources": {
+            "gas": 1.815
+        },
+        "AssetUsage": {
+            "GB": 1.65
+        }
+    },
+    {
+        "StartTime": "2023-07-13T02:00:00",
+        "EndTime": "2023-07-13T03:00:00",
+        "Cost": 800,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 344,
+        "AdditionalResources": {
+            "gas": 1.7600000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.6
+        }
+    },
+    {
+        "StartTime": "2023-07-13T03:00:00",
+        "EndTime": "2023-07-13T04:00:00",
+        "Cost": 775,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 333.25,
+        "AdditionalResources": {
+            "gas": 1.7050000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-13T04:00:00",
+        "EndTime": "2023-07-13T05:00:00",
+        "Cost": 800,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 344,
+        "AdditionalResources": {
+            "gas": 1.7600000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.6
+        }
+    },
+    {
+        "StartTime": "2023-07-13T05:00:00",
+        "EndTime": "2023-07-13T06:00:00",
+        "Cost": 840,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 361.2,
+        "AdditionalResources": {
+            "gas": 1.848
+        },
+        "AssetUsage": {
+            "GB": 1.68
+        }
+    },
+    {
+        "StartTime": "2023-07-13T06:00:00",
+        "EndTime": "2023-07-13T07:00:00",
+        "Cost": 855,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 367.65,
+        "AdditionalResources": {
+            "gas": 1.881
+        },
+        "AssetUsage": {
+            "GB": 1.71
+        }
+    },
+    {
+        "StartTime": "2023-07-13T07:00:00",
+        "EndTime": "2023-07-13T08:00:00",
+        "Cost": 851.9124500000001,
+        "ElectricityUsage": 1.335,
+        "UncoveredUsage": 0,
+        "CO2": 1139.2,
+        "AdditionalResources": {
+            "gas": 3.3819999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.78
+        }
+    },
+    {
+        "StartTime": "2023-07-13T08:00:00",
+        "EndTime": "2023-07-13T09:00:00",
+        "Cost": 877.3275,
+        "ElectricityUsage": 1.53,
+        "UncoveredUsage": 0,
+        "CO2": 1305.6,
+        "AdditionalResources": {
+            "gas": 3.876
+        },
+        "AssetUsage": {
+            "GM": 2.04
+        }
+    },
+    {
+        "StartTime": "2023-07-13T09:00:00",
+        "EndTime": "2023-07-13T10:00:00",
+        "Cost": 1010,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 434.3,
+        "AdditionalResources": {
+            "gas": 2.2220000000000004
+        },
+        "AssetUsage": {
+            "GB": 2.02
+        }
+    },
+    {
+        "StartTime": "2023-07-13T10:00:00",
+        "EndTime": "2023-07-13T11:00:00",
+        "Cost": 748.404,
+        "ElectricityUsage": -1.8,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.8
+        }
+    },
+    {
+        "StartTime": "2023-07-13T11:00:00",
+        "EndTime": "2023-07-13T12:00:00",
+        "Cost": 703.9889000000001,
+        "ElectricityUsage": -1.73,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.73
+        }
+    },
+    {
+        "StartTime": "2023-07-13T12:00:00",
+        "EndTime": "2023-07-13T13:00:00",
+        "Cost": 723.1396,
+        "ElectricityUsage": -1.72,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.72
+        }
+    },
+    {
+        "StartTime": "2023-07-13T13:00:00",
+        "EndTime": "2023-07-13T14:00:00",
+        "Cost": 645.975,
+        "ElectricityUsage": -1.62,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-13T14:00:00",
+        "EndTime": "2023-07-13T15:00:00",
+        "Cost": 645.975,
+        "ElectricityUsage": -1.62,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-13T15:00:00",
+        "EndTime": "2023-07-13T16:00:00",
+        "Cost": 669.0521,
+        "ElectricityUsage": -1.67,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.67
+        }
+    },
+    {
+        "StartTime": "2023-07-13T16:00:00",
+        "EndTime": "2023-07-13T17:00:00",
+        "Cost": 624.7283,
+        "ElectricityUsage": -1.61,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.61
+        }
+    },
+    {
+        "StartTime": "2023-07-13T17:00:00",
+        "EndTime": "2023-07-13T18:00:00",
+        "Cost": 663.2669999999999,
+        "ElectricityUsage": -1.65,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.65
+        }
+    },
+    {
+        "StartTime": "2023-07-13T18:00:00",
+        "EndTime": "2023-07-13T19:00:00",
+        "Cost": 771.672,
+        "ElectricityUsage": -1.65,
+        "UncoveredUsage": 0,
+        "CO2": 0,
+        "AdditionalResources": {},
+        "AssetUsage": {
+            "EK": 1.65
+        }
+    },
+    {
+        "StartTime": "2023-07-13T19:00:00",
+        "EndTime": "2023-07-13T20:00:00",
+        "Cost": 750.7944249999999,
+        "ElectricityUsage": 1.2525,
+        "UncoveredUsage": 0,
+        "CO2": 1068.8,
+        "AdditionalResources": {
+            "gas": 3.1729999999999996
+        },
+        "AssetUsage": {
+            "GM": 1.67
+        }
+    },
+    {
+        "StartTime": "2023-07-13T20:00:00",
+        "EndTime": "2023-07-13T21:00:00",
+        "Cost": 611.3729999999998,
+        "ElectricityUsage": 1.26,
+        "UncoveredUsage": 0,
+        "CO2": 1075.2,
+        "AdditionalResources": {
+            "gas": 3.1919999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.68
+        }
+    },
+    {
+        "StartTime": "2023-07-13T21:00:00",
+        "EndTime": "2023-07-13T22:00:00",
+        "Cost": 525.4712999999998,
+        "ElectricityUsage": 1.215,
+        "UncoveredUsage": 0,
+        "CO2": 1036.8000000000002,
+        "AdditionalResources": {
+            "gas": 3.078
+        },
+        "AssetUsage": {
+            "GM": 1.62
+        }
+    },
+    {
+        "StartTime": "2023-07-13T22:00:00",
+        "EndTime": "2023-07-13T23:00:00",
+        "Cost": 596.670025,
+        "ElectricityUsage": 1.2075,
+        "UncoveredUsage": 0,
+        "CO2": 1030.4,
+        "AdditionalResources": {
+            "gas": 3.059
+        },
+        "AssetUsage": {
+            "GM": 1.61
+        }
+    },
+    {
+        "StartTime": "2023-07-13T23:00:00",
+        "EndTime": "2023-07-14T00:00:00",
+        "Cost": 744.3025,
+        "ElectricityUsage": 1.275,
+        "UncoveredUsage": 0,
+        "CO2": 1088,
+        "AdditionalResources": {
+            "gas": 3.23
+        },
+        "AssetUsage": {
+            "GM": 1.7
+        }
+    },
+    {
+        "StartTime": "2023-07-14T00:00:00",
+        "EndTime": "2023-07-14T01:00:00",
+        "Cost": 855,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 367.65,
+        "AdditionalResources": {
+            "gas": 1.881
+        },
+        "AssetUsage": {
+            "GB": 1.71
+        }
+    },
+    {
+        "StartTime": "2023-07-14T01:00:00",
+        "EndTime": "2023-07-14T02:00:00",
+        "Cost": 875,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 376.25,
+        "AdditionalResources": {
+            "gas": 1.9250000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.75
+        }
+    },
+    {
+        "StartTime": "2023-07-14T02:00:00",
+        "EndTime": "2023-07-14T03:00:00",
+        "Cost": 830,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 356.9,
+        "AdditionalResources": {
+            "gas": 1.826
+        },
+        "AssetUsage": {
+            "GB": 1.66
+        }
+    },
+    {
+        "StartTime": "2023-07-14T03:00:00",
+        "EndTime": "2023-07-14T04:00:00",
+        "Cost": 820,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 352.59999999999997,
+        "AdditionalResources": {
+            "gas": 1.804
+        },
+        "AssetUsage": {
+            "GB": 1.64
+        }
+    },
+    {
+        "StartTime": "2023-07-14T04:00:00",
+        "EndTime": "2023-07-14T05:00:00",
+        "Cost": 850,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 365.5,
+        "AdditionalResources": {
+            "gas": 1.87
+        },
+        "AssetUsage": {
+            "GB": 1.7
+        }
+    },
+    {
+        "StartTime": "2023-07-14T05:00:00",
+        "EndTime": "2023-07-14T06:00:00",
+        "Cost": 890,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 382.7,
+        "AdditionalResources": {
+            "gas": 1.9580000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.78
+        }
+    },
+    {
+        "StartTime": "2023-07-14T06:00:00",
+        "EndTime": "2023-07-14T07:00:00",
+        "Cost": 825.75,
+        "ElectricityUsage": 1.35,
+        "UncoveredUsage": 0,
+        "CO2": 1152,
+        "AdditionalResources": {
+            "gas": 3.42
+        },
+        "AssetUsage": {
+            "GM": 1.8
+        }
+    },
+    {
+        "StartTime": "2023-07-14T07:00:00",
+        "EndTime": "2023-07-14T08:00:00",
+        "Cost": 816.575,
+        "ElectricityUsage": 1.335,
+        "UncoveredUsage": 0,
+        "CO2": 1139.2,
+        "AdditionalResources": {
+            "gas": 3.3819999999999997
+        },
+        "AssetUsage": {
+            "GM": 1.78
+        }
+    },
+    {
+        "StartTime": "2023-07-14T08:00:00",
+        "EndTime": "2023-07-14T09:00:00",
+        "Cost": 910,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 391.3,
+        "AdditionalResources": {
+            "gas": 2.0020000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.82
+        }
+    },
+    {
+        "StartTime": "2023-07-14T09:00:00",
+        "EndTime": "2023-07-14T10:00:00",
+        "Cost": 950,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 408.5,
+        "AdditionalResources": {
+            "gas": 2.09
+        },
+        "AssetUsage": {
+            "GB": 1.9
+        }
+    },
+    {
+        "StartTime": "2023-07-14T10:00:00",
+        "EndTime": "2023-07-14T11:00:00",
+        "Cost": 930,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 399.90000000000003,
+        "AdditionalResources": {
+            "gas": 2.0460000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.86
+        }
+    },
+    {
+        "StartTime": "2023-07-14T11:00:00",
+        "EndTime": "2023-07-14T12:00:00",
+        "Cost": 940,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 404.2,
+        "AdditionalResources": {
+            "gas": 2.068
+        },
+        "AssetUsage": {
+            "GB": 1.88
+        }
+    },
+    {
+        "StartTime": "2023-07-14T12:00:00",
+        "EndTime": "2023-07-14T13:00:00",
+        "Cost": 915,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 393.45,
+        "AdditionalResources": {
+            "gas": 2.0130000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.83
+        }
+    },
+    {
+        "StartTime": "2023-07-14T13:00:00",
+        "EndTime": "2023-07-14T14:00:00",
+        "Cost": 880,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 378.4,
+        "AdditionalResources": {
+            "gas": 1.9360000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.76
+        }
+    },
+    {
+        "StartTime": "2023-07-14T14:00:00",
+        "EndTime": "2023-07-14T15:00:00",
+        "Cost": 815,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 350.45,
+        "AdditionalResources": {
+            "gas": 1.793
+        },
+        "AssetUsage": {
+            "GB": 1.63
+        }
+    },
+    {
+        "StartTime": "2023-07-14T15:00:00",
+        "EndTime": "2023-07-14T16:00:00",
+        "Cost": 785,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 337.55,
+        "AdditionalResources": {
+            "gas": 1.7270000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.57
+        }
+    },
+    {
+        "StartTime": "2023-07-14T16:00:00",
+        "EndTime": "2023-07-14T17:00:00",
+        "Cost": 775,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 333.25,
+        "AdditionalResources": {
+            "gas": 1.7050000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-14T17:00:00",
+        "EndTime": "2023-07-14T18:00:00",
+        "Cost": 770,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 331.1,
+        "AdditionalResources": {
+            "gas": 1.6940000000000002
+        },
+        "AssetUsage": {
+            "GB": 1.54
+        }
+    },
+    {
+        "StartTime": "2023-07-14T18:00:00",
+        "EndTime": "2023-07-14T19:00:00",
+        "Cost": 704.6754000000001,
+        "ElectricityUsage": 1.17,
+        "UncoveredUsage": 0,
+        "CO2": 998.4000000000001,
+        "AdditionalResources": {
+            "gas": 2.964
+        },
+        "AssetUsage": {
+            "GM": 1.56
+        }
+    },
+    {
+        "StartTime": "2023-07-14T19:00:00",
+        "EndTime": "2023-07-14T20:00:00",
+        "Cost": 485.82689999999985,
+        "ElectricityUsage": 1.17,
+        "UncoveredUsage": 0,
+        "CO2": 998.4000000000001,
+        "AdditionalResources": {
+            "gas": 2.964
+        },
+        "AssetUsage": {
+            "GM": 1.56
+        }
+    },
+    {
+        "StartTime": "2023-07-14T20:00:00",
+        "EndTime": "2023-07-14T21:00:00",
+        "Cost": 497.59049999999974,
+        "ElectricityUsage": 1.1925000000000001,
+        "UncoveredUsage": 0,
+        "CO2": 1017.6,
+        "AdditionalResources": {
+            "gas": 3.021
+        },
+        "AssetUsage": {
+            "GM": 1.59
+        }
+    },
+    {
+        "StartTime": "2023-07-14T21:00:00",
+        "EndTime": "2023-07-14T22:00:00",
+        "Cost": 632.6315,
+        "ElectricityUsage": 1.1775,
+        "UncoveredUsage": 0,
+        "CO2": 1004.8000000000001,
+        "AdditionalResources": {
+            "gas": 2.983
+        },
+        "AssetUsage": {
+            "GM": 1.57
+        }
+    },
+    {
+        "StartTime": "2023-07-14T22:00:00",
+        "EndTime": "2023-07-14T23:00:00",
+        "Cost": 775,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 333.25,
+        "AdditionalResources": {
+            "gas": 1.7050000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.55
+        }
+    },
+    {
+        "StartTime": "2023-07-14T23:00:00",
+        "EndTime": "2023-07-15T00:00:00",
+        "Cost": 810,
+        "ElectricityUsage": 0,
+        "UncoveredUsage": 0,
+        "CO2": 348.3,
+        "AdditionalResources": {
+            "gas": 1.7820000000000003
+        },
+        "AssetUsage": {
+            "GB": 1.62
+        }
+    }
+]

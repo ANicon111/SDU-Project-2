@@ -1,0 +1,1010 @@
+[
+    {
+        "StartTime": "2023-07-08T00:00:00",
+        "EndTime": "2023-07-08T01:00:00",
+        "HeatDemand": 1.79,
+        "ElectricityPrice": 752.03
+    },
+    {
+        "StartTime": "2023-07-08T01:00:00",
+        "EndTime": "2023-07-08T02:00:00",
+        "HeatDemand": 1.85,
+        "ElectricityPrice": 691.05
+    },
+    {
+        "StartTime": "2023-07-08T02:00:00",
+        "EndTime": "2023-07-08T03:00:00",
+        "HeatDemand": 1.76,
+        "ElectricityPrice": 674.78
+    },
+    {
+        "StartTime": "2023-07-08T03:00:00",
+        "EndTime": "2023-07-08T04:00:00",
+        "HeatDemand": 1.67,
+        "ElectricityPrice": 652.95
+    },
+    {
+        "StartTime": "2023-07-08T04:00:00",
+        "EndTime": "2023-07-08T05:00:00",
+        "HeatDemand": 1.73,
+        "ElectricityPrice": 666.3
+    },
+    {
+        "StartTime": "2023-07-08T05:00:00",
+        "EndTime": "2023-07-08T06:00:00",
+        "HeatDemand": 1.79,
+        "ElectricityPrice": 654.6
+    },
+    {
+        "StartTime": "2023-07-08T06:00:00",
+        "EndTime": "2023-07-08T07:00:00",
+        "HeatDemand": 1.82,
+        "ElectricityPrice": 637.05
+    },
+    {
+        "StartTime": "2023-07-08T07:00:00",
+        "EndTime": "2023-07-08T08:00:00",
+        "HeatDemand": 1.81,
+        "ElectricityPrice": 639.45
+    },
+    {
+        "StartTime": "2023-07-08T08:00:00",
+        "EndTime": "2023-07-08T09:00:00",
+        "HeatDemand": 1.84,
+        "ElectricityPrice": 628.28
+    },
+    {
+        "StartTime": "2023-07-08T09:00:00",
+        "EndTime": "2023-07-08T10:00:00",
+        "HeatDemand": 1.88,
+        "ElectricityPrice": 570.3
+    },
+    {
+        "StartTime": "2023-07-08T10:00:00",
+        "EndTime": "2023-07-08T11:00:00",
+        "HeatDemand": 2,
+        "ElectricityPrice": 456.75
+    },
+    {
+        "StartTime": "2023-07-08T11:00:00",
+        "EndTime": "2023-07-08T12:00:00",
+        "HeatDemand": 1.86,
+        "ElectricityPrice": 347.4
+    },
+    {
+        "StartTime": "2023-07-08T12:00:00",
+        "EndTime": "2023-07-08T13:00:00",
+        "HeatDemand": 1.78,
+        "ElectricityPrice": 264.15
+    },
+    {
+        "StartTime": "2023-07-08T13:00:00",
+        "EndTime": "2023-07-08T14:00:00",
+        "HeatDemand": 1.6,
+        "ElectricityPrice": 125.33
+    },
+    {
+        "StartTime": "2023-07-08T14:00:00",
+        "EndTime": "2023-07-08T15:00:00",
+        "HeatDemand": 1.57,
+        "ElectricityPrice": 125.48
+    },
+    {
+        "StartTime": "2023-07-08T15:00:00",
+        "EndTime": "2023-07-08T16:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 300
+    },
+    {
+        "StartTime": "2023-07-08T16:00:00",
+        "EndTime": "2023-07-08T17:00:00",
+        "HeatDemand": 1.57,
+        "ElectricityPrice": 456.75
+    },
+    {
+        "StartTime": "2023-07-08T17:00:00",
+        "EndTime": "2023-07-08T18:00:00",
+        "HeatDemand": 1.53,
+        "ElectricityPrice": 625.5
+    },
+    {
+        "StartTime": "2023-07-08T18:00:00",
+        "EndTime": "2023-07-08T19:00:00",
+        "HeatDemand": 1.52,
+        "ElectricityPrice": 804.75
+    },
+    {
+        "StartTime": "2023-07-08T19:00:00",
+        "EndTime": "2023-07-08T20:00:00",
+        "HeatDemand": 1.5,
+        "ElectricityPrice": 907.5
+    },
+    {
+        "StartTime": "2023-07-08T20:00:00",
+        "EndTime": "2023-07-08T21:00:00",
+        "HeatDemand": 1.5,
+        "ElectricityPrice": 965.7
+    },
+    {
+        "StartTime": "2023-07-08T21:00:00",
+        "EndTime": "2023-07-08T22:00:00",
+        "HeatDemand": 1.48,
+        "ElectricityPrice": 996.45
+    },
+    {
+        "StartTime": "2023-07-08T22:00:00",
+        "EndTime": "2023-07-08T23:00:00",
+        "HeatDemand": 1.51,
+        "ElectricityPrice": 972.9
+    },
+    {
+        "StartTime": "2023-07-08T23:00:00",
+        "EndTime": "2023-07-09T00:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 869.4
+    },
+    {
+        "StartTime": "2023-07-09T00:00:00",
+        "EndTime": "2023-07-09T01:00:00",
+        "HeatDemand": 1.54,
+        "ElectricityPrice": 820.8
+    },
+    {
+        "StartTime": "2023-07-09T01:00:00",
+        "EndTime": "2023-07-09T02:00:00",
+        "HeatDemand": 1.47,
+        "ElectricityPrice": 763.05
+    },
+    {
+        "StartTime": "2023-07-09T02:00:00",
+        "EndTime": "2023-07-09T03:00:00",
+        "HeatDemand": 1.41,
+        "ElectricityPrice": 763.65
+    },
+    {
+        "StartTime": "2023-07-09T03:00:00",
+        "EndTime": "2023-07-09T04:00:00",
+        "HeatDemand": 1.43,
+        "ElectricityPrice": 715.8
+    },
+    {
+        "StartTime": "2023-07-09T04:00:00",
+        "EndTime": "2023-07-09T05:00:00",
+        "HeatDemand": 1.43,
+        "ElectricityPrice": 718.43
+    },
+    {
+        "StartTime": "2023-07-09T05:00:00",
+        "EndTime": "2023-07-09T06:00:00",
+        "HeatDemand": 1.45,
+        "ElectricityPrice": 726.9
+    },
+    {
+        "StartTime": "2023-07-09T06:00:00",
+        "EndTime": "2023-07-09T07:00:00",
+        "HeatDemand": 1.47,
+        "ElectricityPrice": 710.1
+    },
+    {
+        "StartTime": "2023-07-09T07:00:00",
+        "EndTime": "2023-07-09T08:00:00",
+        "HeatDemand": 1.5,
+        "ElectricityPrice": 684
+    },
+    {
+        "StartTime": "2023-07-09T08:00:00",
+        "EndTime": "2023-07-09T09:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 646.8
+    },
+    {
+        "StartTime": "2023-07-09T09:00:00",
+        "EndTime": "2023-07-09T10:00:00",
+        "HeatDemand": 1.7,
+        "ElectricityPrice": 578.33
+    },
+    {
+        "StartTime": "2023-07-09T10:00:00",
+        "EndTime": "2023-07-09T11:00:00",
+        "HeatDemand": 1.74,
+        "ElectricityPrice": 450.9
+    },
+    {
+        "StartTime": "2023-07-09T11:00:00",
+        "EndTime": "2023-07-09T12:00:00",
+        "HeatDemand": 1.68,
+        "ElectricityPrice": 375.9
+    },
+    {
+        "StartTime": "2023-07-09T12:00:00",
+        "EndTime": "2023-07-09T13:00:00",
+        "HeatDemand": 1.58,
+        "ElectricityPrice": 342.68
+    },
+    {
+        "StartTime": "2023-07-09T13:00:00",
+        "EndTime": "2023-07-09T14:00:00",
+        "HeatDemand": 1.45,
+        "ElectricityPrice": 277.43
+    },
+    {
+        "StartTime": "2023-07-09T14:00:00",
+        "EndTime": "2023-07-09T15:00:00",
+        "HeatDemand": 1.43,
+        "ElectricityPrice": 336.38
+    },
+    {
+        "StartTime": "2023-07-09T15:00:00",
+        "EndTime": "2023-07-09T16:00:00",
+        "HeatDemand": 1.42,
+        "ElectricityPrice": 413.63
+    },
+    {
+        "StartTime": "2023-07-09T16:00:00",
+        "EndTime": "2023-07-09T17:00:00",
+        "HeatDemand": 1.47,
+        "ElectricityPrice": 547.35
+    },
+    {
+        "StartTime": "2023-07-09T17:00:00",
+        "EndTime": "2023-07-09T18:00:00",
+        "HeatDemand": 1.46,
+        "ElectricityPrice": 618
+    },
+    {
+        "StartTime": "2023-07-09T18:00:00",
+        "EndTime": "2023-07-09T19:00:00",
+        "HeatDemand": 1.5,
+        "ElectricityPrice": 783.08
+    },
+    {
+        "StartTime": "2023-07-09T19:00:00",
+        "EndTime": "2023-07-09T20:00:00",
+        "HeatDemand": 1.5,
+        "ElectricityPrice": 916.58
+    },
+    {
+        "StartTime": "2023-07-09T20:00:00",
+        "EndTime": "2023-07-09T21:00:00",
+        "HeatDemand": 1.44,
+        "ElectricityPrice": 990
+    },
+    {
+        "StartTime": "2023-07-09T21:00:00",
+        "EndTime": "2023-07-09T22:00:00",
+        "HeatDemand": 1.45,
+        "ElectricityPrice": 1005.75
+    },
+    {
+        "StartTime": "2023-07-09T22:00:00",
+        "EndTime": "2023-07-09T23:00:00",
+        "HeatDemand": 1.44,
+        "ElectricityPrice": 990.9
+    },
+    {
+        "StartTime": "2023-07-09T23:00:00",
+        "EndTime": "2023-07-10T00:00:00",
+        "HeatDemand": 1.47,
+        "ElectricityPrice": 897
+    },
+    {
+        "StartTime": "2023-07-10T00:00:00",
+        "EndTime": "2023-07-10T01:00:00",
+        "HeatDemand": 1.4,
+        "ElectricityPrice": 843.68
+    },
+    {
+        "StartTime": "2023-07-10T01:00:00",
+        "EndTime": "2023-07-10T02:00:00",
+        "HeatDemand": 1.32,
+        "ElectricityPrice": 765
+    },
+    {
+        "StartTime": "2023-07-10T02:00:00",
+        "EndTime": "2023-07-10T03:00:00",
+        "HeatDemand": 1.28,
+        "ElectricityPrice": 707.25
+    },
+    {
+        "StartTime": "2023-07-10T03:00:00",
+        "EndTime": "2023-07-10T04:00:00",
+        "HeatDemand": 1.33,
+        "ElectricityPrice": 689.55
+    },
+    {
+        "StartTime": "2023-07-10T04:00:00",
+        "EndTime": "2023-07-10T05:00:00",
+        "HeatDemand": 1.35,
+        "ElectricityPrice": 699.83
+    },
+    {
+        "StartTime": "2023-07-10T05:00:00",
+        "EndTime": "2023-07-10T06:00:00",
+        "HeatDemand": 1.35,
+        "ElectricityPrice": 788.55
+    },
+    {
+        "StartTime": "2023-07-10T06:00:00",
+        "EndTime": "2023-07-10T07:00:00",
+        "HeatDemand": 1.42,
+        "ElectricityPrice": 912.53
+    },
+    {
+        "StartTime": "2023-07-10T07:00:00",
+        "EndTime": "2023-07-10T08:00:00",
+        "HeatDemand": 1.49,
+        "ElectricityPrice": 995.85
+    },
+    {
+        "StartTime": "2023-07-10T08:00:00",
+        "EndTime": "2023-07-10T09:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 1007.03
+    },
+    {
+        "StartTime": "2023-07-10T09:00:00",
+        "EndTime": "2023-07-10T10:00:00",
+        "HeatDemand": 1.58,
+        "ElectricityPrice": 884.63
+    },
+    {
+        "StartTime": "2023-07-10T10:00:00",
+        "EndTime": "2023-07-10T11:00:00",
+        "HeatDemand": 1.68,
+        "ElectricityPrice": 789.6
+    },
+    {
+        "StartTime": "2023-07-10T11:00:00",
+        "EndTime": "2023-07-10T12:00:00",
+        "HeatDemand": 1.73,
+        "ElectricityPrice": 712.43
+    },
+    {
+        "StartTime": "2023-07-10T12:00:00",
+        "EndTime": "2023-07-10T13:00:00",
+        "HeatDemand": 1.68,
+        "ElectricityPrice": 669.23
+    },
+    {
+        "StartTime": "2023-07-10T13:00:00",
+        "EndTime": "2023-07-10T14:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 601.2
+    },
+    {
+        "StartTime": "2023-07-10T14:00:00",
+        "EndTime": "2023-07-10T15:00:00",
+        "HeatDemand": 1.51,
+        "ElectricityPrice": 483.53
+    },
+    {
+        "StartTime": "2023-07-10T15:00:00",
+        "EndTime": "2023-07-10T16:00:00",
+        "HeatDemand": 1.53,
+        "ElectricityPrice": 463.58
+    },
+    {
+        "StartTime": "2023-07-10T16:00:00",
+        "EndTime": "2023-07-10T17:00:00",
+        "HeatDemand": 1.46,
+        "ElectricityPrice": 472.05
+    },
+    {
+        "StartTime": "2023-07-10T17:00:00",
+        "EndTime": "2023-07-10T18:00:00",
+        "HeatDemand": 1.51,
+        "ElectricityPrice": 602.7
+    },
+    {
+        "StartTime": "2023-07-10T18:00:00",
+        "EndTime": "2023-07-10T19:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 914.78
+    },
+    {
+        "StartTime": "2023-07-10T19:00:00",
+        "EndTime": "2023-07-10T20:00:00",
+        "HeatDemand": 1.53,
+        "ElectricityPrice": 1241.18
+    },
+    {
+        "StartTime": "2023-07-10T20:00:00",
+        "EndTime": "2023-07-10T21:00:00",
+        "HeatDemand": 1.5,
+        "ElectricityPrice": 1319.18
+    },
+    {
+        "StartTime": "2023-07-10T21:00:00",
+        "EndTime": "2023-07-10T22:00:00",
+        "HeatDemand": 1.49,
+        "ElectricityPrice": 1350.53
+    },
+    {
+        "StartTime": "2023-07-10T22:00:00",
+        "EndTime": "2023-07-10T23:00:00",
+        "HeatDemand": 1.47,
+        "ElectricityPrice": 1221.9
+    },
+    {
+        "StartTime": "2023-07-10T23:00:00",
+        "EndTime": "2023-07-11T00:00:00",
+        "HeatDemand": 1.57,
+        "ElectricityPrice": 1002.75
+    },
+    {
+        "StartTime": "2023-07-11T00:00:00",
+        "EndTime": "2023-07-11T01:00:00",
+        "HeatDemand": 1.53,
+        "ElectricityPrice": 933.08
+    },
+    {
+        "StartTime": "2023-07-11T01:00:00",
+        "EndTime": "2023-07-11T02:00:00",
+        "HeatDemand": 1.54,
+        "ElectricityPrice": 868.05
+    },
+    {
+        "StartTime": "2023-07-11T02:00:00",
+        "EndTime": "2023-07-11T03:00:00",
+        "HeatDemand": 1.42,
+        "ElectricityPrice": 789.68
+    },
+    {
+        "StartTime": "2023-07-11T03:00:00",
+        "EndTime": "2023-07-11T04:00:00",
+        "HeatDemand": 1.46,
+        "ElectricityPrice": 755.1
+    },
+    {
+        "StartTime": "2023-07-11T04:00:00",
+        "EndTime": "2023-07-11T05:00:00",
+        "HeatDemand": 1.48,
+        "ElectricityPrice": 747.75
+    },
+    {
+        "StartTime": "2023-07-11T05:00:00",
+        "EndTime": "2023-07-11T06:00:00",
+        "HeatDemand": 1.56,
+        "ElectricityPrice": 845.55
+    },
+    {
+        "StartTime": "2023-07-11T06:00:00",
+        "EndTime": "2023-07-11T07:00:00",
+        "HeatDemand": 1.6,
+        "ElectricityPrice": 926.63
+    },
+    {
+        "StartTime": "2023-07-11T07:00:00",
+        "EndTime": "2023-07-11T08:00:00",
+        "HeatDemand": 1.68,
+        "ElectricityPrice": 940.43
+    },
+    {
+        "StartTime": "2023-07-11T08:00:00",
+        "EndTime": "2023-07-11T09:00:00",
+        "HeatDemand": 1.8,
+        "ElectricityPrice": 907.13
+    },
+    {
+        "StartTime": "2023-07-11T09:00:00",
+        "EndTime": "2023-07-11T10:00:00",
+        "HeatDemand": 1.78,
+        "ElectricityPrice": 788.25
+    },
+    {
+        "StartTime": "2023-07-11T10:00:00",
+        "EndTime": "2023-07-11T11:00:00",
+        "HeatDemand": 1.83,
+        "ElectricityPrice": 686.78
+    },
+    {
+        "StartTime": "2023-07-11T11:00:00",
+        "EndTime": "2023-07-11T12:00:00",
+        "HeatDemand": 1.92,
+        "ElectricityPrice": 489.38
+    },
+    {
+        "StartTime": "2023-07-11T12:00:00",
+        "EndTime": "2023-07-11T13:00:00",
+        "HeatDemand": 1.93,
+        "ElectricityPrice": 422.85
+    },
+    {
+        "StartTime": "2023-07-11T13:00:00",
+        "EndTime": "2023-07-11T14:00:00",
+        "HeatDemand": 1.91,
+        "ElectricityPrice": 347.93
+    },
+    {
+        "StartTime": "2023-07-11T14:00:00",
+        "EndTime": "2023-07-11T15:00:00",
+        "HeatDemand": 1.72,
+        "ElectricityPrice": 355.43
+    },
+    {
+        "StartTime": "2023-07-11T15:00:00",
+        "EndTime": "2023-07-11T16:00:00",
+        "HeatDemand": 1.64,
+        "ElectricityPrice": 434.1
+    },
+    {
+        "StartTime": "2023-07-11T16:00:00",
+        "EndTime": "2023-07-11T17:00:00",
+        "HeatDemand": 1.59,
+        "ElectricityPrice": 510
+    },
+    {
+        "StartTime": "2023-07-11T17:00:00",
+        "EndTime": "2023-07-11T18:00:00",
+        "HeatDemand": 1.53,
+        "ElectricityPrice": 698.4
+    },
+    {
+        "StartTime": "2023-07-11T18:00:00",
+        "EndTime": "2023-07-11T19:00:00",
+        "HeatDemand": 1.61,
+        "ElectricityPrice": 855
+    },
+    {
+        "StartTime": "2023-07-11T19:00:00",
+        "EndTime": "2023-07-11T20:00:00",
+        "HeatDemand": 1.69,
+        "ElectricityPrice": 1061.63
+    },
+    {
+        "StartTime": "2023-07-11T20:00:00",
+        "EndTime": "2023-07-11T21:00:00",
+        "HeatDemand": 1.65,
+        "ElectricityPrice": 1200.15
+    },
+    {
+        "StartTime": "2023-07-11T21:00:00",
+        "EndTime": "2023-07-11T22:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 1005.68
+    },
+    {
+        "StartTime": "2023-07-11T22:00:00",
+        "EndTime": "2023-07-11T23:00:00",
+        "HeatDemand": 1.56,
+        "ElectricityPrice": 892.5
+    },
+    {
+        "StartTime": "2023-07-11T23:00:00",
+        "EndTime": "2023-07-12T00:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 772.73
+    },
+    {
+        "StartTime": "2023-07-12T00:00:00",
+        "EndTime": "2023-07-12T01:00:00",
+        "HeatDemand": 1.7,
+        "ElectricityPrice": 738.53
+    },
+    {
+        "StartTime": "2023-07-12T01:00:00",
+        "EndTime": "2023-07-12T02:00:00",
+        "HeatDemand": 1.66,
+        "ElectricityPrice": 682.5
+    },
+    {
+        "StartTime": "2023-07-12T02:00:00",
+        "EndTime": "2023-07-12T03:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 675
+    },
+    {
+        "StartTime": "2023-07-12T03:00:00",
+        "EndTime": "2023-07-12T04:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 615.68
+    },
+    {
+        "StartTime": "2023-07-12T04:00:00",
+        "EndTime": "2023-07-12T05:00:00",
+        "HeatDemand": 1.58,
+        "ElectricityPrice": 580.5
+    },
+    {
+        "StartTime": "2023-07-12T05:00:00",
+        "EndTime": "2023-07-12T06:00:00",
+        "HeatDemand": 1.61,
+        "ElectricityPrice": 570
+    },
+    {
+        "StartTime": "2023-07-12T06:00:00",
+        "EndTime": "2023-07-12T07:00:00",
+        "HeatDemand": 1.66,
+        "ElectricityPrice": 661.65
+    },
+    {
+        "StartTime": "2023-07-12T07:00:00",
+        "EndTime": "2023-07-12T08:00:00",
+        "HeatDemand": 1.75,
+        "ElectricityPrice": 865.5
+    },
+    {
+        "StartTime": "2023-07-12T08:00:00",
+        "EndTime": "2023-07-12T09:00:00",
+        "HeatDemand": 1.78,
+        "ElectricityPrice": 900
+    },
+    {
+        "StartTime": "2023-07-12T09:00:00",
+        "EndTime": "2023-07-12T10:00:00",
+        "HeatDemand": 1.76,
+        "ElectricityPrice": 767.48
+    },
+    {
+        "StartTime": "2023-07-12T10:00:00",
+        "EndTime": "2023-07-12T11:00:00",
+        "HeatDemand": 1.76,
+        "ElectricityPrice": 622.5
+    },
+    {
+        "StartTime": "2023-07-12T11:00:00",
+        "EndTime": "2023-07-12T12:00:00",
+        "HeatDemand": 1.94,
+        "ElectricityPrice": 380.78
+    },
+    {
+        "StartTime": "2023-07-12T12:00:00",
+        "EndTime": "2023-07-12T13:00:00",
+        "HeatDemand": 1.86,
+        "ElectricityPrice": 119.03
+    },
+    {
+        "StartTime": "2023-07-12T13:00:00",
+        "EndTime": "2023-07-12T14:00:00",
+        "HeatDemand": 1.79,
+        "ElectricityPrice": 96.9
+    },
+    {
+        "StartTime": "2023-07-12T14:00:00",
+        "EndTime": "2023-07-12T15:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 144.98
+    },
+    {
+        "StartTime": "2023-07-12T15:00:00",
+        "EndTime": "2023-07-12T16:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 202.73
+    },
+    {
+        "StartTime": "2023-07-12T16:00:00",
+        "EndTime": "2023-07-12T17:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 221.18
+    },
+    {
+        "StartTime": "2023-07-12T17:00:00",
+        "EndTime": "2023-07-12T18:00:00",
+        "HeatDemand": 1.53,
+        "ElectricityPrice": 328.65
+    },
+    {
+        "StartTime": "2023-07-12T18:00:00",
+        "EndTime": "2023-07-12T19:00:00",
+        "HeatDemand": 1.56,
+        "ElectricityPrice": 375.45
+    },
+    {
+        "StartTime": "2023-07-12T19:00:00",
+        "EndTime": "2023-07-12T20:00:00",
+        "HeatDemand": 1.59,
+        "ElectricityPrice": 601.95
+    },
+    {
+        "StartTime": "2023-07-12T20:00:00",
+        "EndTime": "2023-07-12T21:00:00",
+        "HeatDemand": 1.61,
+        "ElectricityPrice": 1043.25
+    },
+    {
+        "StartTime": "2023-07-12T21:00:00",
+        "EndTime": "2023-07-12T22:00:00",
+        "HeatDemand": 1.61,
+        "ElectricityPrice": 939
+    },
+    {
+        "StartTime": "2023-07-12T22:00:00",
+        "EndTime": "2023-07-12T23:00:00",
+        "HeatDemand": 1.67,
+        "ElectricityPrice": 945.08
+    },
+    {
+        "StartTime": "2023-07-12T23:00:00",
+        "EndTime": "2023-07-13T00:00:00",
+        "HeatDemand": 1.66,
+        "ElectricityPrice": 854.33
+    },
+    {
+        "StartTime": "2023-07-13T00:00:00",
+        "EndTime": "2023-07-13T01:00:00",
+        "HeatDemand": 1.67,
+        "ElectricityPrice": 786.9
+    },
+    {
+        "StartTime": "2023-07-13T01:00:00",
+        "EndTime": "2023-07-13T02:00:00",
+        "HeatDemand": 1.65,
+        "ElectricityPrice": 642.45
+    },
+    {
+        "StartTime": "2023-07-13T02:00:00",
+        "EndTime": "2023-07-13T03:00:00",
+        "HeatDemand": 1.6,
+        "ElectricityPrice": 592.5
+    },
+    {
+        "StartTime": "2023-07-13T03:00:00",
+        "EndTime": "2023-07-13T04:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 563.18
+    },
+    {
+        "StartTime": "2023-07-13T04:00:00",
+        "EndTime": "2023-07-13T05:00:00",
+        "HeatDemand": 1.6,
+        "ElectricityPrice": 570
+    },
+    {
+        "StartTime": "2023-07-13T05:00:00",
+        "EndTime": "2023-07-13T06:00:00",
+        "HeatDemand": 1.68,
+        "ElectricityPrice": 663.83
+    },
+    {
+        "StartTime": "2023-07-13T06:00:00",
+        "EndTime": "2023-07-13T07:00:00",
+        "HeatDemand": 1.71,
+        "ElectricityPrice": 766.73
+    },
+    {
+        "StartTime": "2023-07-13T07:00:00",
+        "EndTime": "2023-07-13T08:00:00",
+        "HeatDemand": 1.78,
+        "ElectricityPrice": 828.53
+    },
+    {
+        "StartTime": "2023-07-13T08:00:00",
+        "EndTime": "2023-07-13T09:00:00",
+        "HeatDemand": 2.04,
+        "ElectricityPrice": 893.25
+    },
+    {
+        "StartTime": "2023-07-13T09:00:00",
+        "EndTime": "2023-07-13T10:00:00",
+        "HeatDemand": 2.02,
+        "ElectricityPrice": 652.2
+    },
+    {
+        "StartTime": "2023-07-13T10:00:00",
+        "EndTime": "2023-07-13T11:00:00",
+        "HeatDemand": 1.8,
+        "ElectricityPrice": 365.78
+    },
+    {
+        "StartTime": "2023-07-13T11:00:00",
+        "EndTime": "2023-07-13T12:00:00",
+        "HeatDemand": 1.73,
+        "ElectricityPrice": 356.93
+    },
+    {
+        "StartTime": "2023-07-13T12:00:00",
+        "EndTime": "2023-07-13T13:00:00",
+        "HeatDemand": 1.72,
+        "ElectricityPrice": 370.43
+    },
+    {
+        "StartTime": "2023-07-13T13:00:00",
+        "EndTime": "2023-07-13T14:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 348.75
+    },
+    {
+        "StartTime": "2023-07-13T14:00:00",
+        "EndTime": "2023-07-13T15:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 348.75
+    },
+    {
+        "StartTime": "2023-07-13T15:00:00",
+        "EndTime": "2023-07-13T16:00:00",
+        "HeatDemand": 1.67,
+        "ElectricityPrice": 350.63
+    },
+    {
+        "StartTime": "2023-07-13T16:00:00",
+        "EndTime": "2023-07-13T17:00:00",
+        "HeatDemand": 1.61,
+        "ElectricityPrice": 338.03
+    },
+    {
+        "StartTime": "2023-07-13T17:00:00",
+        "EndTime": "2023-07-13T18:00:00",
+        "HeatDemand": 1.65,
+        "ElectricityPrice": 351.98
+    },
+    {
+        "StartTime": "2023-07-13T18:00:00",
+        "EndTime": "2023-07-13T19:00:00",
+        "HeatDemand": 1.65,
+        "ElectricityPrice": 417.68
+    },
+    {
+        "StartTime": "2023-07-13T19:00:00",
+        "EndTime": "2023-07-13T20:00:00",
+        "HeatDemand": 1.67,
+        "ElectricityPrice": 867.23
+    },
+    {
+        "StartTime": "2023-07-13T20:00:00",
+        "EndTime": "2023-07-13T21:00:00",
+        "HeatDemand": 1.68,
+        "ElectricityPrice": 981.45
+    },
+    {
+        "StartTime": "2023-07-13T21:00:00",
+        "EndTime": "2023-07-13T22:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 1034.18
+    },
+    {
+        "StartTime": "2023-07-13T22:00:00",
+        "EndTime": "2023-07-13T23:00:00",
+        "HeatDemand": 1.61,
+        "ElectricityPrice": 972.53
+    },
+    {
+        "StartTime": "2023-07-13T23:00:00",
+        "EndTime": "2023-07-14T00:00:00",
+        "HeatDemand": 1.7,
+        "ElectricityPrice": 882.9
+    },
+    {
+        "StartTime": "2023-07-14T00:00:00",
+        "EndTime": "2023-07-14T01:00:00",
+        "HeatDemand": 1.71,
+        "ElectricityPrice": 757.5
+    },
+    {
+        "StartTime": "2023-07-14T01:00:00",
+        "EndTime": "2023-07-14T02:00:00",
+        "HeatDemand": 1.75,
+        "ElectricityPrice": 722.7
+    },
+    {
+        "StartTime": "2023-07-14T02:00:00",
+        "EndTime": "2023-07-14T03:00:00",
+        "HeatDemand": 1.66,
+        "ElectricityPrice": 634.13
+    },
+    {
+        "StartTime": "2023-07-14T03:00:00",
+        "EndTime": "2023-07-14T04:00:00",
+        "HeatDemand": 1.64,
+        "ElectricityPrice": 626.85
+    },
+    {
+        "StartTime": "2023-07-14T04:00:00",
+        "EndTime": "2023-07-14T05:00:00",
+        "HeatDemand": 1.7,
+        "ElectricityPrice": 700.13
+    },
+    {
+        "StartTime": "2023-07-14T05:00:00",
+        "EndTime": "2023-07-14T06:00:00",
+        "HeatDemand": 1.78,
+        "ElectricityPrice": 745.13
+    },
+    {
+        "StartTime": "2023-07-14T06:00:00",
+        "EndTime": "2023-07-14T07:00:00",
+        "HeatDemand": 1.8,
+        "ElectricityPrice": 855
+    },
+    {
+        "StartTime": "2023-07-14T07:00:00",
+        "EndTime": "2023-07-14T08:00:00",
+        "HeatDemand": 1.78,
+        "ElectricityPrice": 855
+    },
+    {
+        "StartTime": "2023-07-14T08:00:00",
+        "EndTime": "2023-07-14T09:00:00",
+        "HeatDemand": 1.82,
+        "ElectricityPrice": 778.2
+    },
+    {
+        "StartTime": "2023-07-14T09:00:00",
+        "EndTime": "2023-07-14T10:00:00",
+        "HeatDemand": 1.9,
+        "ElectricityPrice": 638.03
+    },
+    {
+        "StartTime": "2023-07-14T10:00:00",
+        "EndTime": "2023-07-14T11:00:00",
+        "HeatDemand": 1.86,
+        "ElectricityPrice": 597.83
+    },
+    {
+        "StartTime": "2023-07-14T11:00:00",
+        "EndTime": "2023-07-14T12:00:00",
+        "HeatDemand": 1.88,
+        "ElectricityPrice": 572.93
+    },
+    {
+        "StartTime": "2023-07-14T12:00:00",
+        "EndTime": "2023-07-14T13:00:00",
+        "HeatDemand": 1.83,
+        "ElectricityPrice": 553.5
+    },
+    {
+        "StartTime": "2023-07-14T13:00:00",
+        "EndTime": "2023-07-14T14:00:00",
+        "HeatDemand": 1.76,
+        "ElectricityPrice": 523.88
+    },
+    {
+        "StartTime": "2023-07-14T14:00:00",
+        "EndTime": "2023-07-14T15:00:00",
+        "HeatDemand": 1.63,
+        "ElectricityPrice": 563.48
+    },
+    {
+        "StartTime": "2023-07-14T15:00:00",
+        "EndTime": "2023-07-14T16:00:00",
+        "HeatDemand": 1.57,
+        "ElectricityPrice": 582.75
+    },
+    {
+        "StartTime": "2023-07-14T16:00:00",
+        "EndTime": "2023-07-14T17:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 581.63
+    },
+    {
+        "StartTime": "2023-07-14T17:00:00",
+        "EndTime": "2023-07-14T18:00:00",
+        "HeatDemand": 1.54,
+        "ElectricityPrice": 730.95
+    },
+    {
+        "StartTime": "2023-07-14T18:00:00",
+        "EndTime": "2023-07-14T19:00:00",
+        "HeatDemand": 1.56,
+        "ElectricityPrice": 864.38
+    },
+    {
+        "StartTime": "2023-07-14T19:00:00",
+        "EndTime": "2023-07-14T20:00:00",
+        "HeatDemand": 1.56,
+        "ElectricityPrice": 1051.43
+    },
+    {
+        "StartTime": "2023-07-14T20:00:00",
+        "EndTime": "2023-07-14T21:00:00",
+        "HeatDemand": 1.59,
+        "ElectricityPrice": 1049.4
+    },
+    {
+        "StartTime": "2023-07-14T21:00:00",
+        "EndTime": "2023-07-14T22:00:00",
+        "HeatDemand": 1.57,
+        "ElectricityPrice": 929.4
+    },
+    {
+        "StartTime": "2023-07-14T22:00:00",
+        "EndTime": "2023-07-14T23:00:00",
+        "HeatDemand": 1.55,
+        "ElectricityPrice": 714.38
+    },
+    {
+        "StartTime": "2023-07-14T23:00:00",
+        "EndTime": "2023-07-15T00:00:00",
+        "HeatDemand": 1.62,
+        "ElectricityPrice": 607.05
+    }
+]
