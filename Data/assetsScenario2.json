@@ -1,0 +1,40 @@
+{
+    "GB": {
+        "ImagePath": "Assets/GB.png",
+        "HeatCapacity": 5,
+        "Cost": 500,
+        "ElectricityCapacity": 0,
+        "CO2": 215,
+        "AdditionalResources": {
+            "gas": 1.1
+        }
+    },
+    "OB": {
+        "ImagePath": "Assets/OB.png",
+        "HeatCapacity": 4,
+        "Cost": 700,
+        "ElectricityCapacity": 0,
+        "CO2": 265,
+        "AdditionalResources": {
+            "oil": 1.2
+        }
+    },
+    "GM": {
+        "ImagePath": "Assets/GM.png",
+        "HeatCapacity": 3.6,
+        "Cost": 1100,
+        "ElectricityCapacity": 2.7,
+        "CO2": 640,
+        "AdditionalResources": {
+            "gas": 1.9
+        }
+    },
+    "EK": {
+        "ImagePath": "Assets/EK.png",
+        "HeatCapacity": 8,
+        "Cost": 50,
+        "ElectricityCapacity": -8,
+        "CO2": 0,
+        "AdditionalResources": {}
+    }
+}
