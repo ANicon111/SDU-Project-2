@@ -1,5 +1,6 @@
-{
-    "GB": {
+[
+    {
+        "Name": "GB",
         "ImagePath": "Assets/GB.png",
         "HeatCapacity": 5,
         "Cost": 500,
@@ -9,7 +10,8 @@
             "gas": 1.1
         }
     },
-    "OB": {
+    {
+        "Name": "OB",
         "ImagePath": "Assets/OB.png",
         "HeatCapacity": 4,
         "Cost": 700,
@@ -19,4 +21,4 @@
             "oil": 1.2
         }
     }
-}
+]

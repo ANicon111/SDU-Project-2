@@ -1,5 +1,6 @@
-{
-    "GB": {
+[
+    {
+        "Name": "GB",
         "ImagePath": "Assets/GB.png",
         "HeatCapacity": 5,
         "Cost": 500,
@@ -9,7 +10,8 @@
             "gas": 1.1
         }
     },
-    "OB": {
+    {
+        "Name": "OB",
         "ImagePath": "Assets/OB.png",
         "HeatCapacity": 4,
         "Cost": 700,
@@ -19,7 +21,8 @@
             "oil": 1.2
         }
     },
-    "GM": {
+    {
+        "Name": "GM",
         "ImagePath": "Assets/GM.png",
         "HeatCapacity": 3.6,
         "Cost": 1100,
@@ -29,7 +32,8 @@
             "gas": 1.9
         }
     },
-    "EK": {
+    {
+        "Name": "EK",
         "ImagePath": "Assets/EK.png",
         "HeatCapacity": 8,
         "Cost": 50,
@@ -37,4 +41,4 @@
         "CO2": 0,
         "AdditionalResources": {}
     }
-}
+]
