@@ -1,7 +1,6 @@
 namespace HeatManagement;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
 
 
@@ -18,19 +17,12 @@ public struct SourceData(DateTime startTime, DateTime endTime, double heatDemand
     public double ElectricityPrice { readonly get => electricityPrice; set => electricityPrice = value; }
 }
 
-public class SourceDataManager(string filePath = "sourceData.json", bool generateFileIfNotExists = false, bool overwriteFile = false)
+public class SourceDataManager(string json)
 {
-    readonly string FilePath = filePath;
-
-    private List<SourceData>? data = JsonSerializer.Deserialize<List<SourceData>>(
-        !File.Exists(filePath) && generateFileIfNotExists || overwriteFile
-        ? "[]"
-        : File.ReadAllText(filePath)
-    );
+    private List<SourceData>? data = JsonSerializer.Deserialize<List<SourceData>>(json);
 
     public List<SourceData>? Data { get => data; set => data = value; }
 
-    public void StoreJson() => File.WriteAllText(FilePath, JsonSerializer.Serialize(data));
     public void AddData(SourceData sourceData)
     {
         data?.Add(sourceData);
@@ -39,4 +31,5 @@ public class SourceDataManager(string filePath = "sourceData.json", bool generat
     {
         data?.Remove(sourceData);
     }
+    public string ToJson() => JsonSerializer.Serialize(data);
 }

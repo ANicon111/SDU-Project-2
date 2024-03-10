@@ -2,6 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Build HeatManagement",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/HeatManagement/HeatManagement.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "Run HeatManagement",
             "command": "dotnet",
             "type": "process",

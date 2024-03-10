@@ -27,20 +27,13 @@ public struct Asset(
     public Dictionary<string, double> AdditionalResources { readonly get => additionalResources; set => additionalResources = value; }
 }
 
-public class AssetManager(string filePath = "assets.json", bool generateFileIfNotExists = false, bool overwriteFile = false)
+public class AssetManager(string json)
 {
-    readonly string FilePath = filePath;
-
     //The name is stored as the Dictionary index
-    private Dictionary<string, Asset>? assets = JsonSerializer.Deserialize<Dictionary<string, Asset>>(
-        !File.Exists(filePath) && generateFileIfNotExists || overwriteFile
-        ? "{}"
-        : File.ReadAllText(filePath)
-    );
+    private Dictionary<string, Asset>? assets = JsonSerializer.Deserialize<Dictionary<string, Asset>>(json);
 
     public Dictionary<string, Asset>? Assets { get => assets; set => assets = value; }
 
-    public void StoreJson() => File.WriteAllText(FilePath, JsonSerializer.Serialize(assets));
     public void AddAsset(string name, Asset asset)
     {
         assets?.Add(name, asset);
@@ -49,5 +42,5 @@ public class AssetManager(string filePath = "assets.json", bool generateFileIfNo
     {
         assets?.Remove(name);
     }
-
+    public string ToJson() => JsonSerializer.Serialize(assets);
 }

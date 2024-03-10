@@ -5,19 +5,5 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
         x:Class="HeatManagement.MainWindow"
         Title="HeatManagement">
-    <Canvas Name="canvas">
-        <Rectangle Name="cost_bg" Fill="Green" Canvas.Top="0" Canvas.Left="0"/>
-        <Rectangle Name="electricity_bg" Fill="Orange" Canvas.Bottom="0" Canvas.Left="0"/>
-        <Rectangle Name="co2_bg" Fill="Black" Canvas.Bottom="0" Canvas.Right="0"/>
 
-        <Polyline Name="cost" Stroke="LightGreen" StrokeThickness="3"/>
-        <Line Name="cost_0" Stroke="LightGreen"/>
-        <Polyline Name="electricity" Stroke="Yellow" StrokeThickness="3"/>
-        <Line Name="electricity_0" Stroke="Yellow"/>
-        <Polyline Name="co2" Stroke="Gray" StrokeThickness="3"/>
-    
-        <TextBlock Name="cost_text" Margin="0 5" FontSize="18" FontWeight="Bold" Foreground="White" Canvas.Top="0" Canvas.Left="0">Cost</TextBlock>
-        <TextBlock Name="electricity_text" Margin="0 5" FontSize="18" FontWeight="Bold" Foreground="White" Canvas.Bottom="0" Canvas.Left="0">Electricity Generation/Consumption</TextBlock>
-        <TextBlock Name="co2_text" Margin="0 5" FontSize="18" FontWeight="Bold" Foreground="White" Canvas.Bottom="0" Canvas.Right="0">CO2</TextBlock>
-    </Canvas>
 </Window>
