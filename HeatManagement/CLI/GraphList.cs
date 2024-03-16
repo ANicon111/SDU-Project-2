@@ -145,12 +145,14 @@ static partial class CLI
                         );
                         break;
                 }
+                while (Console.KeyAvailable) renderer.ReadKey();
             }
             Thread.Sleep(50);
             if (renderer.UpdateScreenSize())
             {
                 renderer.Object.Width = renderer.TerminalWidth;
                 renderer.Object.Height = renderer.TerminalHeight;
+                renderer.Object.SubObjects[0].Y = -Math.Max(0, selectedGraph - renderer.TerminalHeight + 3);
             }
             renderer.Update();
         }

@@ -112,6 +112,7 @@ static partial class CLI
         while (viewing)
         {
             if (Console.KeyAvailable)
+            {
                 switch (renderer.ReadKey().Key)
                 {
                     case ConsoleKey.LeftArrow:
@@ -134,7 +135,9 @@ static partial class CLI
                         viewing = false;
                         break;
                 }
-            Thread.Sleep(33);
+                while (Console.KeyAvailable) renderer.ReadKey();
+            }
+            Thread.Sleep(50);
 
             if (renderer.UpdateScreenSize())
             {
