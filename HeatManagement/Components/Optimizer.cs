@@ -47,5 +47,6 @@ public static class Optimizer
                 assetCostPerMWH.Remove(name);
             }
         }
+        rdm.CompileData();
     }
 }

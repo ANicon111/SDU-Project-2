@@ -8,6 +8,7 @@ static partial class CLI
 {
     public static void RunGreeter(string[] args)
     {
+        Console.CursorVisible = false;
         AssetManager? assets = null;
         string tryLoadAssetsFile(string filePath)
         {
@@ -125,8 +126,8 @@ static partial class CLI
                         selectedChar = Math.Max(selectedChar - 1, 0);
                         break;
                     default:
-                        //every relevant key on my keyboard, lol
-                        if ("qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM`1234567890-=~!@#$%^&*()_+[]\\|{};':\",./<>? ".Contains(key.KeyChar))
+                        char c = key.KeyChar;
+                        if (c > 31)
                         {
                             selectedChar++;
                             filePath = filePath[..selectedChar] + key.KeyChar + filePath[selectedChar..];
@@ -135,8 +136,13 @@ static partial class CLI
                 }
             }
             Thread.Sleep(50);
-            renderer.UpdateScreenSize();
-            renderer.Update(forceRedraw: true);
+            if (renderer.UpdateScreenSize())
+            {
+                renderer.Object.Width = renderer.TerminalWidth;
+                renderer.Object.Height = renderer.TerminalHeight;
+                renderer.Object.SubObjects[0].Width = renderer.TerminalWidth * 3 / 4;
+            }
+            renderer.Update();
         }
     }
 }

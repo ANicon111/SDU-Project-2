@@ -35,6 +35,12 @@ public class ResultDataManager
             RawResultData.Add(JsonSerializer.Deserialize<Tuple<DateTime, DateTime>>(element.Key)!, element.Value);
         }
         CompiledResultData = [];
+        CompileData();
+    }
+
+    public void CompileData()
+    {
+        CompiledResultData = [];
         foreach (KeyValuePair<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> RawResult in RawResultData)
         {
             ResultData compiledResult = new(0, 0, 0, 0, []);
