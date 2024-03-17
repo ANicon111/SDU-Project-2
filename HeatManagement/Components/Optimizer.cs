@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace HeatManagement;
 
@@ -47,6 +46,5 @@ public static class Optimizer
                 assetCostPerMWH.Remove(name);
             }
         }
-        rdm.CompileData();
     }
 }

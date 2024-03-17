@@ -21,7 +21,7 @@ class Program
                 case "--console":
                 case "-c":
                     args = args[1..];
-                    CLI.RunGreeter(args);
+                    CLI.Run(args);
                     break;
                 case "--gui":
                 case "--avalonia":

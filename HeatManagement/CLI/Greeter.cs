@@ -6,10 +6,10 @@ namespace HeatManagement;
 
 static partial class CLI
 {
-    public static void RunGreeter(string[] args)
+    static void RunGreeter(ref string[] args)
     {
-        Console.CursorVisible = false;
         AssetManager? assets = null;
+
         string tryLoadAssetsFile(string filePath)
         {
             if (!File.Exists(filePath))
@@ -27,13 +27,14 @@ static partial class CLI
         }
 
         FilePathMenu(
-            args: args,
+            args: ref args,
             filePath: "assets.json",
             title: "Input the asset file path:",
             tryLoadFile: tryLoadAssetsFile
         );
 
         SourceDataManager? sourceData = null;
+
         string tryLoadSourceDataFile(string filePath)
         {
             if (!File.Exists(filePath))
@@ -52,7 +53,7 @@ static partial class CLI
 
 
         FilePathMenu(
-            args: args,
+            args: ref args,
             filePath: "sourceData.json",
             title: "Input the source data file path:",
             tryLoadFile: tryLoadSourceDataFile
@@ -60,10 +61,13 @@ static partial class CLI
 
         RunGraphList(assets!, sourceData!);
     }
-    public static void FilePathMenu(string[] args, string filePath, string title, Func<string, string> tryLoadFile)
+
+    //generic file loader for a manager
+    public static void FilePathMenu(ref string[] args, string filePath, string title, Func<string, string> tryLoadFile)
     {
         bool fileLoaded = false;
         string error = "";
+        int selectedChar = filePath.Length - 1;
 
         if (args.Length > 0)
         {
@@ -72,8 +76,6 @@ static partial class CLI
             error = tryLoadFile(filePath);
             fileLoaded = error == "";
         }
-
-        int selectedChar = filePath.Length - 1;
         while (!fileLoaded)
         {
             renderer.Object = new(
@@ -114,19 +116,24 @@ static partial class CLI
                         error = tryLoadFile(filePath);
                         fileLoaded = error == "";
                         break;
+
                     case ConsoleKey.Backspace:
                         if (filePath.Length > 0)
                             filePath = filePath.Remove(selectedChar, 1);
                         selectedChar = Math.Max(selectedChar - 1, 0);
                         break;
+
                     case ConsoleKey.RightArrow:
                         selectedChar = Math.Min(selectedChar + 1, filePath.Length - 1);
                         break;
+
                     case ConsoleKey.LeftArrow:
                         selectedChar = Math.Max(selectedChar - 1, 0);
                         break;
+
                     default:
                         char c = key.KeyChar;
+                        //ignore null and control characters
                         if (c > 31)
                         {
                             selectedChar++;
@@ -135,6 +142,7 @@ static partial class CLI
                         break;
                 }
             }
+
             Thread.Sleep(50);
             if (renderer.UpdateScreenSize())
             {

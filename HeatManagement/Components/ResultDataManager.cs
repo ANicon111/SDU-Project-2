@@ -2,7 +2,6 @@ namespace HeatManagement;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 
 
@@ -24,80 +23,39 @@ public struct ResultData(double heat, double cost, double electricity, double co
 public class ResultDataManager
 {
 
-    public SortedDictionary<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> RawResultData;
-    public SortedDictionary<Tuple<DateTime, DateTime>, ResultData> CompiledResultData;
+    public SortedDictionary<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> ResultData;
 
     public ResultDataManager(string json = "{}")
     {
-        RawResultData = [];
+        ResultData = [];
         foreach (var element in JsonSerializer.Deserialize<SortedDictionary<string, Dictionary<string, ResultData>>>(json)!)
         {
-            RawResultData.Add(JsonSerializer.Deserialize<Tuple<DateTime, DateTime>>(element.Key)!, element.Value);
-        }
-        CompiledResultData = [];
-        CompileData();
-    }
-
-    public void CompileData()
-    {
-        CompiledResultData = [];
-        foreach (KeyValuePair<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> RawResult in RawResultData)
-        {
-            ResultData compiledResult = new(0, 0, 0, 0, []);
-            foreach (KeyValuePair<string, ResultData> AssetResult in RawResult.Value)
-            {
-                compiledResult.Heat += AssetResult.Value.Heat;
-                compiledResult.Cost += AssetResult.Value.Cost;
-                compiledResult.Electricity += AssetResult.Value.Electricity;
-                compiledResult.CO2 += AssetResult.Value.CO2;
-                foreach (KeyValuePair<string, double> additionalResource in compiledResult.AdditionalResources)
-                {
-                    if (!compiledResult.AdditionalResources.ContainsKey(additionalResource.Key))
-                        compiledResult.AdditionalResources[additionalResource.Key] = 0;
-                    compiledResult.AdditionalResources[additionalResource.Key] += additionalResource.Value;
-                }
-            }
-            CompiledResultData[Tuple.Create(RawResult.Key.Item1, RawResult.Key.Item2)] = compiledResult;
+            ResultData.Add(JsonSerializer.Deserialize<Tuple<DateTime, DateTime>>(element.Key)!, element.Value);
         }
     }
 
     public void AddData(DateTime startTime, DateTime endTime, string assetName, ResultData assetData)
     {
-        if (!RawResultData.ContainsKey(Tuple.Create(startTime, endTime))) RawResultData[Tuple.Create(startTime, endTime)] = [];
-        if (!RawResultData[Tuple.Create(startTime, endTime)].ContainsKey(assetName)) RawResultData[Tuple.Create(startTime, endTime)][assetName] = assetData;
+        if (!ResultData.ContainsKey(Tuple.Create(startTime, endTime))) ResultData[Tuple.Create(startTime, endTime)] = [];
+        if (!ResultData[Tuple.Create(startTime, endTime)].ContainsKey(assetName)) ResultData[Tuple.Create(startTime, endTime)][assetName] = assetData;
     }
 
     public void RemoveDataByTime(DateTime startTime, DateTime endTime, string? assetName = null)
     {
         if (assetName != null)
         {
-            RawResultData[Tuple.Create(startTime, endTime)].Remove(assetName);
-            ResultData compiledResult = new(0, 0, 0, 0, []);
-            foreach (KeyValuePair<string, ResultData> AssetResult in RawResultData[Tuple.Create(startTime, endTime)])
-            {
-                compiledResult.Heat += AssetResult.Value.Heat;
-                compiledResult.Cost += AssetResult.Value.Cost;
-                compiledResult.Electricity += AssetResult.Value.Electricity;
-                compiledResult.CO2 += AssetResult.Value.CO2;
-                foreach (KeyValuePair<string, double> additionalResource in compiledResult.AdditionalResources)
-                {
-                    if (!compiledResult.AdditionalResources.ContainsKey(additionalResource.Key))
-                        compiledResult.AdditionalResources[additionalResource.Key] = 0;
-                    compiledResult.AdditionalResources[additionalResource.Key] += additionalResource.Value;
-                }
-            }
-            CompiledResultData[Tuple.Create(startTime, endTime)] = compiledResult;
+            ResultData[Tuple.Create(startTime, endTime)].Remove(assetName);
         }
         else
         {
-            RawResultData.Remove(Tuple.Create(startTime, endTime));
+            ResultData.Remove(Tuple.Create(startTime, endTime));
         }
     }
 
     public string ToJson()
     {
         SortedDictionary<string, Dictionary<string, ResultData>> jsonIntermediary = [];
-        foreach (var item in RawResultData)
+        foreach (var item in ResultData)
         {
             jsonIntermediary.Add(JsonSerializer.Serialize(item.Key), item.Value);
         }
