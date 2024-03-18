@@ -40,7 +40,7 @@ public class ResultDataManager
         if (!ResultData[Tuple.Create(startTime, endTime)].ContainsKey(assetName)) ResultData[Tuple.Create(startTime, endTime)][assetName] = assetData;
     }
 
-    public void RemoveDataByTime(DateTime startTime, DateTime endTime, string? assetName = null)
+    public void RemoveData(DateTime startTime, DateTime endTime, string? assetName = null)
     {
         if (assetName != null)
         {

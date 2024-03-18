@@ -17,7 +17,7 @@ public struct SourceData(DateTime startTime, DateTime endTime, double heatDemand
     public double ElectricityPrice { readonly get => electricityPrice; set => electricityPrice = value; }
 }
 
-public class SourceDataManager(string json)
+public class SourceDataManager(string json = "[]")
 {
     private List<SourceData>? data = JsonSerializer.Deserialize<List<SourceData>>(json);
 

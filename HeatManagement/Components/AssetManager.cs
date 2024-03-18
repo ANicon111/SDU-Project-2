@@ -26,7 +26,7 @@ public struct Asset(
     public Dictionary<string, double> AdditionalResources { readonly get => additionalResources; set => additionalResources = value; }
 }
 
-public class AssetManager(string json)
+public class AssetManager(string json = "{}")
 {
     //The name is stored as the Dictionary index
     private Dictionary<string, Asset>? assets = JsonSerializer.Deserialize<Dictionary<string, Asset>>(json);

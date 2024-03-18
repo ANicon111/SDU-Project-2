@@ -1,7 +1,8 @@
 namespace HeatManagement.tests;
 
-public class UnitTest1
+public class Debug
 {
+    //Testing unit testing
     [Fact]
     public void UnitTestTest()
     {
