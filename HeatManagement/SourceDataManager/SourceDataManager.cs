@@ -17,10 +17,10 @@ public struct Source(DateTime startTime, DateTime endTime, double heatDemand, do
     public double ElectricityPrice { readonly get => electricityPrice; set => electricityPrice = value; }
 }
 
-class SourceDataManager
+public class SourceDataManager
 {
     public List<Source> SourceData = [];
-    void JsonImport(string json)
+    public void JsonImport(string json)
     {
         try
         {
@@ -32,7 +32,7 @@ class SourceDataManager
         }
     }
 
-    string JsonExport() => JsonSerializer.Serialize(SourceData);
+    public string JsonExport() => JsonSerializer.Serialize(SourceData);
 
     public void DataAdd(DateTime startTime, DateTime endTime, double heatDemand, double electricityPrice)
     {

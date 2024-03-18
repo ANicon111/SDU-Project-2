@@ -7,13 +7,12 @@ namespace HeatManagement;
 // Result data should be separated for each production unit and should contain important
 // information such as produced amount of heat, produced / consumed electricity,
 // production costs, consumption of primary energy and produced amount of CO2 
-public struct Result(string unit, double producedHeat, double consumedElectricity, double cost, double consumptionOfEnergy, double producedCO2, Dictionary<string, double> additionalResources)
+public struct Result(string unit, double producedHeat, double consumedElectricity, double cost, double producedCO2, Dictionary<string, double> additionalResources)
 {
     private string unit = unit;
     private double producedHeat = producedHeat;
     private double consumedElectricity = consumedElectricity;
     private double cost = cost;
-    private double consumptionOfEnergy = consumptionOfEnergy;
     private double producedCO2 = producedCO2;
     private Dictionary<string, double> additionalResources = additionalResources;
 
@@ -22,7 +21,6 @@ public struct Result(string unit, double producedHeat, double consumedElectricit
     public double ProducedHeat { readonly get => producedHeat; set => producedHeat = value; }
     public double ConsumedElectricity { readonly get => consumedElectricity; set => consumedElectricity = value; }
     public double Cost { readonly get => cost; set => cost = value; }
-    public double ConsumptionOfEnergy { readonly get => consumptionOfEnergy; set => consumptionOfEnergy = value; }
     public double ProducedCO2 { readonly get => producedCO2; set => producedCO2 = value; }
     public Dictionary<string, double> AdditionalResources { readonly get => additionalResources; set => additionalResources = value; }
 }
@@ -38,9 +36,11 @@ public struct UnitResults(DateTime startTime, DateTime endTime, List<Result> res
     public List<Result> Results { readonly get => results; set => results = value; }
 }
 
-class ResultDataManager
+public class ResultDataManager
 {
-    public static List<UnitResults> TimeResults = [];
+    private List<UnitResults> timeResults = [];
+
+    public List<UnitResults> TimeResults { get => timeResults; set => timeResults = value; }
 
     public void JsonImport(string json)
     {
@@ -55,12 +55,12 @@ class ResultDataManager
     }
     public string JsonExport() => JsonSerializer.Serialize(TimeResults);
 
-    public void DataAddition(UnitResults results)
+    public void DataAdd(UnitResults results)
     {
         TimeResults.Add(results);
 
     }
-    public void DataRemoval(DateTime startTime)
+    public void DataRemove(DateTime startTime)
     {
         TimeResults.RemoveAll(result => result.StartTime == startTime);
     }
