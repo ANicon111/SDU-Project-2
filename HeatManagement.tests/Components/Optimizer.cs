@@ -153,8 +153,6 @@ public class OptimizerTests
 
         string actual = resultDataManager.ToJson();
 
-        Console.Write(actual);
-
         Assert.Equal(expected, actual);
     }
 
