@@ -1,7 +1,4 @@
 namespace HeatManagement;
-using System.Collections.Generic;
-
-
 class Debug
 {
     public static string UnitTestTest()

@@ -2,35 +2,40 @@ namespace HeatManagement;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 
+[method: SetsRequiredMembers]
+
 public struct ResultData(double heat, double cost, double electricity, double co2, Dictionary<string, double> additionalResources)
 {
-    private double heat = heat;
-    private double cost = cost;
-    private double electricity = electricity;
-    private double co2 = co2;
-    private Dictionary<string, double> additionalResources = additionalResources;
-
-    public double Heat { readonly get => heat; set => heat = value; }
-    public double Cost { readonly get => cost; set => cost = value; }
-    public double Electricity { readonly get => electricity; set => electricity = value; }
-    public double CO2 { readonly get => co2; set => co2 = value; }
-    public Dictionary<string, double> AdditionalResources { readonly get => additionalResources; set => additionalResources = value; }
+    public required double Heat { get; set; } = heat;
+    public required double Cost { get; set; } = cost;
+    public required double Electricity { get; set; } = electricity;
+    public required double CO2 { get; set; } = co2;
+    public required Dictionary<string, double> AdditionalResources { get; set; } = additionalResources;
 }
 
 public class ResultDataManager
 {
+    [method: SetsRequiredMembers]
+    public struct JsonData(DateTime startTime, DateTime endTime, Dictionary<string, ResultData> resultData)
+    {
+        public required DateTime StartTime { get; set; } = startTime;
+        public required DateTime EndTime { get; set; } = endTime;
+        public required Dictionary<string, ResultData> ResultData { get; set; } = resultData;
+    }
 
     public SortedDictionary<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> ResultData;
 
-    public ResultDataManager(string json = "{}")
+    public ResultDataManager(string json = "[]")
     {
         ResultData = [];
-        foreach (var element in JsonSerializer.Deserialize<SortedDictionary<string, Dictionary<string, ResultData>>>(json)!)
+        List<JsonData> jsonIntermediary = JsonSerializer.Deserialize<List<JsonData>>(json)!;
+        foreach (var element in jsonIntermediary)
         {
-            ResultData.Add(JsonSerializer.Deserialize<Tuple<DateTime, DateTime>>(element.Key)!, element.Value);
+            ResultData.Add(Tuple.Create(element.StartTime, element.EndTime), element.ResultData);
         }
     }
 
@@ -54,10 +59,10 @@ public class ResultDataManager
 
     public string ToJson()
     {
-        SortedDictionary<string, Dictionary<string, ResultData>> jsonIntermediary = [];
-        foreach (var item in ResultData)
+        List<JsonData> jsonIntermediary = [];
+        foreach (var element in ResultData)
         {
-            jsonIntermediary.Add(JsonSerializer.Serialize(item.Key), item.Value);
+            jsonIntermediary.Add(new(element.Key.Item1, element.Key.Item2, element.Value));
         }
         return JsonSerializer.Serialize(jsonIntermediary);
     }

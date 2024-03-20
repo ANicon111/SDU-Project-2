@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 using System.Threading;
 using AnsiRenderer;
 
@@ -7,11 +9,19 @@ namespace HeatManagement;
 
 static partial class CLI
 {
+    private struct JsonData(DateTime startTime, DateTime endTime, double value)
+    {
+        public DateTime StartTime { get; set; } = startTime;
+        public DateTime EndTime { get; set; } = endTime;
+        public double Value { get; set; } = value;
+    }
+
     static void GraphDrawer(string name, string unitOfMeasurement, Color color, List<Tuple<DateTime, DateTime>> times, Dictionary<Tuple<DateTime, DateTime>, double> values)
     {
-        ColorArea[] accented = [new(color: color, foreground: true)];
+        ColorArea[] accented = [new(color, true)];
         int selectedTime = 0;
-        double maxValue = 0.001;
+        //small maxValue set to avoid 0/0 in formulas
+        double maxValue = 1e-10;
         double minValue = 0;
 
         foreach (KeyValuePair<Tuple<DateTime, DateTime>, double> val in values)
@@ -33,7 +43,7 @@ static partial class CLI
             subObjects: [
                 new(
                     text: name,
-                    colorAreas: [.. accented],
+                    colorAreas: accented,
                     externalAlignmentX:Alignment.Left
                 ),
                 new(
@@ -54,13 +64,18 @@ static partial class CLI
                     geometry: new(0, 1, times.Count, renderer.TerminalHeight - 1)
                 ),
                 new(
+                    geometry: new(0, 1, 1, renderer.TerminalHeight - 1),
+                    defaultCharacter: ' ',
+                    colorAreas: [new(color.WithAlpha(0.75))]
+                ),
+                new(
                     text:
                     """
                               
                       Q  quit 
                     """,
                     colorAreas:[
-                        new(color:Colors.DarkRed.WithAlpha(0.75)),
+                        new(color:Colors.Maroon.WithAlpha(0.75)),
                         new(color:Colors.White, foreground:true),
                     ],
                     externalAlignmentX:Alignment.Right,
@@ -70,13 +85,26 @@ static partial class CLI
                     text:
                     """
                                                 
-                     ← →  Change selected time  
+                     ← →  change selected time  
                     """,
                     colorAreas:[
-                        new(color:Colors.DarkBlue.WithAlpha(0.75)),
+                        new(color:Colors.Navy.WithAlpha(0.75)),
                         new(color:Colors.White, foreground:true),
                     ],
                     externalAlignmentX:Alignment.Left,
+                    externalAlignmentY:Alignment.Bottom
+                ),
+                new(
+                    text:
+                    """
+                                        
+                      E export to json  
+                    """,
+                    colorAreas:[
+                        new(color:Colors.Green.WithAlpha(0.75)),
+                        new(color:Colors.White, foreground:true),
+                    ],
+                    externalAlignmentX:Alignment.Center,
                     externalAlignmentY:Alignment.Bottom
                 ),
             ]
@@ -104,8 +132,6 @@ static partial class CLI
                 defaultCharacter: '█'
             ));
         }
-        //accent the (initially) selected graph bar
-        graphRendererObject().SubObjects[4].SubObjects[selectedTime].ColorAreas = [.. accented];
 
         //initial render
         renderer.Update();
@@ -115,6 +141,7 @@ static partial class CLI
             //set graph position
             graphRendererObject().SubObjects[4].X =
                 -Math.Clamp(selectedTime - renderer.TerminalWidth / 2, 0, Math.Max(times.Count - renderer.TerminalWidth, 0));
+            graphRendererObject().SubObjects[5].X = selectedTime + graphRendererObject().SubObjects[4].X;
 
             //change the value and time
             graphRendererObject().SubObjects[1] =
@@ -153,6 +180,31 @@ static partial class CLI
             }
         }
 
+        //create the json exportable dictionary
+        List<JsonData> jsonValues = [];
+        foreach (var val in values)
+        {
+            jsonValues.Add(new(val.Key.Item1, val.Key.Item2, val.Value));
+        }
+
+        //json export function for the greeter file dialogue
+        JsonSerializerOptions jsonOptions = new() { WriteIndented = true };
+        string tryExportFile(string filePath)
+        {
+            try
+            {
+                File.WriteAllText(filePath, JsonSerializer.Serialize(jsonValues, jsonOptions));
+            }
+            catch
+            {
+                return "Could not write to the selected path";
+            }
+            return "";
+        }
+        //funky trick to reuse the greeter file dialogue without using an argument
+        string[] _notArgs = [];
+
+
         bool viewing = true;
         while (viewing)
         {
@@ -163,20 +215,27 @@ static partial class CLI
                 {
                     //switch highlighted graph bar and move graph to center it
                     case ConsoleKey.LeftArrow:
-                        graphRendererObject().SubObjects[4].SubObjects[selectedTime].ColorAreas = [];
                         selectedTime = Math.Max(selectedTime - 1, 0);
-                        graphRendererObject().SubObjects[4].SubObjects[selectedTime].ColorAreas = [.. accented];
                         updateGraph();
                         break;
                     case ConsoleKey.RightArrow:
-                        graphRendererObject().SubObjects[4].SubObjects[selectedTime].ColorAreas = [];
                         selectedTime = Math.Min(selectedTime + 1, times.Count - 1);
-                        graphRendererObject().SubObjects[4].SubObjects[selectedTime].ColorAreas = [.. accented];
                         updateGraph();
                         break;
 
+                    //quit
                     case ConsoleKey.Q:
                         viewing = false;
+                        break;
+
+                    //export to json
+                    case ConsoleKey.E:
+                        FilePathMenu(
+                            args: ref _notArgs,
+                            filePath: $"{name.ToLower()}.json",
+                            title: "Input the exported file path:",
+                            tryLoadFile: tryExportFile
+                        );
                         break;
                 }
             }
@@ -190,6 +249,7 @@ static partial class CLI
                 graphRendererObject().Width = renderer.TerminalWidth;
                 graphRendererObject().Height = renderer.TerminalHeight;
                 graphRendererObject().SubObjects[4].Height = renderer.TerminalHeight;
+                graphRendererObject().SubObjects[5].Height = renderer.TerminalHeight - 1;
                 updateGraph(true);
             }
             renderer.Update();

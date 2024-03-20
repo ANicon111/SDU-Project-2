@@ -8,7 +8,9 @@ static partial class CLI
         Console.WriteLine(
             """
             Syntax:
-            heatmanagement [OPTIONS] [ASSETS_FILE] [SOURCE_FILE]
+            heatmanagement [OPTION] [SOURCE_FILE] [ASSETS_FILE] 
+            or
+            heatmanagement [OPTION] [RESULT_FILE]
 
             -h, --help: Show this message
             -c, --cli, --console: Run the CLI visualizer

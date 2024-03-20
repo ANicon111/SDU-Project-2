@@ -1,29 +1,17 @@
 namespace HeatManagement;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
-public struct Asset(
-    string imagePath,
-    double heatCapacity,
-    double cost,
-    double electricityCapacity,
-    double co2,
-    Dictionary<string, double> additionalResources
-)
+[method: SetsRequiredMembers]
+public struct Asset(string imagePath, double heatCapacity, double cost, double electricityCapacity, double co2, Dictionary<string, double> additionalResources)
 {
-    private string imagePath = imagePath;
-    private double heatCapacity = heatCapacity;
-    private double cost = cost;
-    private double electricityCapacity = electricityCapacity;
-    private double co2 = co2;
-    private Dictionary<string, double> additionalResources = additionalResources;
-
-    public string ImagePath { readonly get => imagePath; set => imagePath = value; }
-    public double HeatCapacity { readonly get => heatCapacity; set => heatCapacity = value; }
-    public double Cost { readonly get => cost; set => cost = value; }
-    public double ElectricityCapacity { readonly get => electricityCapacity; set => electricityCapacity = value; }
-    public double CO2 { readonly get => co2; set => co2 = value; }
-    public Dictionary<string, double> AdditionalResources { readonly get => additionalResources; set => additionalResources = value; }
+    public required string ImagePath { get; set; } = imagePath;
+    public required double HeatCapacity { get; set; } = heatCapacity;
+    public required double Cost { get; set; } = cost;
+    public required double ElectricityCapacity { get; set; } = electricityCapacity;
+    public required double CO2 { get; set; } = co2;
+    public required Dictionary<string, double> AdditionalResources { get; set; } = additionalResources;
 }
 
 public class AssetManager(string json = "{}")

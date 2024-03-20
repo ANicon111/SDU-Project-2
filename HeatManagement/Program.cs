@@ -10,6 +10,7 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
         if (args.Length > 0)
             switch (args[0])
             {
@@ -41,4 +42,9 @@ class Program
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace();
+
+    static void OnProcessExit(object? sender, EventArgs e)
+    {
+        Console.CursorVisible = true;
+    }
 }

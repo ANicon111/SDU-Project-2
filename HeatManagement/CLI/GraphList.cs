@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
 using System.Threading;
 using AnsiRenderer;
 
@@ -7,11 +9,13 @@ namespace HeatManagement;
 
 static partial class CLI
 {
-    static void RunGraphList(AssetManager assetManager, SourceDataManager sourceDataManager)
+    static void RunGraphList(AssetManager? assetManager, SourceDataManager? sourceDataManager = null, ResultDataManager? resultDataManager = null)
     {
-        ResultDataManager resultDataManager = new();
-        Optimizer.GetResult(assetManager, sourceDataManager, resultDataManager);
-
+        if (assetManager != null && sourceDataManager != null)
+        {
+            resultDataManager = new();
+            Optimizer.GetResult(assetManager, sourceDataManager, resultDataManager);
+        }
 
         List<string> resourceOptions = [
             "Cost",
@@ -22,7 +26,7 @@ static partial class CLI
         List<string> assetOptions = [];
 
 
-        List<Tuple<DateTime, DateTime>> times = [.. resultDataManager.ResultData.Keys];
+        List<Tuple<DateTime, DateTime>> times = [.. resultDataManager!.ResultData.Keys];
 
         List<Color> colors =
         [
@@ -130,8 +134,7 @@ static partial class CLI
         {
             graphs[i] = new(
                 text: options[i],
-                y: i + 5
-
+                y: i + 6
             );
         }
 
@@ -144,9 +147,10 @@ static partial class CLI
                         new(
                             text:
                             """
-                             ↑ ↓   Change selected graph
-                            ENTER  Display selected graph
-                              Q    Quit the application
+                             ↑ ↓   change the selected graph
+                            ENTER  display the selected graph
+                              Q    quit the application
+                              E    export the result data
                             """,
                             externalAlignmentX:Alignment.Center,
                             y:1
@@ -162,6 +166,23 @@ static partial class CLI
         //removing empty space at the end of the list
         renderer.Object.SubObjects[0].Height--;
 
+        //json export function for the greeter file dialogue
+        JsonSerializerOptions jsonOptions = new() { WriteIndented = true };
+        string tryExportFile(string filePath)
+        {
+            try
+            {
+                File.WriteAllText(filePath, resultDataManager.ToJson());
+            }
+            catch
+            {
+                return "Could not write to the selected path";
+            }
+            return "";
+        }
+        //funky trick to reuse the greeter file dialogue without using an argument
+        string[] _notArgs = [];
+
         graphs[selectedGraph].ColorAreas = [new(color: colors[selectedGraph % colors.Count]), new(color: Colors.Black, foreground: true)];
         renderer.Update(forceRedraw: true);
         bool running = true;
@@ -176,7 +197,7 @@ static partial class CLI
                         graphs[selectedGraph].ColorAreas = [];
                         selectedGraph = Math.Max(selectedGraph - 1, 0);
                         renderer.Object.SubObjects[0].Y =
-                            -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 6 - renderer.TerminalHeight, 0));
+                            -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 7 - renderer.TerminalHeight, 0));
                         graphs[selectedGraph].ColorAreas =
                             [new(color: colors[selectedGraph % colors.Count]), new(color: Colors.Black, foreground: true)];
                         break;
@@ -184,10 +205,12 @@ static partial class CLI
                         graphs[selectedGraph].ColorAreas = [];
                         selectedGraph = Math.Min(selectedGraph + 1, graphs.Length - 1);
                         renderer.Object.SubObjects[0].Y =
-                            -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 6 - renderer.TerminalHeight, 0));
+                            -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 7 - renderer.TerminalHeight, 0));
                         graphs[selectedGraph].ColorAreas =
                             [new(color: colors[selectedGraph % colors.Count]), new(color: Colors.Black, foreground: true)];
                         break;
+
+                    //load graph
                     case ConsoleKey.Enter:
                         GraphDrawer(
                             options[selectedGraph],
@@ -197,10 +220,21 @@ static partial class CLI
                             graphValues[options[selectedGraph]]
                         );
                         break;
+
+                    //quit
                     case ConsoleKey.Q:
                         running = false;
                         break;
 
+                    //export all data to json
+                    case ConsoleKey.E:
+                        FilePathMenu(
+                            args: ref _notArgs,
+                            filePath: "resultData.json",
+                            title: "Input the result data file path:",
+                            tryLoadFile: tryExportFile
+                        );
+                        break;
                 }
             }
 
@@ -209,7 +243,7 @@ static partial class CLI
             {
                 renderer.Object.Width = renderer.TerminalWidth;
                 renderer.Object.Height = renderer.TerminalHeight;
-                renderer.Object.SubObjects[0].Y = -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 5 - renderer.TerminalHeight, 0));
+                renderer.Object.SubObjects[0].Y = -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 7 - renderer.TerminalHeight, 0));
             }
             renderer.Update();
         }

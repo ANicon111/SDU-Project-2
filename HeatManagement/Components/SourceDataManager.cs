@@ -1,20 +1,16 @@
 namespace HeatManagement;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
-
+[method: SetsRequiredMembers]
 public struct SourceData(DateTime startTime, DateTime endTime, double heatDemand, double electricityPrice)
 {
-    private DateTime startTime = startTime;
-    private DateTime endTime = endTime;
-    private double heatDemand = heatDemand;
-    private double electricityPrice = electricityPrice;
-
-    public DateTime StartTime { readonly get => startTime; set => startTime = value; }
-    public DateTime EndTime { readonly get => endTime; set => endTime = value; }
-    public double HeatDemand { readonly get => heatDemand; set => heatDemand = value; }
-    public double ElectricityPrice { readonly get => electricityPrice; set => electricityPrice = value; }
+    public required DateTime StartTime { get; set; } = startTime;
+    public required DateTime EndTime { get; set; } = endTime;
+    public required double HeatDemand { get; set; } = heatDemand;
+    public required double ElectricityPrice { get; set; } = electricityPrice;
 }
 
 public class SourceDataManager(string json = "[]")

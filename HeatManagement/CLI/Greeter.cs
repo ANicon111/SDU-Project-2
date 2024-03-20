@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Threading;
 using AnsiRenderer;
 namespace HeatManagement;
 
@@ -8,149 +6,114 @@ static partial class CLI
 {
     static void RunGreeter(ref string[] args)
     {
-        AssetManager? assets = null;
-
-        string tryLoadAssetsFile(string filePath)
-        {
-            if (!File.Exists(filePath))
-                return "Assets file path is invalid";
-            else
-                try
-                {
-                    assets = new(File.ReadAllText(filePath));
-                }
-                catch
-                {
-                    return "Assets file is inaccessible or has invalid json";
-                }
-            return "";
-        }
-
-        FilePathMenu(
-            args: ref args,
-            filePath: "assets.json",
-            title: "Input the asset file path:",
-            tryLoadFile: tryLoadAssetsFile
+        renderer.Object = new(
+            geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
+            internalAlignmentX: Alignment.Center,
+            internalAlignmentY: Alignment.Center,
+            defaultCharacter: ' '
         );
 
         SourceDataManager? sourceData = null;
+        ResultDataManager? resultData = null;
 
-        string tryLoadSourceDataFile(string filePath)
+        string tryLoadSourceResultDataFile(string filePath)
         {
             if (!File.Exists(filePath))
-                return "Source data file path is invalid";
+                return "Data file path is invalid";
             else
+            {
+                string json = "INVALID";
+
                 try
                 {
-                    sourceData = new(File.ReadAllText(filePath));
+                    json = File.ReadAllText(filePath);
                 }
                 catch
                 {
-                    return "Source data file is inaccessible or has invalid json";
+                    return "Data file is inaccessible";
                 }
+
+                try
+                {
+                    sourceData = new(json);
+                    if (sourceData.Data!.Count == 0)
+                    {
+                        sourceData = null;
+                        return "Source data file contains no data";
+                    }
+                }
+                catch
+                {
+                    try
+                    {
+                        resultData = new(json);
+                        if (resultData.ResultData!.Count == 0)
+                        {
+                            resultData = null;
+                            return "Result data file contains no data";
+                        }
+                    }
+                    catch
+                    {
+                        return "Data file has invalid json";
+                    }
+                }
+            }
+
             return "";
         }
 
-
         FilePathMenu(
             args: ref args,
-            filePath: "sourceData.json",
-            title: "Input the source data file path:",
-            tryLoadFile: tryLoadSourceDataFile
+            filePath: "data.json",
+            title: "Input the source or result data file path:",
+            tryLoadFile: tryLoadSourceResultDataFile
         );
 
-        RunGraphList(assets!, sourceData!);
-    }
-
-    //generic file loader for a manager
-    public static void FilePathMenu(ref string[] args, string filePath, string title, Func<string, string> tryLoadFile)
-    {
-        bool fileLoaded = false;
-        string error = "";
-        int selectedChar = filePath.Length - 1;
-
-        if (args.Length > 0)
+        AssetManager? assets = null;
+        if (sourceData != null)
         {
-            filePath = args[0];
-            args = args[1..];
-            error = tryLoadFile(filePath);
-            fileLoaded = error == "";
-        }
-        while (!fileLoaded)
-        {
-            renderer.Object = new(
-                geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
-                internalAlignmentX: Alignment.Center,
-                internalAlignmentY: Alignment.Center,
-                defaultCharacter: ' ',
-                subObjects: [
-                    new(
-                        geometry: new(0, 0, renderer.TerminalWidth * 3 / 4, 5),
-                        internalAlignmentX: Alignment.Center,
-                        internalAlignmentY: Alignment.Center,
-                        defaultCharacter: ' ',
-                        text:
-                        $"""
-                        {error}
-                        {title}
-                        {filePath}
-                        """,
-                        colorAreas: [
-                            new(color:Colors.White, geometry: new(0, 1, renderer.TerminalWidth * 3 / 4 - 4, 1)),
-                            new(color:Colors.Black, geometry: new(0, 1, renderer.TerminalWidth * 3 / 4 - 4, 1), foreground:true),
-                            new(color:Colors.Black, geometry: new( -filePath.Length / 2 + selectedChar + 1, 1, 1, 1)),
-                            new(color:Colors.White, geometry: new( -filePath.Length / 2 + selectedChar + 1, 1, 1, 1), foreground:true),
-                            new(color:Colors.Red, geometry: new(0, -1, renderer.TerminalWidth * 3 / 4 - 4, 1), foreground:true),
-                        ],
-                        border: Borders.Rounded
-                    ),
-                ]
-            );
-
-            while (Console.KeyAvailable)
+            string tryLoadAssetsFile(string filePath)
             {
-                ConsoleKeyInfo key = renderer.ReadKey();
-                switch (key.Key)
+                if (!File.Exists(filePath))
+                    return "Assets file path is invalid";
+                else
                 {
-                    case ConsoleKey.Enter:
-                        error = tryLoadFile(filePath);
-                        fileLoaded = error == "";
-                        break;
+                    string json = "INVALID";
 
-                    case ConsoleKey.Backspace:
-                        if (filePath.Length > 0)
-                            filePath = filePath.Remove(selectedChar, 1);
-                        selectedChar = Math.Max(selectedChar - 1, 0);
-                        break;
-
-                    case ConsoleKey.RightArrow:
-                        selectedChar = Math.Min(selectedChar + 1, filePath.Length - 1);
-                        break;
-
-                    case ConsoleKey.LeftArrow:
-                        selectedChar = Math.Max(selectedChar - 1, 0);
-                        break;
-
-                    default:
-                        char c = key.KeyChar;
-                        //ignore null and control characters
-                        if (c > 31)
+                    try
+                    {
+                        json = File.ReadAllText(filePath);
+                    }
+                    catch
+                    {
+                        return "Assets file is inaccessible";
+                    }
+                    try
+                    {
+                        assets = new(json);
+                        if (assets.Assets!.Count == 0)
                         {
-                            selectedChar++;
-                            filePath = filePath[..selectedChar] + key.KeyChar + filePath[selectedChar..];
+                            return "Assets file contains no assets";
                         }
-                        break;
+                    }
+                    catch
+                    {
+                        return "Assets file has invalid json";
+                    }
                 }
+
+                return "";
             }
 
-            Thread.Sleep(50);
-            if (renderer.UpdateScreenSize())
-            {
-                renderer.Object.Width = renderer.TerminalWidth;
-                renderer.Object.Height = renderer.TerminalHeight;
-                renderer.Object.SubObjects[0].Width = renderer.TerminalWidth * 3 / 4;
-            }
-            renderer.Update();
+            FilePathMenu(
+                args: ref args,
+                filePath: "assets.json",
+                title: "Input the asset file path:",
+                tryLoadFile: tryLoadAssetsFile
+            );
         }
+
+        RunGraphList(assets, sourceData, resultData);
     }
 }
