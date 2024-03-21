@@ -7,9 +7,9 @@ namespace AnsiRenderer
 {
     public struct Border
     {
-        public char TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft, Left;
+        public char? TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft, Left;
 
-        public Border(char topLeft, char top, char topRight, char right, char bottomRight, char bottom, char bottomLeft, char left)
+        public Border(char? topLeft = null, char? top = null, char? topRight = null, char? right = null, char? bottomRight = null, char? bottom = null, char? bottomLeft = null, char? left = null)
         {
             TopLeft = topLeft; Top = top; TopRight = topRight; Right = right; BottomRight = bottomRight; Bottom = bottom; BottomLeft = bottomLeft; Left = left;
         }
@@ -986,26 +986,38 @@ namespace AnsiRenderer
                 }
 
                 //border drawing
-                if (border != null)
+                if (border != null && width > 0 && height > 0)
                 {
                     Border b = (Border)border;
 
-                    pixels[0, 0].Ch = b.TopLeft;
-                    pixels[width - 1, 0].Ch = b.TopRight;
-                    pixels[0, height - 1].Ch = b.BottomLeft;
-                    pixels[width - 1, height - 1].Ch = b.BottomRight;
+                    if (b.Top != null)
+                        for (int i = 0; i < width; i++)
+                        {
+                            pixels[i, 0].Ch = (char)b.Top;
+                        }
 
-                    for (int i = 1; i < width - 1; i++)
-                    {
-                        pixels[i, 0].Ch = b.Top;
-                        pixels[i, height - 1].Ch = b.Bottom;
-                    }
+                    if (b.Bottom != null)
+                        for (int i = 0; i < width; i++)
+                        {
+                            pixels[i, height - 1].Ch = (char)b.Bottom;
+                        }
 
-                    for (int j = 1; j < height - 1; j++)
-                    {
-                        pixels[0, j].Ch = b.Left;
-                        pixels[width - 1, j].Ch = b.Right;
-                    }
+                    if (b.Left != null)
+                        for (int j = 0; j < height; j++)
+                        {
+                            pixels[0, j].Ch = (char)b.Left;
+                        }
+
+                    if (b.Right != null)
+                        for (int j = 0; j < height; j++)
+                        {
+                            pixels[width - 1, j].Ch = (char)b.Right;
+                        }
+
+                    if (b.TopLeft != null) pixels[0, 0].Ch = (char)b.TopLeft;
+                    if (b.TopRight != null) pixels[width - 1, 0].Ch = (char)b.TopRight;
+                    if (b.BottomLeft != null) pixels[0, height - 1].Ch = (char)b.BottomLeft;
+                    if (b.BottomRight != null) pixels[width - 1, height - 1].Ch = (char)b.BottomRight;
                 }
 
 

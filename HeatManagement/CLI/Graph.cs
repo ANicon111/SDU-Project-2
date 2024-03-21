@@ -122,17 +122,26 @@ static partial class CLI
                 graphValue = val;
             }
             int height = (int)(renderer.TerminalHeight * graphValue / (maxValue - minValue));
+            int sign = Math.Sign(height);
+            height *= sign;
+            int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - height) * 8);
             graphRendererObject().SubObjects[4].SubObjects.Add(new(
                 geometry: new(
                     i,
-                    Math.Min(zeroHeight - height, zeroHeight),
+                    sign > 0 ? zeroHeight - height : zeroHeight,
                     1,
-                    Math.Abs(height)
+                    height
                 ),
-                defaultCharacter: '█'
+                //invert bottom slice if graph value is negative
+                colorAreas: sign < 0 ? [new(Colors.White, false, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom), new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom)] : [],
+                defaultCharacter: '█',
+                //modify the top and bottom borders for extra precision
+                border: new(
+                    top: sign < 0 ? null : (char)('▁' + heightFractions8),
+                    bottom: sign > 0 ? null : (char)('█' - heightFractions8)
+                )
             ));
         }
-
         //initial render
         renderer.Update();
 
