@@ -180,9 +180,6 @@ static partial class CLI
             }
             return "";
         }
-        //funky trick to reuse the greeter file dialogue without using an argument
-        string[] _notArgs = [];
-
         graphs[selectedGraph].ColorAreas = [new(color: colors[selectedGraph % colors.Count]), new(color: Colors.Black, foreground: true)];
         renderer.Update(forceRedraw: true);
         bool running = true;
@@ -229,10 +226,9 @@ static partial class CLI
                     //export all data to json
                     case ConsoleKey.E:
                         FilePathMenu(
-                            args: ref _notArgs,
                             filePath: "resultData.json",
                             title: "Input the result data file path:",
-                            tryLoadFile: tryExportFile
+                            fileAction: tryExportFile
                         );
                         break;
                 }

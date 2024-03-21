@@ -231,10 +231,9 @@ static partial class CLI
                     //export to json
                     case ConsoleKey.E:
                         FilePathMenu(
-                            args: ref _notArgs,
                             filePath: $"{name.ToLower()}.json",
                             title: "Input the exported file path:",
-                            tryLoadFile: tryExportFile
+                            fileAction: tryExportFile
                         );
                         break;
                 }

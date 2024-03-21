@@ -7,19 +7,16 @@ namespace HeatManagement;
 static partial class CLI
 {
     //generic file loader for a manager
-    public static void FilePathMenu(ref string[] args, string filePath, string title, Func<string, string> tryLoadFile)
+    public static void FilePathMenu(string filePath, string title, Func<string, string> fileAction, bool tryInitialAction = false)
     {
         bool fileLoaded = false;
-        string error = "";
+
+        //try to load file
+        string error = tryInitialAction ? fileAction(filePath) : "";
+        if (tryInitialAction && error == "") fileLoaded = true;
+
         int selectedChar = filePath.Length;
 
-        if (args.Length > 0)
-        {
-            filePath = args[0];
-            args = args[1..];
-            error = tryLoadFile(filePath);
-            fileLoaded = error == "";
-        }
         renderer.Object.SubObjects.Add(new());
         while (!fileLoaded)
         {
@@ -54,7 +51,7 @@ static partial class CLI
                 switch (key.Key)
                 {
                     case ConsoleKey.Enter:
-                        error = tryLoadFile(filePath);
+                        error = fileAction(filePath);
                         fileLoaded = error == "";
                         break;
 

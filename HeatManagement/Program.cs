@@ -8,32 +8,39 @@ class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args)
+    public static int Main(string[] args)
     {
-        AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
-        if (args.Length > 0)
-            switch (args[0])
-            {
-                case "--help":
-                case "-h":
-                    CLI.PrintHelp();
-                    break;
-                case "--cli":
-                case "--console":
-                case "-c":
-                    args = args[1..];
-                    CLI.Run(args);
-                    break;
-                case "--gui":
-                case "--avalonia":
-                case "-g":
-                    args = args[1..];
-                    BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-                    break;
-                default:
-                    BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
-                    break;
-            }
+        Arguments arguments;
+        try
+        {
+            arguments = new(args);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            Console.WriteLine(Arguments.HelpMessage);
+            return 1;
+        }
+
+        if (arguments.Help)
+        {
+            Console.WriteLine(Arguments.HelpMessage);
+            return 0;
+        }
+
+        if (arguments.CLIMode)
+        {
+            CLI.Run(arguments);
+            return 0;
+        }
+
+        if (arguments.AvaloniaMode)
+        {
+            BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+            return 0;
+        }
+
+        return 1;
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
@@ -42,9 +49,4 @@ class Program
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace();
-
-    static void OnProcessExit(object? sender, EventArgs e)
-    {
-        Console.CursorVisible = true;
-    }
 }

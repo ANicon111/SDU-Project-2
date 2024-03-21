@@ -6,9 +6,16 @@ static partial class CLI
 {
     private static readonly Renderer renderer = new();
 
-    public static void Run(string[] args)
+    public static void Run(Arguments arguments)
     {
         Console.CursorVisible = false;
-        RunGreeter(ref args);
+        Console.CancelKeyPress += delegate
+        {
+            renderer.Reset();
+            Console.Clear();
+            Console.CursorVisible = true;
+        };
+        RunGreeter(arguments);
+        Console.CursorVisible = true;
     }
 }
