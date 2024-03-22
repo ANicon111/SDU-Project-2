@@ -242,7 +242,7 @@ static partial class CLI
             {
                 zeroHeight = Math.Max(graphs.Count, (int)((renderer.TerminalHeight - graphs.Count) * maxValue / (maxValue - minValue)));
                 zeroLine().Width = renderer.TerminalWidth;
-                zeroLine().Y = zeroHeight + 1;
+                zeroLine().Y = zeroHeight + graphs.Count - 1;
                 for (int i = 0; i < times.Count; i++)
                 {
                     for (int j = 0; j < graphs.Count; j++)
