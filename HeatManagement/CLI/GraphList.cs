@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading;
 using AnsiRenderer;
+using Avalonia.Controls;
 
 namespace HeatManagement;
 
@@ -27,22 +28,6 @@ static partial class CLI
 
 
         List<Tuple<DateTime, DateTime>> times = [.. resultDataManager!.ResultData.Keys];
-
-        List<Color> colors =
-        [
-            Colors.Lime,
-            Colors.Yellow,
-            Colors.Gray,
-            Colors.Crimson,
-            Colors.LawnGreen,
-            Colors.SkyBlue,
-            Colors.BlanchedAlmond,
-            Colors.Sienna,
-            Colors.Purple,
-            Colors.Goldenrod,
-            Colors.BlueViolet,
-            Colors.PeachPuff,
-        ];
 
         List<string> resourceMeasurements =
         [
@@ -126,19 +111,25 @@ static partial class CLI
         //merge options and units of measurements
         string[] options = [.. resourceOptions, .. assetOptions];
         string[] measurements = [.. resourceMeasurements, .. assetMeasurements];
+        List<Color> colorList = [];
+
+        //golden ratio-based color generation
+        for (int i = 0; i < options.Length; i++) colorList.Add(Color.FromHSLA(137.5 * i, 1, 1.618 * i % 0.33 + 0.33));
 
         //create a RendererObject for each 
-        RendererObject[] graphs = new RendererObject[options.Length];
+        RendererObject[] graphList = new RendererObject[options.Length];
 
         for (int i = 0; i < options.Length; i++)
         {
-            graphs[i] = new(
+            graphList[i] = new(
                 text: options[i],
-                y: i + 6
+                y: i + 7
             );
         }
 
         int selectedGraph = 0;
+        int menuPosition() => -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 8, 0, Math.Max(options.Length + 8 - renderer.TerminalHeight, 0));
+
         renderer.Object = new(
             geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
             subObjects: [
@@ -149,17 +140,20 @@ static partial class CLI
                             """
                              ↑ ↓   change the selected graph
                             ENTER  display the selected graph
+                            SPACE  select multiple compatible graphs
                               Q    quit the application
                               E    export the result data
                             """,
                             externalAlignmentX:Alignment.Center,
                             y:1
                         ),
-                        ..graphs,
+                        ..graphList,
                     ],
                     internalAlignmentX: Alignment.Center,
                     externalAlignmentX: Alignment.Center,
-                    border: Borders.Rounded
+                    border: Borders.Rounded,
+                    defaultCharacter:' ',
+                    y:menuPosition()
                 )
             ]
         );
@@ -180,9 +174,37 @@ static partial class CLI
             }
             return "";
         }
-        graphs[selectedGraph].ColorAreas = [new(color: colors[selectedGraph % colors.Count]), new(color: Colors.Black, foreground: true)];
+        graphList[selectedGraph].ColorAreas = [new(color: colorList[selectedGraph % colorList.Count]), new(color: Colors.Black, foreground: true)];
         renderer.Update(forceRedraw: true);
         bool running = true;
+        List<int> selectedList = [];
+
+        //color getters for readability
+        List<ColorArea> selectedElementColor() => [
+            //only color compatible selections
+            new(
+                color: selectedList.Count > 0 && measurements[selectedList[0]] != measurements[selectedGraph]
+                ? Colors.Gray
+                : colorList[selectedGraph]
+            ),
+            //if selected, change foreground
+            new(
+                color: selectedList.Contains(selectedGraph)
+                ? Colors.White
+                : Colors.Black,
+                foreground: true
+            )
+        ];
+
+        List<ColorArea> unselectedElementColor() => [
+            new(
+                color: selectedList.Contains(selectedGraph)
+                ? colorList[selectedGraph]
+                : Colors.White,
+                true
+            )
+        ];
+
         while (running)
         {
             while (Console.KeyAvailable)
@@ -191,31 +213,60 @@ static partial class CLI
                 {
                     //switch selected graph and move the menu to center the selection
                     case ConsoleKey.UpArrow:
-                        graphs[selectedGraph].ColorAreas = [];
+                        graphList[selectedGraph].ColorAreas = unselectedElementColor();
                         selectedGraph = Math.Max(selectedGraph - 1, 0);
-                        renderer.Object.SubObjects[0].Y =
-                            -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 7 - renderer.TerminalHeight, 0));
-                        graphs[selectedGraph].ColorAreas =
-                            [new(color: colors[selectedGraph % colors.Count]), new(color: Colors.Black, foreground: true)];
+                        renderer.Object.SubObjects[0].Y = menuPosition();
+                        graphList[selectedGraph].ColorAreas = selectedElementColor();
                         break;
                     case ConsoleKey.DownArrow:
-                        graphs[selectedGraph].ColorAreas = [];
-                        selectedGraph = Math.Min(selectedGraph + 1, graphs.Length - 1);
-                        renderer.Object.SubObjects[0].Y =
-                            -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 7 - renderer.TerminalHeight, 0));
-                        graphs[selectedGraph].ColorAreas =
-                            [new(color: colors[selectedGraph % colors.Count]), new(color: Colors.Black, foreground: true)];
+                        graphList[selectedGraph].ColorAreas = unselectedElementColor();
+                        selectedGraph = Math.Min(selectedGraph + 1, graphList.Length - 1);
+                        renderer.Object.SubObjects[0].Y = menuPosition();
+                        graphList[selectedGraph].ColorAreas = selectedElementColor();
                         break;
 
                     //load graph
                     case ConsoleKey.Enter:
+                        List<string> names = [];
+                        List<Color> colors = [];
+                        List<Dictionary<Tuple<DateTime, DateTime>, double>> graphs = [];
+                        //handling the selection-less edge case
+                        bool singleGraph = selectedList.Count == 0;
+
+                        if (singleGraph) selectedList.Add(selectedGraph);
+
+                        foreach (int selected in selectedList)
+                        {
+                            names.Add(options[selected]);
+                            colors.Add(colorList[selected]);
+                            graphs.Add(graphValues[options[selected]]);
+                        }
+
                         GraphDrawer(
-                            options[selectedGraph],
-                            measurements[selectedGraph],
-                            colors[selectedGraph % colors.Count],
+                            names,
+                            measurements[selectedList[0]],
+                            colors,
                             times,
-                            graphValues[options[selectedGraph]]
+                            graphs
                         );
+
+                        if (singleGraph) selectedList = [];
+
+                        break;
+                    //multi-graph selection
+                    case ConsoleKey.Spacebar:
+                        //if it's compatible, toggle it's presence in the list
+                        if (selectedList.Count == 0 || measurements[selectedList[0]] == measurements[selectedGraph])
+                            if (selectedList.Contains(selectedGraph))
+                            {
+                                graphList[selectedGraph].ColorAreas = [new(color: colorList[selectedGraph]), new(color: Colors.Black, foreground: true)];
+                                selectedList.Remove(selectedGraph);
+                            }
+                            else
+                            {
+                                graphList[selectedGraph].ColorAreas = [new(color: colorList[selectedGraph]), new(color: Colors.White, foreground: true)];
+                                selectedList.Add(selectedGraph);
+                            }
                         break;
 
                     //quit
@@ -239,7 +290,7 @@ static partial class CLI
             {
                 renderer.Object.Width = renderer.TerminalWidth;
                 renderer.Object.Height = renderer.TerminalHeight;
-                renderer.Object.SubObjects[0].Y = -Math.Clamp(selectedGraph - renderer.TerminalHeight / 2 + 4, 0, Math.Max(options.Length + 7 - renderer.TerminalHeight, 0));
+                renderer.Object.SubObjects[0].Y = menuPosition();
             }
             renderer.Update();
         }

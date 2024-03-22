@@ -9,28 +9,30 @@ namespace HeatManagement;
 
 static partial class CLI
 {
-    private struct JsonData(DateTime startTime, DateTime endTime, double value)
+    private struct JsonData(DateTime startTime, DateTime endTime, Dictionary<string, double> values)
     {
         public DateTime StartTime { get; set; } = startTime;
         public DateTime EndTime { get; set; } = endTime;
-        public double Value { get; set; } = value;
+        public Dictionary<string, double> Values { get; set; } = values;
     }
 
-    static void GraphDrawer(string name, string unitOfMeasurement, Color color, List<Tuple<DateTime, DateTime>> times, Dictionary<Tuple<DateTime, DateTime>, double> values)
+    static void GraphDrawer(List<string> names, string unitOfMeasurement, List<Color> colors, List<Tuple<DateTime, DateTime>> times, List<Dictionary<Tuple<DateTime, DateTime>, double>> graphs)
     {
-        ColorArea[] accented = [new(color, true)];
         int selectedTime = 0;
         //small maxValue set to avoid 0/0 in formulas
         double maxValue = 1e-10;
         double minValue = 0;
 
-        foreach (KeyValuePair<Tuple<DateTime, DateTime>, double> val in values)
+        foreach (Dictionary<Tuple<DateTime, DateTime>, double> graph in graphs)
         {
-            if (maxValue < val.Value) maxValue = val.Value;
-            if (minValue > val.Value) minValue = val.Value;
+            foreach (KeyValuePair<Tuple<DateTime, DateTime>, double> val in graph)
+            {
+                if (maxValue < val.Value) maxValue = val.Value;
+                if (minValue > val.Value) minValue = val.Value;
+            }
         }
 
-        int zeroHeight = Math.Max(1, (int)((renderer.TerminalHeight - 1) * maxValue / (maxValue - minValue)));
+        int zeroHeight = Math.Max(1, (int)((renderer.TerminalHeight - graphs.Count) * maxValue / (maxValue - minValue)));
 
         renderer.Object.SubObjects.Add(new(
             geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
@@ -41,33 +43,53 @@ static partial class CLI
                 )
             ],
             subObjects: [
+                //header
                 new(
-                    text: name,
-                    colorAreas: accented,
-                    externalAlignmentX:Alignment.Left
+                    geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
+                    colorAreas:[
+                        new(Colors.Black.WithAlpha(0.25))
+                    ],
+                    defaultCharacter: ' ',
+                    subObjects:[
+                        //name list
+                        new(
+                            geometry:new(0, 0, renderer.TerminalWidth, graphs.Count),
+                            subObjects:[],
+                            externalAlignmentX: Alignment.Left,
+                            internalAlignmentX: Alignment.Left
+                        ),
+                        //value list
+                        new(
+                            geometry:new(0, 0, renderer.TerminalWidth, graphs.Count),
+                            subObjects:[],
+                            externalAlignmentX: Alignment.Center,
+                            internalAlignmentX: Alignment.Center
+                        ),
+                        //time
+                        new(
+                            text: $"{times[selectedTime].Item1} - {times[selectedTime].Item2}",
+                            colorAreas: [new(Colors.White,true)],
+                            externalAlignmentX: Alignment.Right
+                        ),
+                    ]
                 ),
+                //selection bar
                 new(
-                    text: $"{(values.TryGetValue(times[selectedTime], out double value) ? value : 0.0)} {unitOfMeasurement}",
-                    colorAreas: accented,
-                    externalAlignmentX: Alignment.Center
+                    geometry: new(0, graphs.Count, graphs.Count, renderer.TerminalHeight - graphs.Count),
+                    defaultCharacter: ' ',
+                    colorAreas: [new(Colors.White.WithAlpha(0.5))]
                 ),
+                //zero line
                 new(
-                    text: $"{times[selectedTime].Item1} - {times[selectedTime].Item2}",
-                    colorAreas: accented,
-                    externalAlignmentX: Alignment.Right
-                ),
-                new(
-                    geometry: new(0, Math.Max(1,Math.Max(1,(int)((renderer.TerminalHeight - 1) * maxValue / (maxValue - minValue)))), renderer.TerminalWidth, 1),
+                    geometry: new(0, zeroHeight + graphs.Count - 1, renderer.TerminalWidth, 1),
                     defaultCharacter: '▁'
                 ),
+                //graph bar list
                 new(
-                    geometry: new(0, 1, times.Count, renderer.TerminalHeight - 1)
+                    geometry: new(0, graphs.Count, times.Count*graphs.Count, renderer.TerminalHeight - graphs.Count),
+                    defaultCharacter:' '
                 ),
-                new(
-                    geometry: new(0, 1, 1, renderer.TerminalHeight - 1),
-                    defaultCharacter: ' ',
-                    colorAreas: [new(color.WithAlpha(0.75))]
-                ),
+                //helpers
                 new(
                     text:
                     """
@@ -110,90 +132,166 @@ static partial class CLI
             ]
         ));
 
-        //simple getter functions for readability
-        RendererObject graphRendererObject() => renderer.Object.SubObjects[1];
+        //getters for readability
+        RendererObject root() => renderer.Object.SubObjects[1];
+        RendererObject header() => renderer.Object.SubObjects[1].SubObjects[0];
+        RendererObject nameList() => renderer.Object.SubObjects[1].SubObjects[0].SubObjects[0];
+        RendererObject valueList() => renderer.Object.SubObjects[1].SubObjects[0].SubObjects[1];
+        RendererObject selectionBar() => renderer.Object.SubObjects[1].SubObjects[1];
+        RendererObject zeroLine() => renderer.Object.SubObjects[1].SubObjects[2];
+        RendererObject graphBarList() => renderer.Object.SubObjects[1].SubObjects[3];
+
+        for (int i = 0; i < graphs.Count; i++)
+        {
+            nameList().SubObjects.Add(
+                new(
+                    y: i,
+                    text: names[i],
+                    colorAreas: [new(colors[i], true)]
+                )
+            );
+            valueList().SubObjects.Add(
+                new(
+                    y: i,
+                    text: $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0)} {unitOfMeasurement}",
+                    colorAreas: [new(colors[i], true)]
+                )
+            );
+        }
+
+        //alternating background grays for readability
+        Color[] grays = [
+            Colors.DarkGray.WithAlpha(0.25),
+            Colors.LightGray.WithAlpha(0.25)
+        ];
 
         //add graph bars
         for (int i = 0; i < times.Count; i++)
         {
-            double graphValue = 0;
-            if (values.TryGetValue(times[i], out double val))
+            graphBarList().ColorAreas.Add(new(grays[i % 2], false, new(i * graphs.Count, 0, graphs.Count, 100000)));
+            for (int j = 0; j < graphs.Count; j++)
             {
-                graphValue = val;
+                double graphValue = 0;
+                if (graphs[j].TryGetValue(times[i], out double val))
+                {
+                    graphValue = val;
+                }
+                int height = (int)(renderer.TerminalHeight * graphValue / (maxValue - minValue));
+                int sign = Math.Sign(height);
+                height *= sign;
+                int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - height) * 8);
+                graphBarList().SubObjects.Add(new(
+                    geometry: new(
+                        i * graphs.Count + j,
+                        sign > 0 ? zeroHeight - height : zeroHeight,
+                        1,
+                        height
+                    ),
+                    //invert bottom slice if graph value is negative
+                    colorAreas: sign < 0 ?
+                    [
+                        new(colors[j], true),
+                        new(colors[j], false, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom),
+                        new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom)
+                    ] : [new(colors[j], true)],
+                    defaultCharacter: '█',
+                    //modify the top and bottom borders for extra precision
+                    border: new(
+                        top: sign < 0 ? null : (char)('▁' + heightFractions8),
+                        bottom: sign > 0 ? null : (char)('█' - heightFractions8)
+                    )
+                ));
             }
-            int height = (int)(renderer.TerminalHeight * graphValue / (maxValue - minValue));
-            int sign = Math.Sign(height);
-            height *= sign;
-            int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - height) * 8);
-            graphRendererObject().SubObjects[4].SubObjects.Add(new(
-                geometry: new(
-                    i,
-                    sign > 0 ? zeroHeight - height : zeroHeight,
-                    1,
-                    height
-                ),
-                //invert bottom slice if graph value is negative
-                colorAreas: sign < 0 ? [new(Colors.White, false, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom), new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom)] : [],
-                defaultCharacter: '█',
-                //modify the top and bottom borders for extra precision
-                border: new(
-                    top: sign < 0 ? null : (char)('▁' + heightFractions8),
-                    bottom: sign > 0 ? null : (char)('█' - heightFractions8)
-                )
-            ));
         }
+
+
+
         //initial render
         renderer.Update();
 
         void updateGraph(bool resize = false)
         {
             //set graph position
-            graphRendererObject().SubObjects[4].X =
-                -Math.Clamp(selectedTime - renderer.TerminalWidth / 2, 0, Math.Max(times.Count - renderer.TerminalWidth, 0));
-            graphRendererObject().SubObjects[5].X = selectedTime + graphRendererObject().SubObjects[4].X;
+            graphBarList().X =
+                -Math.Clamp(selectedTime * graphs.Count - renderer.TerminalWidth / 2, 0, Math.Max(times.Count * graphs.Count - renderer.TerminalWidth, 0));
+            selectionBar().X = selectedTime * graphs.Count + graphBarList().X;
 
-            //change the value and time
-            graphRendererObject().SubObjects[1] =
-            new(
-                text: $"{(values.TryGetValue(times[selectedTime], out double value) ? value : 0.0)} {unitOfMeasurement}",
-                colorAreas: accented,
-                externalAlignmentX: Alignment.Center
-            );
+            //change the values
+            for (int i = 0; i < graphs.Count; i++)
+            {
+                valueList().SubObjects[i] =
+                new(
+                    y: i,
+                    text: $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0)} {unitOfMeasurement}",
+                    colorAreas: [new(colors[i], true)],
+                    externalAlignmentX: Alignment.Center
+                );
+            }
 
-            graphRendererObject().SubObjects[2] =
-            new(
-                text: $"{times[selectedTime].Item1} - {times[selectedTime].Item2}",
-                colorAreas: accented,
-                externalAlignmentX: Alignment.Right
-            );
+            //change the time
+            header().SubObjects[2] =
+                new(
+                    text: $"{times[selectedTime].Item1} - {times[selectedTime].Item2}",
+                    colorAreas: [new(Colors.White, true)],
+                    externalAlignmentX: Alignment.Right
+                );
 
 
             //recalculate all geometries if terminal resized
             if (resize)
             {
-                graphRendererObject().SubObjects[3].Width = renderer.TerminalWidth;
-                graphRendererObject().SubObjects[3].Y = zeroHeight;
-
+                zeroHeight = Math.Max(graphs.Count, (int)((renderer.TerminalHeight - graphs.Count) * maxValue / (maxValue - minValue)));
+                zeroLine().Width = renderer.TerminalWidth;
+                zeroLine().Y = zeroHeight + 1;
                 for (int i = 0; i < times.Count; i++)
                 {
-                    double graphValue = 0;
-                    if (values.TryGetValue(times[i], out double val))
+                    for (int j = 0; j < graphs.Count; j++)
                     {
-                        graphValue = val;
+                        double graphValue = 0;
+                        if (graphs[j].TryGetValue(times[i], out double val))
+                        {
+                            graphValue = val;
+                        }
+                        int height = (int)(renderer.TerminalHeight * graphValue / (maxValue - minValue));
+                        int sign = Math.Sign(height);
+                        height *= sign;
+                        int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - height) * 8);
+                        graphBarList().SubObjects[i * graphs.Count + j] = new(
+                            geometry: new(
+                                i * graphs.Count + j,
+                                sign > 0 ? zeroHeight - height : zeroHeight,
+                                1,
+                                height
+                            ),
+                            //invert bottom slice if graph value is negative
+                            colorAreas: sign < 0 ?
+                            [
+                                new(colors[j], true),
+                                new(colors[j], false, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom),
+                                new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom)
+                            ] : [new(colors[j], true)],
+                            defaultCharacter: '█',
+                            //modify the top and bottom borders for extra precision
+                            border: new(
+                                top: sign < 0 ? null : (char)('▁' + heightFractions8),
+                                bottom: sign > 0 ? null : (char)('█' - heightFractions8)
+                            )
+                        );
                     }
-
-                    int height = (int)(renderer.TerminalHeight * graphValue / (maxValue - minValue));
-                    graphRendererObject().SubObjects[4].SubObjects[i].Y = Math.Min(zeroHeight - height, zeroHeight);
-                    graphRendererObject().SubObjects[4].SubObjects[i].Height = Math.Abs(height);
                 }
             }
         }
 
         //create the json exportable dictionary
         List<JsonData> jsonValues = [];
-        foreach (var val in values)
+        for (int i = 0; i < times.Count; i++)
         {
-            jsonValues.Add(new(val.Key.Item1, val.Key.Item2, val.Value));
+            jsonValues.Add(new(times[i].Item1, times[i].Item2, []));
+            for (int j = 0; j < graphs.Count; j++)
+            {
+                graphs[j].TryGetValue(times[i], out double value);
+                jsonValues[i].Values.Add(names[j], value);
+            }
         }
 
         //json export function for the greeter file dialogue
@@ -240,7 +338,7 @@ static partial class CLI
                     //export to json
                     case ConsoleKey.E:
                         FilePathMenu(
-                            filePath: $"{name.ToLower()}.json",
+                            filePath: $"graph.json",
                             title: "Input the exported file path:",
                             fileAction: tryExportFile
                         );
@@ -254,10 +352,13 @@ static partial class CLI
                 zeroHeight = Math.Max(1, (int)((renderer.TerminalHeight - 1) * maxValue / (maxValue - minValue)));
                 renderer.Object.Width = renderer.TerminalWidth;
                 renderer.Object.Height = renderer.TerminalHeight;
-                graphRendererObject().Width = renderer.TerminalWidth;
-                graphRendererObject().Height = renderer.TerminalHeight;
-                graphRendererObject().SubObjects[4].Height = renderer.TerminalHeight;
-                graphRendererObject().SubObjects[5].Height = renderer.TerminalHeight - 1;
+                root().Width = renderer.TerminalWidth;
+                root().Height = renderer.TerminalHeight;
+                graphBarList().Height = renderer.TerminalHeight - graphs.Count;
+                selectionBar().Height = renderer.TerminalHeight - graphs.Count;
+                header().Width = renderer.TerminalWidth;
+                nameList().Width = renderer.TerminalWidth;
+                valueList().Width = renderer.TerminalWidth;
                 updateGraph(true);
             }
             renderer.Update();

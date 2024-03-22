@@ -11,7 +11,8 @@ static partial class CLI
         Console.CursorVisible = false;
         Console.CancelKeyPress += delegate
         {
-            renderer.Reset();
+            Console.SetCursorPosition(0, 0);
+            Console.ResetColor();
             Console.Clear();
             Console.CursorVisible = true;
         };
