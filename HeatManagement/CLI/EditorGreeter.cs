@@ -84,10 +84,10 @@ static partial class CLI
         }
 
         TextBox(
-            text: arguments.DataPath ?? "data.json",
-            title: "Input the source or result data file path:",
+            text: arguments.EditPath ?? "data.json",
+            title: "Input the assets or source data file path:",
             fileAction: tryLoadEditedFile,
-            tryInitialAction: arguments.DataPath != null
+            tryInitialAction: arguments.EditPath != null
         );
 
         if (editedFileType == null) EditTypeSelector(ref editedFileType);

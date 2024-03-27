@@ -57,7 +57,7 @@ class Arguments
                 case "-e":
                 case "--edit":
                     i++;
-                    try { DataPath = args[i]; } catch { throw new($"Expected an asset or source data file path after {args[i - 1]}"); }
+                    try { EditPath = args[i]; } catch { throw new($"Expected an asset or source data file path after {args[i - 1]}"); }
                     break;
 
                 //handle accidental double spaces
