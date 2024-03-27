@@ -88,4 +88,28 @@ public class ArgumentsTests
         }
         throw new("Failed to catch a missing file");
     }
+
+    [Fact]
+    public void EditPath()
+    {
+        Arguments actual = new(["-e", "path"]);
+        Assert.Equal("path", actual.EditPath);
+
+        actual = new(["--edit", "path"]);
+        Assert.Equal("path", actual.EditPath);
+
+        actual = new(["--cli", "-h", "--edit", "path"]);
+        Assert.Equal("path", actual.EditPath);
+
+        try
+        {
+            actual = new(["-e"]);
+        }
+        catch (Exception e)
+        {
+            Assert.Equal("Expected a source or result data file path after -e", e.Message);
+            return;
+        }
+        throw new("Failed to catch a missing file");
+    }
 }

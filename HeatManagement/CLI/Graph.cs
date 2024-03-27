@@ -337,8 +337,8 @@ static partial class CLI
 
                     //export to json
                     case ConsoleKey.E:
-                        FilePathMenu(
-                            filePath: $"graph.json",
+                        TextBox(
+                            text: $"graph.json",
                             title: "Input the exported file path:",
                             fileAction: tryExportFile
                         );

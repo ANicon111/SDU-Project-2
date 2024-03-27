@@ -29,5 +29,5 @@ public class AssetManager(string json = "{}")
     {
         assets?.Remove(name);
     }
-    public string ToJson() => JsonSerializer.Serialize(assets);
+    public string ToJson(JsonSerializerOptions? options = null) => JsonSerializer.Serialize(assets, options);
 }

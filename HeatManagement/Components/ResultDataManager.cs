@@ -57,13 +57,13 @@ public class ResultDataManager
         }
     }
 
-    public string ToJson()
+    public string ToJson(JsonSerializerOptions? options = null)
     {
         List<JsonData> jsonIntermediary = [];
         foreach (var element in ResultData)
         {
             jsonIntermediary.Add(new(element.Key.Item1, element.Key.Item2, element.Value));
         }
-        return JsonSerializer.Serialize(jsonIntermediary);
+        return JsonSerializer.Serialize(jsonIntermediary, options);
     }
 }

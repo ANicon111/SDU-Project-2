@@ -4,7 +4,6 @@ using System.IO;
 using System.Text.Json;
 using System.Threading;
 using AnsiRenderer;
-using Avalonia.Controls;
 
 namespace HeatManagement;
 
@@ -116,7 +115,7 @@ static partial class CLI
         //golden ratio-based color generation
         for (int i = 0; i < options.Length; i++) colorList.Add(Color.FromHSLA(137.5 * i, 1, 1.618 * i % 0.33 + 0.33));
 
-        //create a RendererObject for each 
+        //create a RendererObject for each option
         RendererObject[] graphList = new RendererObject[options.Length];
 
         for (int i = 0; i < options.Length; i++)
@@ -276,8 +275,8 @@ static partial class CLI
 
                     //export all data to json
                     case ConsoleKey.E:
-                        FilePathMenu(
-                            filePath: "resultData.json",
+                        TextBox(
+                            text: "resultData.json",
                             title: "Input the result data file path:",
                             fileAction: tryExportFile
                         );

@@ -4,7 +4,7 @@ namespace HeatManagement;
 
 static partial class CLI
 {
-    static void RunGreeter(Arguments arguments)
+    static void RunViewerGreeter(Arguments arguments)
     {
         renderer.Object = new(
             geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
@@ -63,8 +63,8 @@ static partial class CLI
             return "";
         }
 
-        FilePathMenu(
-            filePath: arguments.DataPath ?? "data.json",
+        TextBox(
+            text: arguments.DataPath ?? "data.json",
             title: "Input the source or result data file path:",
             fileAction: tryLoadSourceResultDataFile,
             tryInitialAction: arguments.DataPath != null
@@ -106,8 +106,8 @@ static partial class CLI
                 return "";
             }
 
-            FilePathMenu(
-                filePath: arguments.AssetsPath ?? "assets.json",
+            TextBox(
+                text: arguments.AssetsPath ?? "assets.json",
                 title: "Input the asset file path:",
                 fileAction: tryLoadAssetsFile,
                 tryInitialAction: arguments.AssetsPath != null

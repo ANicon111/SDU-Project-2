@@ -7,6 +7,7 @@ class Arguments
     public bool Help { get; } = false;
     public string? AssetsPath { get; init; } = null;
     public string? DataPath { get; init; } = null;
+    public string? EditPath { get; init; } = null;
 
     public static string HelpMessage =
         """
@@ -16,8 +17,9 @@ class Arguments
         -h, --help: Show this message
         -c, --cli: Run the command line visualizer
         -g, --gui: Run the graphical visualizer
-        -a, --assets <path>: Set initial assets file path
         -d, --data <path>: Set initial source or result data file path
+        -a, --assets <path>: Set initial assets file path
+        -e, --edit <path>: Edit an asset or source data file
         """;
 
     public Arguments(string[] args)
@@ -50,6 +52,12 @@ class Arguments
                 case "--data":
                     i++;
                     try { DataPath = args[i]; } catch { throw new($"Expected a source or result data file path after {args[i - 1]}"); }
+                    break;
+
+                case "-e":
+                case "--edit":
+                    i++;
+                    try { DataPath = args[i]; } catch { throw new($"Expected an asset or source data file path after {args[i - 1]}"); }
                     break;
 
                 //handle accidental double spaces

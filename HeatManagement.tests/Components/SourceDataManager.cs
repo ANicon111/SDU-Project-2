@@ -138,12 +138,8 @@ public class SourceDataManagerTests
         """.Replace(" ", "").Replace("\n", "").Replace("\r", "")
         );
         sourceDataManager.RemoveData(
-            new(
-                startTime: new(year: 2023, month: 7, day: 8, hour: 1, minute: 0, second: 0),
-                endTime: new(year: 2023, month: 7, day: 8, hour: 2, minute: 0, second: 0),
-                heatDemand: 1.85,
-                electricityPrice: 691.05
-            )
+            startTime: new DateTime(year: 2023, month: 7, day: 8, hour: 1, minute: 0, second: 0),
+            endTime: new DateTime(year: 2023, month: 7, day: 8, hour: 2, minute: 0, second: 0)
         );
         string actual = sourceDataManager.ToJson();
         Assert.Equal(expected, actual);

@@ -23,9 +23,9 @@ public class SourceDataManager(string json = "[]")
     {
         data?.Add(sourceData);
     }
-    public void RemoveData(SourceData sourceData)
+    public void RemoveData(DateTime startTime, DateTime endTime)
     {
-        data?.Remove(sourceData);
+        data?.RemoveAll((val) => val.StartTime == startTime && val.EndTime == endTime);
     }
-    public string ToJson() => JsonSerializer.Serialize(data);
+    public string ToJson(JsonSerializerOptions? options = null) => JsonSerializer.Serialize(data, options);
 }
