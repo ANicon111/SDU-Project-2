@@ -107,7 +107,7 @@ public class ArgumentsTests
         }
         catch (Exception e)
         {
-            Assert.Equal("Expected a source or result data file path after -e", e.Message);
+            Assert.Equal("Expected an asset or source data file path after -e", e.Message);
             return;
         }
         throw new("Failed to catch a missing file");

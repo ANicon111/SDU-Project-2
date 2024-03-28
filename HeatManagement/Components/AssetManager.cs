@@ -17,9 +17,9 @@ public struct Asset(string imagePath, double heatCapacity, double cost, double e
 public class AssetManager(string json = "{}")
 {
     //The name is stored as the Dictionary index
-    private Dictionary<string, Asset>? assets = JsonSerializer.Deserialize<Dictionary<string, Asset>>(json);
+    private SortedDictionary<string, Asset>? assets = JsonSerializer.Deserialize<SortedDictionary<string, Asset>>(json);
 
-    public Dictionary<string, Asset>? Assets { get => assets; set => assets = value; }
+    public SortedDictionary<string, Asset>? Assets { get => assets; set => assets = value; }
 
     public void AddAsset(string name, Asset asset)
     {

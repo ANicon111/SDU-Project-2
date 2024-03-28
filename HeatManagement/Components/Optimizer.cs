@@ -8,14 +8,14 @@ public static class Optimizer
 {
     public static void GetResult(AssetManager am, SourceDataManager sdm, ResultDataManager rdm)
     {
-        foreach (SourceData dataUnit in sdm.Data!)
+        foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> dataUnit in sdm.Data!)
         {
             Dictionary<string, double> assetCostPerMWH = new();
-            double remainingUsage = dataUnit.HeatDemand;
+            double remainingUsage = dataUnit.Value.HeatDemand;
 
             foreach ((string name, Asset asset) in am.Assets!)
             {
-                double costPerMWH = asset.Cost - asset.ElectricityCapacity * dataUnit.ElectricityPrice / asset.HeatCapacity;
+                double costPerMWH = asset.Cost - asset.ElectricityCapacity * dataUnit.Value.ElectricityPrice / asset.HeatCapacity;
                 assetCostPerMWH.Add(name, costPerMWH);
             }
             //precision error avoidance
@@ -31,8 +31,8 @@ public static class Optimizer
                     additionalResourceUsage[resourceName] += resourceUsage * coveredUsage;
                 }
                 rdm.AddData(
-                    dataUnit.StartTime,
-                    dataUnit.EndTime,
+                    dataUnit.Value.StartTime,
+                    dataUnit.Value.EndTime,
                     name,
                     new(
                         coveredUsage,

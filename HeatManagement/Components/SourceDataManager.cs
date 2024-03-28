@@ -13,19 +13,37 @@ public struct SourceData(DateTime startTime, DateTime endTime, double heatDemand
     public required double ElectricityPrice { get; set; } = electricityPrice;
 }
 
-public class SourceDataManager(string json = "[]")
+public class SourceDataManager
 {
-    private List<SourceData>? data = JsonSerializer.Deserialize<List<SourceData>>(json);
+    private SortedDictionary<Tuple<DateTime, DateTime>, SourceData>? data;
 
-    public List<SourceData>? Data { get => data; set => data = value; }
+    public SourceDataManager(string json = "[]")
+    {
+        List<SourceData> jsonIntermediary = JsonSerializer.Deserialize<List<SourceData>>(json)!;
+        data = [];
+        foreach (SourceData dataElement in jsonIntermediary)
+        {
+            data.Add(Tuple.Create(dataElement.StartTime, dataElement.EndTime), dataElement);
+        }
+    }
+
+    public SortedDictionary<Tuple<DateTime, DateTime>, SourceData>? Data { get => data; set => data = value; }
 
     public void AddData(SourceData sourceData)
     {
-        data?.Add(sourceData);
+        data?.Add(Tuple.Create(sourceData.StartTime, sourceData.EndTime), sourceData);
     }
     public void RemoveData(DateTime startTime, DateTime endTime)
     {
-        data?.RemoveAll((val) => val.StartTime == startTime && val.EndTime == endTime);
+        data?.Remove(Tuple.Create(startTime, endTime));
     }
-    public string ToJson(JsonSerializerOptions? options = null) => JsonSerializer.Serialize(data, options);
+    public string ToJson(JsonSerializerOptions? options = null)
+    {
+        List<SourceData> jsonIntermediary = [];
+        foreach (var dataElement in data!)
+        {
+            jsonIntermediary.Add(dataElement.Value);
+        }
+        return JsonSerializer.Serialize(jsonIntermediary, options);
+    }
 }
