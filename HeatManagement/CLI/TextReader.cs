@@ -61,10 +61,9 @@ static partial class CLI
                         selectedChar = Math.Max(selectedChar - 1, 0);
                         break;
                     case ConsoleKey.Delete:
-                        if (text.Length > 0)
+                        if (text.Length > 0 && selectedChar < text.Length)
                             text = text.Remove(selectedChar, 1);
                         break;
-
                     case ConsoleKey.RightArrow:
                         selectedChar = Math.Min(selectedChar + 1, text.Length);
                         break;
@@ -76,7 +75,7 @@ static partial class CLI
                     default:
                         char c = key.KeyChar;
                         //ignore null and control characters, and only allow numbers and ,.: for a number input
-                        if (c > 31 && (!numbersOnly || "0123456789,.:".Contains(c)))
+                        if (c > 31 && (!numbersOnly || "0123456789,.:-".Contains(c)))
                         {
                             if (text != "")
                             {
