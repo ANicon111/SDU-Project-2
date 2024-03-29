@@ -5,9 +5,9 @@ using System.Text.Json;
 using System.Threading;
 using AnsiRenderer;
 
-namespace HeatManagement;
+namespace HeatManagement.CLI;
 
-static partial class CLI
+static partial class App
 {
     private struct JsonData(DateTime startTime, DateTime endTime, Dictionary<string, double> values)
     {

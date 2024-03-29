@@ -5,9 +5,9 @@ using System.Text.Json;
 using System.Threading;
 using AnsiRenderer;
 
-namespace HeatManagement;
+namespace HeatManagement.CLI;
 
-static partial class CLI
+static partial class App
 {
     static void RunGraphList(AssetManager? assetManager, SourceDataManager? sourceDataManager = null, ResultDataManager? resultDataManager = null)
     {
@@ -26,7 +26,7 @@ static partial class CLI
         List<string> assetOptions = [];
 
 
-        List<Tuple<DateTime, DateTime>> times = [.. resultDataManager!.ResultData.Keys];
+        List<Tuple<DateTime, DateTime>> times = [.. resultDataManager!.Data.Keys];
 
         List<string> resourceMeasurements =
         [
@@ -43,7 +43,7 @@ static partial class CLI
         };
 
         //get individual asset usage stats
-        foreach (var result in resultDataManager.ResultData)
+        foreach (var result in resultDataManager.Data)
         {
             graphValues["Cost"][result.Key] = 0;
             graphValues["Electricity"][result.Key] = 0;

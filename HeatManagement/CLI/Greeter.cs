@@ -1,10 +1,9 @@
 using System;
 using System.Threading;
 using AnsiRenderer;
-using Avalonia.Input;
-namespace HeatManagement;
+namespace HeatManagement.CLI;
 
-static partial class CLI
+static partial class App
 {
     private static readonly Renderer renderer = new();
 

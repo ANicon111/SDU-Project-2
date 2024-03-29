@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:HeatManagement.GUI" 
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="HeatManagement.GUI.EditorGreeterView"
+             x:DataType="vm:GreeterViewModel">
+    <StackPanel>
+        <TextBlock Text="Load source or assets file"/>
+        <TextBlock Text="{Binding EditedError}"/>
+        <Button Command="{Binding LoadEditedFile}" Content="Load"/>
+        <TextBlock Text="{Binding EditedFileName}"/>
+        <Button Command="{Binding GoToEditor}" IsVisible="{Binding CanGoToEditor}" Content="Start"/>
+        <Button Command="{Binding GoToEditorTypeGreeter}" IsVisible="{Binding CanNotGoToEditor}" Content="New"/>
+    </StackPanel>
+</UserControl>

@@ -1,8 +1,8 @@
 using System.IO;
 using AnsiRenderer;
-namespace HeatManagement;
+namespace HeatManagement.CLI;
 
-static partial class CLI
+static partial class App
 {
     static void RunViewerGreeter(Arguments arguments)
     {
@@ -47,7 +47,7 @@ static partial class CLI
                     try
                     {
                         resultData = new(json);
-                        if (resultData.ResultData!.Count == 0)
+                        if (resultData.Data!.Count == 0)
                         {
                             resultData = null;
                             return "Result data file contains no data";

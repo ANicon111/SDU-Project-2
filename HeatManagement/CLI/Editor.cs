@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using AnsiRenderer;
-namespace HeatManagement;
+namespace HeatManagement.CLI;
 
-static partial class CLI
+static partial class App
 {
 
     static void RunEditor(string fileType, string filePath, AssetManager? assets, SourceDataManager? sourceData)

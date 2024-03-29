@@ -27,40 +27,40 @@ public class ResultDataManager
         public required Dictionary<string, ResultData> ResultData { get; set; } = resultData;
     }
 
-    public SortedDictionary<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> ResultData;
+    public SortedDictionary<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> Data;
 
     public ResultDataManager(string json = "[]")
     {
-        ResultData = [];
+        Data = [];
         List<JsonData> jsonIntermediary = JsonSerializer.Deserialize<List<JsonData>>(json)!;
         foreach (var element in jsonIntermediary)
         {
-            ResultData.Add(Tuple.Create(element.StartTime, element.EndTime), element.ResultData);
+            Data.Add(Tuple.Create(element.StartTime, element.EndTime), element.ResultData);
         }
     }
 
     public void AddData(DateTime startTime, DateTime endTime, string assetName, ResultData assetData)
     {
-        if (!ResultData.ContainsKey(Tuple.Create(startTime, endTime))) ResultData[Tuple.Create(startTime, endTime)] = [];
-        if (!ResultData[Tuple.Create(startTime, endTime)].ContainsKey(assetName)) ResultData[Tuple.Create(startTime, endTime)][assetName] = assetData;
+        if (!Data.ContainsKey(Tuple.Create(startTime, endTime))) Data[Tuple.Create(startTime, endTime)] = [];
+        if (!Data[Tuple.Create(startTime, endTime)].ContainsKey(assetName)) Data[Tuple.Create(startTime, endTime)][assetName] = assetData;
     }
 
     public void RemoveData(DateTime startTime, DateTime endTime, string? assetName = null)
     {
         if (assetName != null)
         {
-            ResultData[Tuple.Create(startTime, endTime)].Remove(assetName);
+            Data[Tuple.Create(startTime, endTime)].Remove(assetName);
         }
         else
         {
-            ResultData.Remove(Tuple.Create(startTime, endTime));
+            Data.Remove(Tuple.Create(startTime, endTime));
         }
     }
 
     public string ToJson(JsonSerializerOptions? options = null)
     {
         List<JsonData> jsonIntermediary = [];
-        foreach (var element in ResultData)
+        foreach (var element in Data)
         {
             jsonIntermediary.Add(new(element.Key.Item1, element.Key.Item2, element.Value));
         }

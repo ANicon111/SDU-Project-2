@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:HeatManagement.GUI" 
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="HeatManagement.GUI.ViewerGreeterView"
+             x:DataType="vm:GreeterViewModel">
+    <StackPanel>
+        <TextBlock Text="Load source or result data file"/>
+        <TextBlock Text="{Binding DataError}"/>
+        <Button Command="{Binding LoadDataFile}" Content="Load"/>
+        <TextBlock Text="{Binding DataFileName}"/>
+        <StackPanel IsVisible="{Binding CanPickAsset}">
+            <TextBlock Text="Load assets file"/>
+            <TextBlock Text="{Binding AssetsError}"/>
+            <Button Command="{Binding LoadAssetsFile}" Content="Load"/>
+            <TextBlock Text="{Binding AssetsFileName}"/>
+        </StackPanel>
+        <Button Command="{Binding GoToViewer}" IsVisible="{Binding CanGoToViewer}" Content="Start"/>
+    </StackPanel>
+</UserControl>

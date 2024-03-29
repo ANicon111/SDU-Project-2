@@ -3,9 +3,9 @@ using System.IO;
 using System.Threading;
 using AnsiRenderer;
 using Avalonia.Controls.Documents;
-namespace HeatManagement;
+namespace HeatManagement.CLI;
 
-static partial class CLI
+static partial class App
 {
     static void RunEditorGreeter(Arguments arguments)
     {

@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using AnsiRenderer;
 
-namespace HeatManagement;
+namespace HeatManagement.CLI;
 
-static partial class CLI
+static partial class App
 {
     //generic file loader for a manager
     public static void TextBox(string text, string title, Func<string, string> fileAction, bool tryInitialAction = false, bool numbersOnly = false)

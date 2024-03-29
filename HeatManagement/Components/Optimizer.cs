@@ -6,14 +6,14 @@ namespace HeatManagement;
 
 public static class Optimizer
 {
-    public static void GetResult(AssetManager am, SourceDataManager sdm, ResultDataManager rdm)
+    public static void GetResult(AssetManager assets, SourceDataManager sourceData, ResultDataManager resultData)
     {
-        foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> dataUnit in sdm.Data!)
+        foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> dataUnit in sourceData.Data!)
         {
             Dictionary<string, double> assetCostPerMWH = new();
             double remainingUsage = dataUnit.Value.HeatDemand;
 
-            foreach ((string name, Asset asset) in am.Assets!)
+            foreach ((string name, Asset asset) in assets.Assets!)
             {
                 double costPerMWH = asset.Cost - asset.ElectricityCapacity * dataUnit.Value.ElectricityPrice / asset.HeatCapacity;
                 assetCostPerMWH.Add(name, costPerMWH);
@@ -23,14 +23,14 @@ public static class Optimizer
             {
                 Dictionary<string, double> additionalResourceUsage = [];
                 (string name, double costPerMWH) = assetCostPerMWH.MinBy(pair => pair.Value);
-                double coveredUsage = Math.Min(am.Assets[name].HeatCapacity, remainingUsage);
+                double coveredUsage = Math.Min(assets.Assets[name].HeatCapacity, remainingUsage);
                 remainingUsage -= coveredUsage;
-                foreach ((string resourceName, double resourceUsage) in am.Assets[name].AdditionalResources)
+                foreach ((string resourceName, double resourceUsage) in assets.Assets[name].AdditionalResources)
                 {
                     if (!additionalResourceUsage.ContainsKey(resourceName)) additionalResourceUsage[resourceName] = 0;
                     additionalResourceUsage[resourceName] += resourceUsage * coveredUsage;
                 }
-                rdm.AddData(
+                resultData.AddData(
                     dataUnit.Value.StartTime,
                     dataUnit.Value.EndTime,
                     name,
@@ -38,8 +38,8 @@ public static class Optimizer
                         coveredUsage,
                         coveredUsage * costPerMWH,
                         //assuming proportional electricity and heat production/consumption, this is the electricity delta per mwh of heat produced 
-                        am.Assets[name].ElectricityCapacity / am.Assets[name].HeatCapacity * coveredUsage,
-                        am.Assets[name].CO2 * coveredUsage,
+                        assets.Assets[name].ElectricityCapacity / assets.Assets[name].HeatCapacity * coveredUsage,
+                        assets.Assets[name].CO2 * coveredUsage,
                         additionalResourceUsage
                     )
                 );
