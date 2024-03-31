@@ -67,7 +67,7 @@ static partial class App
                         ),
                         //time
                         new(
-                            text: $"{times[selectedTime].Item1} - {times[selectedTime].Item2}",
+                            text: $"{times[selectedTime].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {times[selectedTime].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}",
                             colorAreas: [new(Colors.White,true)],
                             externalAlignmentX: Alignment.Right
                         ),
@@ -153,7 +153,7 @@ static partial class App
             valueList().SubObjects.Add(
                 new(
                     y: i,
-                    text: $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0)} {unitOfMeasurement}",
+                    text: $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0):0.##} {unitOfMeasurement}",
                     colorAreas: [new(colors[i], true)]
                 )
             );
@@ -222,7 +222,7 @@ static partial class App
                 valueList().SubObjects[i] =
                 new(
                     y: i,
-                    text: $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0)} {unitOfMeasurement}",
+                    text: $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0):0.##} {unitOfMeasurement}",
                     colorAreas: [new(colors[i], true)],
                     externalAlignmentX: Alignment.Center
                 );
@@ -231,7 +231,7 @@ static partial class App
             //change the time
             header().SubObjects[2] =
                 new(
-                    text: $"{times[selectedTime].Item1} - {times[selectedTime].Item2}",
+                    text: $"{times[selectedTime].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {times[selectedTime].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}",
                     colorAreas: [new(Colors.White, true)],
                     externalAlignmentX: Alignment.Right
                 );
@@ -338,7 +338,7 @@ static partial class App
                     //export to json
                     case ConsoleKey.E:
                         TextBox(
-                            text: $"graph.json",
+                            text: "graph.json",
                             title: "Input the exported file path:",
                             fileAction: tryExportFile
                         );

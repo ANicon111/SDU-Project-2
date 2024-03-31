@@ -1,5 +1,6 @@
 ﻿namespace HeatManagement;
 using Avalonia;
+using Avalonia.ReactiveUI;
 using System;
 
 class Program
@@ -48,5 +49,6 @@ class Program
         => AppBuilder.Configure<GUI.App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .LogToTrace();
+            .LogToTrace()
+            .UseReactiveUI();
 }

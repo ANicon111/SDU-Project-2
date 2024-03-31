@@ -104,7 +104,6 @@ static partial class App
                     graphValues[$"{assetName}-{resourceName}"][result.Key] = additionalResource.Value;
                 }
             }
-
         }
 
         //merge options and units of measurements

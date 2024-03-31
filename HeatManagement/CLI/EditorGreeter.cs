@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Threading;
 using AnsiRenderer;
-using Avalonia.Controls.Documents;
 namespace HeatManagement.CLI;
 
 static partial class App

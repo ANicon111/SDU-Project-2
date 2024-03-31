@@ -3,10 +3,24 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:HeatManagement.GUI" 
+             xmlns:cc="using:HeatManagement.GUI"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="HeatManagement.GUI.ViewerGraphListView"
-             x:DataType="vm:GreeterViewModel">
-    <StackPanel>
-        <TextBlock>GraphListPlaceholder</TextBlock>
-    </StackPanel>
+             x:DataType="vm:ViewerViewModel">
+    <RelativePanel>
+        <RelativePanel RelativePanel.AlignHorizontalCenterWithPanel="True">
+            <TextBlock FontSize="24" x:Name="Title">Graphs</TextBlock>
+            <ItemsControl x:Name="GraphList" RelativePanel.Below="Title" ItemsSource="{Binding GraphButtonList}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+            <Button RelativePanel.Below="GraphList" IsEnabled="{Binding CanOpenGraph}" Command="{Binding ToggleGraph}" Content="Open" Padding="5"/>
+        </RelativePanel>
+        <Border RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Background="#aa000000" IsVisible="{Binding GraphOpen}" Child="{Binding Graph}">
+            <cc:ViewerGraphView/>
+        </Border>
+    </RelativePanel>
 </UserControl>

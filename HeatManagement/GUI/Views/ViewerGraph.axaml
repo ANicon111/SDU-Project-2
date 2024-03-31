@@ -5,8 +5,57 @@
              xmlns:vm="clr-namespace:HeatManagement.GUI" 
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="HeatManagement.GUI.ViewerGraphView"
-             x:DataType="vm:GreeterViewModel">
-    <StackPanel>
-        <TextBlock>ViewerGraphViewPlaceholder</TextBlock>
-    </StackPanel>
+             x:DataType="vm:ViewerViewModel"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <RelativePanel x:Name="InfoBar" VerticalAlignment="Top" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+            <Button RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Command="{Binding ToggleGraph}" Content="Close"/>
+            <ItemsControl ItemsSource="{Binding GraphValueList}" RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Foreground="{Binding Color}" Text="{Binding Text}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <TextBlock RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignRightWithPanel="True" Text="{Binding GraphTime}" />
+        </RelativePanel>
+        <Grid RelativePanel.Below="InfoBar" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True">
+            <ScrollViewer HorizontalScrollBarVisibility="Visible" AllowAutoHide="False"> 
+                <ItemsControl ItemsSource="{Binding GraphBarList}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Padding="0"  Margin="0" Background="{Binding BarBackground}" Width="{Binding BarWidth}" Command="{Binding SelectBar}" VerticalAlignment="Stretch">
+                                <Viewbox Stretch="Fill">
+                                    <ItemsControl ItemsSource="{Binding Bars}" Width="{Binding BarWidth}" Height="64">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Width="32" Height="32" VerticalAlignment="{Binding BarSignAlignment}">
+                                                    <Rectangle HorizontalAlignment="Left" VerticalAlignment="{Binding BarAlignment}" Fill="{Binding Color}" Width="32" Height="{Binding Height}"/>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Viewbox>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </RelativePanel>
 </UserControl>

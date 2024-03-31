@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using ReactiveUI;
@@ -140,7 +141,7 @@ class GreeterViewModel : ViewModelBase
     public void CreateAssetsEditor() { Assets = new(); GoToEditor(); }
     public void CreateSourceDataEditor() { SourceData = new(); GoToEditor(); }
 
-    static readonly FilePickerFileType JsonFile = new("All Images")
+    static readonly FilePickerFileType JsonFile = new("Json Files")
     {
         Patterns = ["*.json"],
         AppleUniformTypeIdentifiers = ["public.json"],
