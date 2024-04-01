@@ -25,36 +25,39 @@
             <TextBlock RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignRightWithPanel="True" Text="{Binding GraphTime}" />
         </RelativePanel>
         <Grid RelativePanel.Below="InfoBar" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True">
-            <ScrollViewer HorizontalScrollBarVisibility="Visible" AllowAutoHide="False"> 
-                <ItemsControl ItemsSource="{Binding GraphBarList}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Padding="0"  Margin="0" Background="{Binding BarBackground}" Width="{Binding BarWidth}" Command="{Binding SelectBar}" VerticalAlignment="Stretch">
-                                <Viewbox Stretch="Fill">
-                                    <ItemsControl ItemsSource="{Binding Bars}" Width="{Binding BarWidth}" Height="64">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <StackPanel Orientation="Horizontal" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <Border Width="32" Height="32" VerticalAlignment="{Binding BarSignAlignment}">
-                                                    <Rectangle HorizontalAlignment="Left" VerticalAlignment="{Binding BarAlignment}" Fill="{Binding Color}" Width="32" Height="{Binding Height}"/>
-                                                </Border>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </Viewbox>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+            <ScrollViewer HorizontalScrollBarVisibility="Visible" AllowAutoHide="False">
+                <Panel>
+                    <ItemsControl ItemsSource="{Binding GraphBarList}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Padding="0"  Margin="0" Background="{Binding BarBackground}" Width="{Binding BarWidth}" Command="{Binding SelectBar}" VerticalAlignment="Stretch">
+                                    <Viewbox Stretch="Fill">
+                                        <ItemsControl ItemsSource="{Binding Bars}" Width="{Binding BarWidth}" Height="{Binding BarHeight}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Width="{Binding BaseSize}" Height="{Binding BaseSize}" VerticalAlignment="{Binding BarSignAlignment}">
+                                                        <Rectangle HorizontalAlignment="Left" VerticalAlignment="{Binding BarAlignment}" Fill="{Binding Color}" Width="{Binding BaseSize}" Height="{Binding Height}"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Viewbox>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                   <Line VerticalAlignment="Center" StartPoint="0,0" EndPoint="{Binding ZeroLineLength}" Stroke="White" StrokeThickness="2"/> 
+                </Panel>
             </ScrollViewer>
         </Grid>
     </RelativePanel>

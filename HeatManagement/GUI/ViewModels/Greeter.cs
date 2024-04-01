@@ -5,34 +5,53 @@ using Avalonia.Platform.Storage;
 using ReactiveUI;
 namespace HeatManagement.GUI;
 
-class ViewModelBase : ReactiveObject;
-
 class GreeterViewModel : ViewModelBase
 {
     public Arguments Arguments { get; set; }
 
-    public SourceDataManager? SourceData = null;
-    ResultDataManager? ResultData = null;
-    AssetManager? Assets = null;
-
     private UserControl currentPage = new GreeterView();
     public UserControl CurrentPage { get => currentPage; set => this.RaiseAndSetIfChanged(ref currentPage, value); }
 
+    //Managers
+    SourceDataManager? SourceData = null;
+    ResultDataManager? ResultData = null;
+    AssetManager? Assets = null;
+
+    //ViewerGreeter
     private string? dataError = null;
     public string? DataError { get => dataError; set => this.RaiseAndSetIfChanged(ref dataError, value); }
     private string? assetsError = null;
     public string? AssetsError { get => assetsError; set => this.RaiseAndSetIfChanged(ref assetsError, value); }
-    private string? editedError = null;
-    public string? EditedError { get => editedError; set => this.RaiseAndSetIfChanged(ref editedError, value); }
 
     private string? dataFileName = null;
     public string? DataFileName { get => dataFileName; set => this.RaiseAndSetIfChanged(ref dataFileName, value); }
-
     private string? assetsFileName = null;
     public string? AssetsFileName { get => assetsFileName; set => this.RaiseAndSetIfChanged(ref assetsFileName, value); }
 
+    private bool canPickAsset = false;
+    public bool CanPickAsset { get => canPickAsset; set => this.RaiseAndSetIfChanged(ref canPickAsset, value); }
+    private bool canGoToViewer = false;
+    public bool CanGoToViewer { get => canGoToViewer; set => this.RaiseAndSetIfChanged(ref canGoToViewer, value); }
+    private bool canNotGoToViewer = true;
+    public bool CanNotGoToViewer { get => canNotGoToViewer; set => this.RaiseAndSetIfChanged(ref canNotGoToViewer, value); }
+
+    //EditorGreeter
+    private string? editedError = null;
+    public string? EditedError { get => editedError; set => this.RaiseAndSetIfChanged(ref editedError, value); }
     private string? editedFileName = null;
     public string? EditedFileName { get => editedFileName; set => this.RaiseAndSetIfChanged(ref editedFileName, value); }
+
+    private bool canGoToEditor = false;
+    public bool CanGoToEditor { get => canGoToEditor; set => this.RaiseAndSetIfChanged(ref canGoToEditor, value); }
+    private bool canNotGoToEditor = true;
+    public bool CanNotGoToEditor { get => canNotGoToEditor; set => this.RaiseAndSetIfChanged(ref canNotGoToEditor, value); }
+
+    readonly FilePickerFileType JsonFile = new("Json Files")
+    {
+        Patterns = ["*.json"],
+        AppleUniformTypeIdentifiers = ["public.json"],
+        MimeTypes = ["application/json", "text/json"]
+    };
 
     public GreeterViewModel(Arguments arguments)
     {
@@ -103,13 +122,6 @@ class GreeterViewModel : ViewModelBase
     public void GoToEditorGreeter() => CurrentPage = new EditorGreeterView();
     public void GoToEditorTypeGreeter() => CurrentPage = new EditorTypeGreeterView();
 
-
-    private bool canPickAsset = false;
-    public bool CanPickAsset { get => canPickAsset; set => this.RaiseAndSetIfChanged(ref canPickAsset, value); }
-    private bool canGoToViewer = false;
-    public bool CanGoToViewer { get => canGoToViewer; set => this.RaiseAndSetIfChanged(ref canGoToViewer, value); }
-    private bool canNotGoToViewer = true;
-    public bool CanNotGoToViewer { get => canNotGoToViewer; set => this.RaiseAndSetIfChanged(ref canNotGoToViewer, value); }
     public void GoToViewer()
     {
         if (ResultData == null)
@@ -123,10 +135,6 @@ class GreeterViewModel : ViewModelBase
         };
     }
 
-    private bool canGoToEditor = false;
-    public bool CanGoToEditor { get => canGoToEditor; set => this.RaiseAndSetIfChanged(ref canGoToEditor, value); }
-    private bool canNotGoToEditor = true;
-    public bool CanNotGoToEditor { get => canNotGoToEditor; set => this.RaiseAndSetIfChanged(ref canNotGoToEditor, value); }
     public void GoToEditor()
     {
         CurrentPage = new EditorView()
@@ -137,16 +145,8 @@ class GreeterViewModel : ViewModelBase
         };
     }
 
-
     public void CreateAssetsEditor() { Assets = new(); GoToEditor(); }
     public void CreateSourceDataEditor() { SourceData = new(); GoToEditor(); }
-
-    static readonly FilePickerFileType JsonFile = new("Json Files")
-    {
-        Patterns = ["*.json"],
-        AppleUniformTypeIdentifiers = ["public.json"],
-        MimeTypes = ["application/json", "text/json"]
-    };
 
     public async void LoadDataFile()
     {
@@ -224,7 +224,6 @@ class GreeterViewModel : ViewModelBase
         CanGoToViewer = ResultData != null || SourceData != null && Assets != null;
         CanNotGoToViewer = !CanGoToViewer;
     }
-
     public async void LoadAssetsFile()
     {
         // Start async operation to open the dialog.
@@ -281,7 +280,6 @@ class GreeterViewModel : ViewModelBase
         CanGoToViewer = ResultData != null || SourceData != null && Assets != null;
         CanNotGoToViewer = !CanGoToViewer;
     }
-
     public async void LoadEditedFile()
     {
         // Start async operation to open the dialog.
