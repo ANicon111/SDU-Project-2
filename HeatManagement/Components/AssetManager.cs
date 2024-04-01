@@ -14,12 +14,12 @@ public struct Asset(string imagePath, double heatCapacity, double cost, double e
     public required Dictionary<string, double> AdditionalResources { get; set; } = additionalResources;
 }
 
-public class AssetManager(string json = "{}")
+public class AssetManager(string? json = null)
 {
     //The name is stored as the Dictionary index
-    private SortedDictionary<string, Asset>? assets = JsonSerializer.Deserialize<SortedDictionary<string, Asset>>(json);
+    private SortedDictionary<string, Asset> assets = json != null ? JsonSerializer.Deserialize<SortedDictionary<string, Asset>>(json) ?? throw new("Null value") : [];
 
-    public SortedDictionary<string, Asset>? Assets { get => assets; set => assets = value; }
+    public SortedDictionary<string, Asset> Assets { get => assets; set => assets = value; }
 
     public void AddAsset(string name, Asset asset)
     {

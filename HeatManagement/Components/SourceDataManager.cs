@@ -17,13 +17,16 @@ public class SourceDataManager
 {
     private SortedDictionary<Tuple<DateTime, DateTime>, SourceData>? data;
 
-    public SourceDataManager(string json = "[]")
+    public SourceDataManager(string? json = null)
     {
-        List<SourceData> jsonIntermediary = JsonSerializer.Deserialize<List<SourceData>>(json)!;
         data = [];
-        foreach (SourceData dataElement in jsonIntermediary)
+        if (json != null)
         {
-            data.Add(Tuple.Create(dataElement.StartTime, dataElement.EndTime), dataElement);
+            List<SourceData> jsonIntermediary = JsonSerializer.Deserialize<List<SourceData>>(json) ?? throw new("Null value");
+            foreach (SourceData dataElement in jsonIntermediary)
+            {
+                data.Add(Tuple.Create(dataElement.StartTime, dataElement.EndTime), dataElement);
+            }
         }
     }
 

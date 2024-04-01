@@ -20,9 +20,9 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new GreeterViewModel(new(desktop.Args!))
+                DataContext = new GreeterViewModel(new(desktop.Args ?? []))
             };
-            TopLevel = TopLevel.GetTopLevel(desktop.MainWindow)!;
+            TopLevel = TopLevel.GetTopLevel(desktop.MainWindow) ?? throw new("Unsupported Platform");
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -30,7 +30,7 @@ public partial class App : Application
             {
                 DataContext = new GreeterViewModel(new([]))
             };
-            TopLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView)!;
+            TopLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView) ?? throw new("Unsupported Platform");
         }
 
         base.OnFrameworkInitializationCompleted();

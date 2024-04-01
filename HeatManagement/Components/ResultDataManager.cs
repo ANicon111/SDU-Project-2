@@ -20,22 +20,35 @@ public struct ResultData(double heat, double cost, double electricity, double co
 public class ResultDataManager
 {
     [method: SetsRequiredMembers]
-    public struct JsonData(DateTime startTime, DateTime endTime, Dictionary<string, ResultData> resultData)
+    public struct JsonData(SortedDictionary<string, Asset> assets)
     {
-        public required DateTime StartTime { get; set; } = startTime;
-        public required DateTime EndTime { get; set; } = endTime;
-        public required Dictionary<string, ResultData> ResultData { get; set; } = resultData;
+        [method: SetsRequiredMembers]
+        public struct JsonElement(DateTime startTime, DateTime endTime, Dictionary<string, ResultData> resultData)
+        {
+            public required DateTime StartTime { get; set; } = startTime;
+            public required DateTime EndTime { get; set; } = endTime;
+            public required Dictionary<string, ResultData> ResultData { get; set; } = resultData;
+        }
+        public required List<JsonElement> Data { get; set; } = [];
+        public required SortedDictionary<string, Asset> Assets { get; set; } = assets;
     }
 
+
+    public SortedDictionary<string, Asset> Assets;
     public SortedDictionary<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> Data;
 
-    public ResultDataManager(string json = "[]")
+    public ResultDataManager(string? json = null)
     {
         Data = [];
-        List<JsonData> jsonIntermediary = JsonSerializer.Deserialize<List<JsonData>>(json)!;
-        foreach (var element in jsonIntermediary)
+        Assets = [];
+        if (json != null)
         {
-            Data.Add(Tuple.Create(element.StartTime, element.EndTime), element.ResultData);
+            JsonData jsonIntermediary = JsonSerializer.Deserialize<JsonData>(json)!;
+            Assets = jsonIntermediary.Assets;
+            foreach (JsonData.JsonElement element in jsonIntermediary.Data)
+            {
+                Data.Add(Tuple.Create(element.StartTime, element.EndTime), element.ResultData);
+            }
         }
     }
 
@@ -59,10 +72,10 @@ public class ResultDataManager
 
     public string ToJson(JsonSerializerOptions? options = null)
     {
-        List<JsonData> jsonIntermediary = [];
+        JsonData jsonIntermediary = new(Assets);
         foreach (var element in Data)
         {
-            jsonIntermediary.Add(new(element.Key.Item1, element.Key.Item2, element.Value));
+            jsonIntermediary.Data.Add(new(element.Key.Item1, element.Key.Item2, element.Value));
         }
         return JsonSerializer.Serialize(jsonIntermediary, options);
     }

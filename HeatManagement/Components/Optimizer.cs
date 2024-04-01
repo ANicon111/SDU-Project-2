@@ -8,9 +8,10 @@ public static class Optimizer
 {
     public static void GetResult(AssetManager assets, SourceDataManager sourceData, ResultDataManager resultData)
     {
+        resultData.Assets = assets.Assets;
         foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> dataUnit in sourceData.Data!)
         {
-            Dictionary<string, double> assetCostPerMWH = new();
+            Dictionary<string, double> assetCostPerMWH = [];
             double remainingUsage = dataUnit.Value.HeatDemand;
 
             foreach ((string name, Asset asset) in assets.Assets!)
@@ -28,7 +29,7 @@ public static class Optimizer
                 foreach ((string resourceName, double resourceUsage) in assets.Assets[name].AdditionalResources)
                 {
                     if (!additionalResourceUsage.ContainsKey(resourceName)) additionalResourceUsage[resourceName] = 0;
-                    additionalResourceUsage[resourceName] += resourceUsage * coveredUsage;
+                    additionalResourceUsage[resourceName] -= resourceUsage * coveredUsage;
                 }
                 resultData.AddData(
                     dataUnit.Value.StartTime,
