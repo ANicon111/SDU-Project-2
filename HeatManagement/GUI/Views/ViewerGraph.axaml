@@ -9,7 +9,7 @@
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <RelativePanel x:Name="InfoBar" VerticalAlignment="Top" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True">
-            <Button FontSize="{Binding H1Size}" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Command="{Binding ToggleGraph}" Content="Close"/>
+            <Button FontSize="{Binding H1Size}" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Command="{Binding ToggleGraph}" Content="Close" Foreground="White"/>
             <ItemsControl ItemsSource="{Binding GraphValueList}" RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -22,7 +22,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <TextBlock RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" Text="{Binding GraphTime}" FontSize="{Binding H1Size}" />
+            <TextBlock RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True" Text="{Binding GraphTime}" FontSize="{Binding H1Size}" Foreground="White" />
         </RelativePanel>
         <Grid RelativePanel.Below="InfoBar" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.AlignRightWithPanel="True">
             <ScrollViewer HorizontalScrollBarVisibility="Visible" AllowAutoHide="False">
