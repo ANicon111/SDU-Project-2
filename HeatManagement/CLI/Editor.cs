@@ -279,6 +279,7 @@ static partial class App
             return width;
         };
         int menuPosition() => -Math.Clamp(selectedValue - renderer.TerminalHeight / 2 + 8, 0, Math.Max(names.Count + 9 - renderer.TerminalHeight, 0));
+        int selectorPosition() => selectedValue + menuPosition() + 8;
 
         renderer.Object = new(
             geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
@@ -289,11 +290,25 @@ static partial class App
                     externalAlignmentX: Alignment.Center,
                     border: Borders.Rounded,
                     defaultCharacter:' '
+                ),
+                new(
+                    geometry: new(0, selectorPosition(), menuWidth()-2, 1),
+                    internalAlignmentX: Alignment.Center,
+                    externalAlignmentX: Alignment.Center,
+                    defaultCharacter:' ',
+                    colorAreas: [
+                        new(Colors.White.WithAlpha(0.5))
+                    ]
                 )
             ]
         );
 
         RendererObject list() => renderer.Object.SubObjects[0];
+        RendererObject selector() => renderer.Object.SubObjects[1];
+
+        //color getters for readability
+        List<ColorArea> selectedElementColor() => [new(Colors.White.WithAlpha(0.25))];
+        List<ColorArea> unselectedElementColor() => [];
         //create a RendererObject for each name
         void fillNameList()
         {
@@ -323,14 +338,19 @@ static partial class App
         }
         fillNameList();
         if (names.Count > 0)
-            list().SubObjects[selectedValue + 1].ColorAreas = selectedElementColor();
+        {
+            selector().ColorAreas = selectedElementColor();
+            selector().Y = selectorPosition();
+        }
+        else
+        {
+            selector().ColorAreas = unselectedElementColor();
+        }
+
 
         renderer.Update(forceRedraw: true);
         bool running = true;
 
-        //color getters for readability
-        List<ColorArea> selectedElementColor() => [new(Colors.White), new(Colors.Black, true)];
-        List<ColorArea> unselectedElementColor() => [];
 
         while (running)
         {
@@ -342,19 +362,17 @@ static partial class App
                     case ConsoleKey.UpArrow:
                         if (names.Count > 0)
                         {
-                            list().SubObjects[selectedValue + 1].ColorAreas = unselectedElementColor();
                             selectedValue = Math.Max(selectedValue - 1, 0);
                             renderer.Object.SubObjects[0].Y = menuPosition();
-                            list().SubObjects[selectedValue + 1].ColorAreas = selectedElementColor();
+                            selector().Y = selectorPosition();
                         }
                         break;
                     case ConsoleKey.DownArrow:
                         if (names.Count > 0)
                         {
-                            list().SubObjects[selectedValue + 1].ColorAreas = unselectedElementColor();
                             selectedValue = Math.Min(selectedValue + 1, names.Count - 1);
                             renderer.Object.SubObjects[0].Y = menuPosition();
-                            list().SubObjects[selectedValue + 1].ColorAreas = selectedElementColor();
+                            selector().Y = selectorPosition();
                         }
                         break;
 
@@ -368,7 +386,14 @@ static partial class App
                             fillNameList();
                             selectedValue = Math.Min(selectedValue, names.Count - 1);
                             if (names.Count > 0)
-                                list().SubObjects[selectedValue + 1].ColorAreas = selectedElementColor();
+                            {
+                                selector().ColorAreas = selectedElementColor();
+                                selector().Y = selectorPosition();
+                            }
+                            else
+                            {
+                                selector().ColorAreas = unselectedElementColor();
+                            }
                         }
                         break;
 
@@ -379,7 +404,7 @@ static partial class App
                         selectedValue = names.IndexOf(name);
                         list().SubObjects.Clear();
                         fillNameList();
-                        list().SubObjects[selectedValue + 1].ColorAreas = selectedElementColor();
+                        selector().Y = selectorPosition();
                         break;
 
                     case ConsoleKey.S:
@@ -419,7 +444,14 @@ static partial class App
                                             fillNameList();
                                             selectedValue = Math.Min(selectedValue, names.Count - 1);
                                             if (names.Count > 0)
-                                                list().SubObjects[selectedValue + 1].ColorAreas = selectedElementColor();
+                                            {
+                                                selector().ColorAreas = selectedElementColor();
+                                                selector().Y = selectorPosition();
+                                            }
+                                            else
+                                            {
+                                                selector().ColorAreas = unselectedElementColor();
+                                            }
                                             displaying = false;
                                             break;
                                         case ConsoleKey.Enter:
