@@ -8,9 +8,9 @@
              x:Class="HeatManagement.GUI.ViewerGraphListView"
              x:DataType="vm:ViewerViewModel">
     <Panel>
-        <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*" RowDefinitions="Auto,*,Auto" VerticalAlignment="Stretch">
-            <TextBlock Grid.Row="0" x:Name="Title" HorizontalAlignment="Center" FontSize="{Binding TitleSize}">Available Graphs</TextBlock>
-            <ScrollViewer Grid.Row="1" x:Name="GraphList" VerticalAlignment="Stretch">
+        <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*,*" RowDefinitions="Auto,*,Auto,Auto" VerticalAlignment="Stretch">
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" x:Name="Title" HorizontalAlignment="Center" FontSize="{Binding TitleSize}">Available Graphs</TextBlock>
+            <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2" x:Name="GraphList" VerticalAlignment="Stretch">
                 <ItemsControl ItemsSource="{Binding GraphButtonList}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -19,7 +19,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button IsEnabled="{Binding IsEnabled}" Background="{Binding Background}" HorizontalAlignment="Stretch" Command="{Binding Command}">
+                            <Button IsEnabled="{Binding IsEnabled}" Background="{Binding Background}" HorizontalAlignment="Stretch" Command="{Binding Command}" Cursor="Hand">
                                 <StackPanel Orientation="Horizontal">
                                     <Canvas Width="{Binding LargeImageSize}" Height="{Binding LargeImageSize}">
                                         <Viewbox Stretch="UniformToFill" Width="{Binding LargeImageSize}" Height="{Binding LargeImageSize}">
@@ -34,7 +34,9 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-            <Button Grid.Row="2" x:Name="GraphOpenButton" HorizontalAlignment="Stretch" IsEnabled="{Binding CanOpenGraph}" Command="{Binding ToggleGraph}" Content="Open" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}"/>
+            <Button Grid.Row="2" Grid.Column="0" x:Name="GraphOpenButton" HorizontalAlignment="Stretch" IsEnabled="{Binding CanOpenGraph}" Command="{Binding ToggleGraph}" Content="Open" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+            <Button Grid.Row="2" Grid.Column="1" x:Name="ExportResultData" HorizontalAlignment="Stretch" IsVisible="{Binding CanNotOpenGraph}" Command="{Binding ExportResultData}" Content="Export Result Data" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+            <Button Grid.Row="2" Grid.Column="1" x:Name="ExportSelectedGraphs" HorizontalAlignment="Stretch" IsVisible="{Binding CanOpenGraph}" Command="{Binding ExportSelectedGraphs}" Content="Export Selected Graphs" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
         </Grid>
         <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding GraphOpen}" Child="{Binding Graph}">
             <cc:ViewerGraphView/>

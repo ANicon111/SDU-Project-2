@@ -9,7 +9,7 @@ public static class Optimizer
     public static void GetResult(AssetManager assets, SourceDataManager sourceData, ResultDataManager resultData)
     {
         resultData.Assets = assets.Assets;
-        foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> dataUnit in sourceData.Data!)
+        foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> dataUnit in sourceData.Data)
         {
             Dictionary<string, double> assetCostPerMWH = [];
             double remainingUsage = dataUnit.Value.HeatDemand;

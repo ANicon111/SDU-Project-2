@@ -9,7 +9,7 @@
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <RelativePanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <RelativePanel x:Name="InfoBar" VerticalAlignment="Top" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignRightWithPanel="True">
-            <Button FontSize="{Binding H1Size}" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Command="{Binding ToggleGraph}" Content="Close" Foreground="White"/>
+            <Button FontSize="{Binding H1Size}" RelativePanel.AlignTopWithPanel="True" RelativePanel.AlignLeftWithPanel="True" Command="{Binding ToggleGraph}" Content="Close" Foreground="White" Cursor="Hand"/>
             <ItemsControl ItemsSource="{Binding GraphValueList}" RelativePanel.AlignVerticalCenterWithPanel="True" RelativePanel.AlignHorizontalCenterWithPanel="True">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -35,7 +35,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Button Padding="0"  Margin="0" Background="{Binding BarBackground}" Width="{Binding BarWidth}" Command="{Binding SelectBar}" VerticalAlignment="Stretch">
+                                <Button Padding="0" Margin="0" Background="{Binding BarBackground}" Width="{Binding BarWidth}" Command="{Binding SelectBar}" VerticalAlignment="Stretch" Cursor="Hand">
                                     <Viewbox Stretch="Fill">
                                         <ItemsControl ItemsSource="{Binding Bars}" Width="{Binding BarWidth}" Height="{Binding BarHeight}">
                                             <ItemsControl.ItemsPanel>

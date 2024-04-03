@@ -6,8 +6,25 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="HeatManagement.GUI.GreeterView"
              x:DataType="vm:GreeterViewModel">
-    <StackPanel>
-        <Button Command="{Binding GoToViewerGreeter}" Content="Viewer Mode"/>
-        <Button Command="{Binding GoToEditorGreeter}" Content="Editor Mode"/>
-    </StackPanel>
+    <Panel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Viewbox Stretch="Fill">
+            <Panel Width="100" Height="100">
+                <Line StartPoint="0,100" EndPoint="100,0" StrokeThickness="1" Stroke="Gray"/>
+            </Panel>
+        </Viewbox>
+        <Grid RowDefinitions="*,*" ColumnDefinitions="*,*" >
+            <Button Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding GoToViewerGreeter}" Cursor="Hand">
+                <StackPanel>
+                    <Image Width="{Binding LargeImageSize}" Height="{Binding LargeImageSize}" Source="avares://HeatManagement/GUI/Assets/viewer.png" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="{Binding H1Size}" Text="Open Viewer" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding GoToEditorGreeter}" Cursor="Hand">
+                <StackPanel>
+                    <Image Width="{Binding LargeImageSize}" Height="{Binding LargeImageSize}" Source="avares://HeatManagement/GUI/Assets/editor.png" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="{Binding H1Size}" Text="Open Editor" />
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Panel>
 </UserControl>

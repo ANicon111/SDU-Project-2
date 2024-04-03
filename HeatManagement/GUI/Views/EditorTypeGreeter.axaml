@@ -6,8 +6,25 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="HeatManagement.GUI.EditorTypeGreeterView"
              x:DataType="vm:GreeterViewModel">
-    <StackPanel>
-        <Button Command="{Binding CreateAssetsEditor}" Content="Assets"/>
-        <Button Command="{Binding CreateSourceDataEditor}" Content="Source data"/>
-    </StackPanel>
+    <Panel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+        <Viewbox Stretch="Fill">
+            <Panel Width="100" Height="100">
+                <Line StartPoint="0,0" EndPoint="100,100" StrokeThickness="1" Stroke="Gray"/>
+            </Panel>
+        </Viewbox>
+        <Grid RowDefinitions="*,*" ColumnDefinitions="*,*" >
+            <Button Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding CreateAssetsEditor}" Cursor="Hand">
+                <StackPanel>
+                    <Image Width="{Binding LargeImageSize}" Height="{Binding LargeImageSize}" Source="avares://HeatManagement/GUI/Assets/assets.png" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="{Binding H1Size}" Text="New Assets" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding CreateSourceDataEditor}" Cursor="Hand">
+                <StackPanel>
+                    <Image Width="{Binding LargeImageSize}" Height="{Binding LargeImageSize}" Source="avares://HeatManagement/GUI/Assets/sourceData.png" />
+                    <TextBlock HorizontalAlignment="Center" FontSize="{Binding H1Size}" Text="New Source Data" />
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Panel>
 </UserControl>

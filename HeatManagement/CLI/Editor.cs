@@ -51,7 +51,7 @@ static partial class App
         }
         string getSourceData(int index)
         {
-            var source = sourceData!.Data!.ElementAt(index).Value;
+            var source = sourceData!.Data.ElementAt(index).Value;
             return FormattableString.Invariant($"""
              Start time: {source.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} 
              End time: {source.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} 
@@ -257,7 +257,7 @@ static partial class App
                 EntryList(names, addToAssets, getAsset, removeFromAssets, saveAssets);
                 break;
             case "sourceData":
-                names = new(sourceData!.Data!.Count);
+                names = new(sourceData!.Data.Count);
                 foreach (var element in sourceData.Data) names.Add($"{element.Value.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {element.Value.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
                 EntryList(names, addToSourceData, getSourceData, removeFromSourceData, saveSourceData);
                 break;

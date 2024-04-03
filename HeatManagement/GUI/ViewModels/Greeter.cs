@@ -17,6 +17,11 @@ class GreeterViewModel : ViewModelBase
     ResultDataManager? ResultData = null;
     AssetManager? Assets = null;
 
+    //Design
+    public double BaseSize { get; } = MainWindow.FontSize * 2;
+    public double H1Size { get; }
+    public double LargeImageSize { get; }
+
     //ViewerGreeter
     private string? dataError = null;
     public string? DataError { get => dataError; set => this.RaiseAndSetIfChanged(ref dataError, value); }
@@ -55,6 +60,8 @@ class GreeterViewModel : ViewModelBase
 
     public GreeterViewModel(Arguments arguments)
     {
+        H1Size = BaseSize * 0.75;
+        LargeImageSize = BaseSize * 5;
         Arguments = arguments;
         if (Arguments.EditPath != null)
         {
@@ -75,8 +82,8 @@ class GreeterViewModel : ViewModelBase
                 }
             }
 
-            if (Assets != null) CurrentPage = new EditorView() { DataContext = new EditorViewModel(Assets) };
-            if (SourceData != null) CurrentPage = new EditorView() { DataContext = new EditorViewModel(SourceData) };
+            if (Assets != null) CurrentPage = new AssetsEditorView();
+            if (SourceData != null) CurrentPage = new SourceDataEditorView();
         }
 
         if (Arguments.DataPath != null || Arguments.AssetsPath != null)
@@ -107,13 +114,13 @@ class GreeterViewModel : ViewModelBase
                 Assets = null;
             }
 
-            if (SourceData != null && SourceData.Data!.Count > 0 && Assets != null && Assets.Assets!.Count > 0)
+            if (SourceData != null && SourceData.Data.Count > 0 && Assets != null && Assets.Assets!.Count > 0)
             {
                 ResultData = new();
                 Optimizer.GetResult(Assets, SourceData, ResultData);
             }
 
-            if (ResultData != null) CurrentPage = new ViewerGraphListView() { DataContext = new ViewerViewModel(ResultData) };
+            if (ResultData != null) CurrentPage = new ViewerGraphListView() { DataContext = new ViewerViewModel(BaseSize, ResultData) };
         }
     }
 
@@ -131,18 +138,16 @@ class GreeterViewModel : ViewModelBase
         }
         CurrentPage = new ViewerGraphListView
         {
-            DataContext = new ViewerViewModel(ResultData!)
+            DataContext = new ViewerViewModel(BaseSize, ResultData!)
         };
     }
 
     public void GoToEditor()
     {
-        CurrentPage = new EditorView()
-        {
-            DataContext = SourceData != null
-            ? new EditorViewModel(SourceData)
-            : new EditorViewModel(Assets!)
-        };
+        if (SourceData != null)
+            CurrentPage = new SourceDataEditorView() { DataContext = new SourceDataEditorViewModel(BaseSize, SourceData) };
+        if (Assets != null)
+            CurrentPage = new AssetsEditorView() { DataContext = new AssetsEditorViewModel(BaseSize, Assets) };
     }
 
     public void CreateAssetsEditor() { Assets = new(); GoToEditor(); }
@@ -196,7 +201,7 @@ class GreeterViewModel : ViewModelBase
                 }
             if (SourceData != null)
             {
-                if (SourceData.Data!.Count > 0)
+                if (SourceData.Data.Count > 0)
                 {
                     DataFileName = files[0].Name;
                 }
@@ -208,7 +213,7 @@ class GreeterViewModel : ViewModelBase
             }
             if (ResultData != null)
             {
-                if (ResultData.Data!.Count > 0)
+                if (ResultData.Data.Count > 0)
                 {
                     DataFileName = files[0].Name;
                 }

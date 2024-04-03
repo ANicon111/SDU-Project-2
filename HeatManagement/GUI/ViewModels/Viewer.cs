@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Platform.Storage;
 using ReactiveUI;
 
 namespace HeatManagement.GUI;
@@ -33,7 +35,8 @@ class ViewerViewModel : ViewModelBase
     private bool graphOpen = false;
     public bool GraphOpen { get => graphOpen; set => this.RaiseAndSetIfChanged(ref graphOpen, value); }
     private bool canOpenGraph = false;
-    public bool CanOpenGraph { get => canOpenGraph; set => this.RaiseAndSetIfChanged(ref canOpenGraph, value); }
+    public bool CanOpenGraph { get => canOpenGraph; set { this.RaiseAndSetIfChanged(ref canOpenGraph, value); this.RaisePropertyChanged(nameof(CanNotOpenGraph)); } }
+    public bool CanNotOpenGraph { get => !canOpenGraph; }
     private ViewerGraphView? graph = null;
     public ViewerGraphView? Graph { get => graph; set => this.RaiseAndSetIfChanged(ref graph, value); }
 
@@ -83,8 +86,11 @@ class ViewerViewModel : ViewModelBase
         CanOpenGraph = SelectedGraphList.Count > 0;
     }
 
-    public ViewerViewModel(ResultDataManager resultData)
+    public ViewerViewModel(double baseSize, ResultDataManager resultData)
     {
+        BaseSize = baseSize;
+        TitleSize = BaseSize * 1.5;
+        H1Size = BaseSize * 0.75;
         ResultData = resultData;
         Times = [.. ResultData!.Data.Keys];
 
@@ -260,6 +266,70 @@ class ViewerViewModel : ViewModelBase
             GraphBarList.Add(new(BaseSize, values[i], colors, i, SelectBar));
         }
         SelectBar(0);
+    }
+
+    public async void ExportResultData()
+    {
+        // Start async operation to open the dialog.
+        IStorageFile? file = await App.TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Export result data",
+            SuggestedFileName = "resultData.json"
+        });
+
+        if (file != null)
+        {
+            try
+            {
+                // Open writing stream from the file.
+                await using Stream stream = await file.OpenWriteAsync();
+                using StreamWriter streamWriter = new(stream);
+                // Writes all the content of file as a text.
+                await streamWriter.WriteAsync(ResultData.ToJson());
+            }
+            catch { }
+        }
+    }
+
+    private struct JsonData(DateTime startTime, DateTime endTime, SortedDictionary<string, double> values)
+    {
+        public DateTime StartTime { get; set; } = startTime;
+        public DateTime EndTime { get; set; } = endTime;
+        public SortedDictionary<string, double> Values { get; set; } = values;
+    }
+    private readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+    public async void ExportSelectedGraphs()
+    {
+        // Start async operation to open the dialog.
+        IStorageFile? file = await App.TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title = "Export graph data",
+            SuggestedFileName = "graph.json"
+        });
+
+        if (file != null)
+        {
+            //create the json exportable dictionary
+            List<JsonData> jsonValues = [];
+            for (int i = 0; i < Times.Length; i++)
+            {
+                jsonValues.Add(new(Times[i].Item1, Times[i].Item2, []));
+                for (int j = 0; j < SelectedGraphList.Count; j++)
+                {
+                    GraphValues[Options[SelectedGraphList[j]]].TryGetValue(Times[i], out double value);
+                    jsonValues[i].Values.Add(Options[SelectedGraphList[j]], value);
+                }
+            }
+            try
+            {
+                // Open writing stream from the file.
+                await using Stream stream = await file.OpenWriteAsync();
+                using StreamWriter streamWriter = new(stream);
+                // Writes all the content of file as a text.
+                await streamWriter.WriteAsync(JsonSerializer.Serialize(jsonValues, JsonOptions));
+            }
+            catch { }
+        }
     }
 }
 

@@ -9,11 +9,11 @@ namespace HeatManagement.CLI;
 
 static partial class App
 {
-    private struct JsonData(DateTime startTime, DateTime endTime, Dictionary<string, double> values)
+    private struct JsonData(DateTime startTime, DateTime endTime, SortedDictionary<string, double> values)
     {
         public DateTime StartTime { get; set; } = startTime;
         public DateTime EndTime { get; set; } = endTime;
-        public Dictionary<string, double> Values { get; set; } = values;
+        public SortedDictionary<string, double> Values { get; set; } = values;
     }
 
     static void GraphDrawer(List<string> names, string unitOfMeasurement, List<Color> colors, List<Tuple<DateTime, DateTime>> times, List<Dictionary<Tuple<DateTime, DateTime>, double>> graphs)

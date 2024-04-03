@@ -15,7 +15,7 @@ public struct SourceData(DateTime startTime, DateTime endTime, double heatDemand
 
 public class SourceDataManager
 {
-    private SortedDictionary<Tuple<DateTime, DateTime>, SourceData>? data;
+    private SortedDictionary<Tuple<DateTime, DateTime>, SourceData> data;
 
     public SourceDataManager(string? json = null)
     {
@@ -30,7 +30,7 @@ public class SourceDataManager
         }
     }
 
-    public SortedDictionary<Tuple<DateTime, DateTime>, SourceData>? Data { get => data; set => data = value; }
+    public SortedDictionary<Tuple<DateTime, DateTime>, SourceData> Data { get => data; set => data = value; }
 
     public void AddData(SourceData sourceData)
     {

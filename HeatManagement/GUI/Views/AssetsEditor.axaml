@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:HeatManagement.GUI" 
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="HeatManagement.GUI.AssetsEditorView"
+             x:DataType="vm:AssetsEditorViewModel">
+    <Panel>
+        <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*,*" RowDefinitions="Auto,*,Auto,Auto" VerticalAlignment="Stretch">
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" x:Name="Title" HorizontalAlignment="Center" FontSize="{Binding TitleSize}">Asset List</TextBlock>
+            <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2" x:Name="AssetList" VerticalAlignment="Stretch">
+                <ItemsControl ItemsSource="{Binding AssetButtonValues}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <RelativePanel HorizontalAlignment="Stretch" Background="#30808080">
+                                <Border x:Name="Image" Width="{Binding LargeImageSize}" Height="{Binding LargeImageSize}">
+                                    <Viewbox Stretch="UniformToFill">
+                                        <Image Source="{Binding Image}"/>
+                                    </Viewbox>
+                                </Border>
+                                <TextBlock RelativePanel.RightOf="Image" RelativePanel.AlignVerticalCenterWithPanel="True" Text="{Binding AssetName}" FontSize="{Binding BaseSize}" />
+                                <Button RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" FontSize="{Binding BaseSize}" Content="Delete" Command="{Binding RemoveAsset}"/>
+                            </RelativePanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <Button Grid.Row="2" Grid.Column="0" x:Name="AddAsset" HorizontalAlignment="Stretch" Command="{Binding OpenAssetAdder}" Content="Add Asset" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+            <Button Grid.Row="2" Grid.Column="1" x:Name="ExportAssets" HorizontalAlignment="Stretch" Command="{Binding ExportAssets}" Content="Export Assets" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+        </Grid>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding NewAssetOpen}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBox HorizontalAlignment="Stretch" Watermark="name" Text="{Binding NewAssetName, Mode=TwoWay}" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="image/path.jpg" Text="{Binding NewAssetImagePath, Mode=TwoWay}" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="heat in MWh" Text="{Binding NewAssetHeat, Mode=TwoWay}" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="cost in dkk" Text="{Binding NewAssetCost, Mode=TwoWay}" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="electricity production/consumtion in MWh" Text="{Binding NewAssetElectricity, Mode=TwoWay}" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="co2 emissions in kg" Text="{Binding NewAssetCO2, Mode=TwoWay}" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="resource1: consumption1, resource2: consumption2" Text="{Binding NewAssetAdditionalResources, Mode=TwoWay}" />
+                <TextBlock Foreground="Red" Text="{Binding NewAssetError}" />
+                <Button HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding AddAsset}" Content="Add Asset"/>
+            </StackPanel>
+        </StackPanel>
+    </Panel>
+</UserControl>

@@ -36,7 +36,7 @@ static partial class App
                 try
                 {
                     sourceData = new(json);
-                    if (sourceData.Data!.Count == 0)
+                    if (sourceData.Data.Count == 0)
                     {
                         sourceData = null;
                         return "Source data file contains no data";
@@ -47,7 +47,7 @@ static partial class App
                     try
                     {
                         resultData = new(json);
-                        if (resultData.Data!.Count == 0)
+                        if (resultData.Data.Count == 0)
                         {
                             resultData = null;
                             return "Result data file contains no data";
