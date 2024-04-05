@@ -87,7 +87,7 @@ static partial class App
         }
 
         TextBox(
-            text: arguments.EditPath ?? "data.json",
+            text: arguments.EditPath ?? "data.csv",
             title: "Input the assets or source data file path:",
             fileAction: tryLoadEditedFile,
             tryInitialAction: arguments.EditPath != null

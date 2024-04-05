@@ -47,7 +47,7 @@ class AssetsEditorViewModel : ViewModelBase
         BaseSize = baseSize;
         TitleSize = BaseSize * 2;
         AssetButtonValues = [];
-        foreach (var asset in Assets.Assets)
+        foreach (KeyValuePair<string, Asset> asset in Assets.Assets)
         {
             AssetButtonValues.Add(new(BaseSize, asset.Key, asset.Value.ImagePath, RemoveAsset));
         }
@@ -77,19 +77,19 @@ class AssetsEditorViewModel : ViewModelBase
             if (!double.TryParse(NewAssetElectricity, CultureInfo.InvariantCulture, out electricity)) return "Invalid electricity production/consumption";
         if (!double.TryParse(NewAssetCO2, out double co2))
             if (!double.TryParse(NewAssetCO2, CultureInfo.InvariantCulture, out co2)) return "Invalid co2 emissions";
-        Dictionary<string, double> additionalResources = [];
+        Dictionary<string, AdditionalResource> additionalResources = [];
         try
         {
             if (!string.IsNullOrWhiteSpace(NewAssetAdditionalResources))
             {
-                foreach (string resource in NewAssetAdditionalResources.Split(','))
+                foreach (string resource in NewAssetAdditionalResources.Split(';'))
                 {
-                    string[] resourceNameAndValue = resource.Split(':');
-                    string resourceName = resourceNameAndValue[0].Trim().ToLower();
-                    if (!double.TryParse(resourceNameAndValue[1], out double resourceValue))
-                        if (!double.TryParse(resourceNameAndValue[1], CultureInfo.InvariantCulture, out resourceValue))
-                            return $"Invalid additional resources";
-                    additionalResources.Add(resourceName, resourceValue);
+                    string[] resourceNameValueMeasurement = resource.Split([":", ","], StringSplitOptions.None);
+                    string resourceName = resourceNameValueMeasurement[0].Trim().ToLower();
+                    if (!double.TryParse(resourceNameValueMeasurement[1], CultureInfo.InvariantCulture, out double resourceValue))
+                        return $"Invalid additional resources";
+                    string resourceMeasurement = resourceNameValueMeasurement[0].Trim();
+                    additionalResources.Add(resourceName, new(resourceValue, resourceMeasurement));
                 }
             }
         }

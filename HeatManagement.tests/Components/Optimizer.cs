@@ -7,8 +7,7 @@ public class OptimizerTests
     [Fact]
     public void OptimalTest()
     {
-        string expected = new ResultDataManager(
-            """
+        string expected = """
             {
                 "Data": [
                     {
@@ -21,7 +20,10 @@ public class OptimizerTests
                                 "Electricity": 4,
                                 "CO2": 8000,
                                 "AdditionalResources": {
-                                    "R1": -8
+                                    "R1": {
+                                        "Measurement": "Unit1",
+                                        "Value": -8
+                                    }
                                 }
                             },
                             "A": {
@@ -30,7 +32,10 @@ public class OptimizerTests
                                 "Electricity": 0,
                                 "CO2": 5000,
                                 "AdditionalResources": {
-                                    "R1": -5
+                                    "R1": {
+                                        "Measurement": "Unit1",
+                                        "Value": -5
+                                    }
                                 }
                             },
                             "B": {
@@ -39,7 +44,10 @@ public class OptimizerTests
                                 "Electricity": -2,
                                 "CO2": 0,
                                 "AdditionalResources": {
-                                    "R2": -1
+                                    "R2": {
+                                        "Measurement": "Unit2",
+                                        "Value": -1
+                                    }
                                 }
                             }
                         }
@@ -54,7 +62,10 @@ public class OptimizerTests
                                 "Electricity": -8,
                                 "CO2": 0,
                                 "AdditionalResources": {
-                                    "R2": -4
+                                    "R2": {
+                                        "Measurement": "Unit2",
+                                        "Value": -4
+                                    }
                                 }
                             }
                         }
@@ -69,7 +80,10 @@ public class OptimizerTests
                                 "Electricity": 0,
                                 "CO2": 5000,
                                 "AdditionalResources": {
-                                    "R1": -5
+                                    "R1": {
+                                        "Measurement": "Unit1",
+                                        "Value": -5
+                                    }
                                 }
                             },
                             "C": {
@@ -78,7 +92,10 @@ public class OptimizerTests
                                 "Electricity": 3,
                                 "CO2": 6000,
                                 "AdditionalResources": {
-                                    "R1": -6
+                                    "R1": {
+                                        "Measurement": "Unit1",
+                                        "Value": -6
+                                    }
                                 }
                             }
                         }
@@ -92,7 +109,10 @@ public class OptimizerTests
                         "ElectricityCapacity": 0,
                         "CO2": 1000,
                         "AdditionalResources": {
-                            "R1": 1
+                            "R1": {
+                                "Measurement": "Unit1",
+                                "Value": -1
+                            }
                         }
                     },
                     "B": {
@@ -102,7 +122,10 @@ public class OptimizerTests
                         "ElectricityCapacity": -8,
                         "CO2": 0,
                         "AdditionalResources": {
-                            "R2": 1
+                            "R2": {
+                                "Measurement": "Unit2",
+                                "Value": -1
+                            }
                         }
                     },
                     "C": {
@@ -112,12 +135,15 @@ public class OptimizerTests
                         "ElectricityCapacity": 4,
                         "CO2": 2000,
                         "AdditionalResources": {
-                            "R1": 2
+                            "R1": {
+                                "Measurement": "Unit1",
+                                "Value": -2
+                            }
                         }
                     }
                 } 
             }
-            """).ToJson();
+            """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
 
         AssetManager assetManager = AssetManager.FromJson(
             """
@@ -129,7 +155,10 @@ public class OptimizerTests
                     "ElectricityCapacity": 0,
                     "CO2": 1000,
                     "AdditionalResources": {
-                        "R1": 1
+                        "R1": {
+                            "Measurement": "Unit1",
+                            "Value": -1
+                        }
                     }
                 },
                 "B": {
@@ -139,7 +168,10 @@ public class OptimizerTests
                     "ElectricityCapacity": -8,
                     "CO2": 0,
                     "AdditionalResources": {
-                        "R2": 1
+                        "R2": {
+                            "Measurement": "Unit2",
+                            "Value": -1
+                        }
                     }
                 },
                 "C": {
@@ -149,7 +181,10 @@ public class OptimizerTests
                     "ElectricityCapacity": 4,
                     "CO2": 2000,
                     "AdditionalResources": {
-                        "R1": 2
+                        "R1": {
+                            "Measurement": "Unit1",
+                            "Value": -2
+                        }
                     }
                 }
             }

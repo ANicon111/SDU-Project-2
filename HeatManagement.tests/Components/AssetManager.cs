@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace HeatManagement.tests;
 
 public class AssetManagerTests
@@ -17,7 +19,10 @@ public class AssetManagerTests
                 "ElectricityCapacity": 0,
                 "CO2": 215,
                 "AdditionalResources": {
-                    "gas": 1.1
+                    "gas": {
+                        "Measurement": "MWh",
+                        "Value": -1.1
+                    }
                 }
             },
             "OB": {
@@ -27,7 +32,10 @@ public class AssetManagerTests
                 "ElectricityCapacity": 0,
                 "CO2": 265,
                 "AdditionalResources": {
-                    "oil": 1.2
+                    "oil": {
+                        "Measurement": "MWh",
+                        "Value": -1.2
+                    }
                 }
             }
         }
@@ -40,12 +48,13 @@ public class AssetManagerTests
     [Fact]
     public void CSVTest()
     {
+        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
         string expected = """
-        Name,DataType,ImagePath,HeatCapacity,Cost,ElectricityCapacity,CO2,AdditionalResourceName,AdditionalResourceValue
+        Name,DataType,ImagePath,HeatCapacity,Cost,ElectricityCapacity,CO2,AdditionalResourceName,AdditionalResourceValue,AdditionalResourceMeasurement
         GB,Base,Assets/GB.png,5,500,0,215,,
-        GB,Additional,,,,,,gas,1.1
+        GB,Additional,,,,,,gas,-1.1,MWh
         OB,Base,Assets/OB.png,4,700,0,265,,
-        OB,Additional,,,,,,oil,1.2
+        OB,Additional,,,,,,oil,-1.2,MWh
         """;
 
         string json = """
@@ -57,7 +66,10 @@ public class AssetManagerTests
                 "ElectricityCapacity": 0,
                 "CO2": 215,
                 "AdditionalResources": {
-                    "gas": 1.1
+                    "gas": {
+                        "Measurement": "MWh",
+                        "Value": -1.1
+                    }
                 }
             },
             "OB": {
@@ -67,7 +79,10 @@ public class AssetManagerTests
                 "ElectricityCapacity": 0,
                 "CO2": 265,
                 "AdditionalResources": {
-                    "oil": 1.2
+                    "oil": {
+                        "Measurement": "MWh",
+                        "Value": -1.2
+                    }
                 }
             }
         }
@@ -90,7 +105,10 @@ public class AssetManagerTests
                 "ElectricityCapacity": 0,
                 "CO2": 215,
                 "AdditionalResources": {
-                    "gas": 1.1
+                    "gas": {
+                        "Measurement": "MWh",
+                        "Value": -1.1
+                    }
                 }
             }
         }
@@ -105,7 +123,7 @@ public class AssetManagerTests
                 electricityCapacity: 0,
                 co2: 215,
                 additionalResources: new(){
-                    {"gas",1.1}
+                    {"gas",new(-1.1,"MWh")}
                 }
             )
         );
@@ -127,7 +145,10 @@ public class AssetManagerTests
                 "ElectricityCapacity": 0,
                 "CO2": 215,
                 "AdditionalResources": {
-                    "gas": 1.1
+                    "gas": {
+                        "Measurement": "MWh",
+                        "Value": -1.1
+                    }
                 }
             }
         }
@@ -142,7 +163,10 @@ public class AssetManagerTests
                 "ElectricityCapacity": 0,
                 "CO2": 215,
                 "AdditionalResources": {
-                    "gas": 1.1
+                    "gas": {
+                        "Measurement": "MWh",
+                        "Value": -1.1
+                    }
                 }
             },
             "OB": {
@@ -152,7 +176,10 @@ public class AssetManagerTests
                 "ElectricityCapacity": 0,
                 "CO2": 265,
                 "AdditionalResources": {
-                    "oil": 1.2
+                    "oil": {
+                        "Measurement": "MWh",
+                        "Value": -1.2
+                    }
                 }
             }
         }

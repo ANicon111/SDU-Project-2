@@ -164,9 +164,9 @@ class GreeterViewModel : ViewModelBase
     public async void LoadDataFile()
     {
         // Start async operation to open the dialog.
-        var files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        System.Collections.Generic.IReadOnlyList<IStorageFile> files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Open a source or result data json file",
+            Title = "Open a source or result data file",
             AllowMultiple = false,
             FileTypeFilter = [CSVFile, JsonFile]
         });
@@ -207,7 +207,7 @@ class GreeterViewModel : ViewModelBase
                         }
                         catch
                         {
-                            DataError = "Data file contains invalid json";
+                            DataError = "Data file contains invalid data";
                         }
                 }
             if (SourceData != null)
@@ -243,7 +243,7 @@ class GreeterViewModel : ViewModelBase
     public async void LoadAssetsFile()
     {
         // Start async operation to open the dialog.
-        var files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        System.Collections.Generic.IReadOnlyList<IStorageFile> files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
             Title = "Open an assets file",
             AllowMultiple = false,
@@ -305,9 +305,9 @@ class GreeterViewModel : ViewModelBase
     public async void LoadEditedFile()
     {
         // Start async operation to open the dialog.
-        var files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        System.Collections.Generic.IReadOnlyList<IStorageFile> files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Open an assets or source data json file",
+            Title = "Open an assets or source data file",
             AllowMultiple = false,
             FileTypeFilter = [CSVFile, JsonFile]
         });

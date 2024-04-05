@@ -82,9 +82,9 @@ static partial class App
         {
             KeyValuePair<string, Asset> asset = assets!.Assets!.ElementAt(index);
             List<string> additionalResources = [];
-            foreach (KeyValuePair<string, double> resource in asset.Value.AdditionalResources)
+            foreach (KeyValuePair<string, AdditionalResource> resource in asset.Value.AdditionalResources)
             {
-                additionalResources.Add(FormattableString.Invariant($"{resource.Key}: {resource.Value}"));
+                additionalResources.Add(FormattableString.Invariant($"{resource.Key}: {resource.Value.Value}, {resource.Value.Measurement}"));
             }
             return FormattableString.Invariant($"""
              Name: {asset.Key} 
@@ -93,12 +93,12 @@ static partial class App
              Cost per MWh: {asset.Value.Cost} dkk 
              Electricity production/usage: {asset.Value.ElectricityCapacity} MWh  
              CO2 emissions: {asset.Value.CO2} kg per MWh of heat 
-             Additional resources - {(additionalResources.Count != 0 ? string.Join(", ", additionalResources) : "nothing")} 
+             Additional resources - {(additionalResources.Count != 0 ? string.Join("; ", additionalResources) : "nothing")} 
             """);
         }
         string getSourceData(int index)
         {
-            var source = sourceData!.Data.ElementAt(index).Value;
+            SourceData source = sourceData!.Data.ElementAt(index).Value;
             return FormattableString.Invariant($"""
              Start time: {source.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} 
              End time: {source.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} 
@@ -187,17 +187,18 @@ static partial class App
             }
             TextBox("", "Enter the CO2 emissions in kg", parseCO2, numbersOnly: true);
 
-            Dictionary<string, double> additionalResources = [];
+            Dictionary<string, AdditionalResource> additionalResources = [];
             string parseAdditionalResources(string text)
             {
                 if (text.Trim() != "")
                     try
                     {
-                        string[] resources = text.Split(',');
+                        string[] resources = text.Split([";"], StringSplitOptions.None);
                         foreach (string resource in resources)
                         {
-                            string[] resourceNameAndValue = resource.Split(':');
-                            additionalResources[resourceNameAndValue[0].Trim()] = Convert.ToDouble(resourceNameAndValue[1], CultureInfo.InvariantCulture);
+                            string[] resourceNameValueMeasurement = resource.Split([":", ","], StringSplitOptions.None);
+                            additionalResources[resourceNameValueMeasurement[0].Trim()] =
+                                new(Convert.ToDouble(resourceNameValueMeasurement[1], CultureInfo.InvariantCulture), resourceNameValueMeasurement[2].Trim());
                         }
                     }
                     catch
@@ -207,7 +208,7 @@ static partial class App
                     }
                 return "";
             }
-            TextBox("", "Enter additional resources (gas: 1.2, oil: 0.2)", parseAdditionalResources);
+            TextBox("", "Enter additional resource consumption or production (oil: -1.2, MWh; water: 52.4, kg)", parseAdditionalResources);
 
             assets.AddAsset(assetName, new(imagePath, heatCapacity, cost, electricityCapacity, co2, additionalResources));
             return assetName;
@@ -300,12 +301,12 @@ static partial class App
         {
             case "asset":
                 names = new(assets!.Assets!.Count);
-                foreach (var asset in assets.Assets) names.Add(asset.Key);
+                foreach (KeyValuePair<string, Asset> asset in assets.Assets) names.Add(asset.Key);
                 EntryList(names, addToAssets, getAsset, removeFromAssets, saveAssets);
                 break;
             case "sourceData":
                 names = new(sourceData!.Data.Count);
-                foreach (var element in sourceData.Data) names.Add($"{element.Value.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {element.Value.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
+                foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> element in sourceData.Data) names.Add($"{element.Value.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {element.Value.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
                 EntryList(names, addToSourceData, getSourceData, removeFromSourceData, saveSourceData);
                 break;
         }
@@ -319,7 +320,7 @@ static partial class App
         int menuWidth()
         {
             int width = 39;
-            foreach (var name in names)
+            foreach (string name in names)
             {
                 if (width < name.Length + 4) width = name.Length + 4;
             }

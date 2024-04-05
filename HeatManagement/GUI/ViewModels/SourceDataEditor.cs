@@ -38,7 +38,7 @@ class SourceDataEditorViewModel : ViewModelBase
         BaseSize = baseSize;
         TitleSize = BaseSize * 2;
         SourceButtonValues = [];
-        foreach (var source in SourceData.Data)
+        foreach (System.Collections.Generic.KeyValuePair<Tuple<DateTime, DateTime>, SourceData> source in SourceData.Data)
         {
             SourceButtonValues.Add(new(BaseSize, source.Value.StartTime, source.Value.EndTime, RemoveSourceData));
         }

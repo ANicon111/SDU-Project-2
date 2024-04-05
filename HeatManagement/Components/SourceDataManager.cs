@@ -50,7 +50,7 @@ public class SourceDataManager
     public string ToJson(JsonSerializerOptions? options = null)
     {
         List<SourceData> jsonIntermediary = [];
-        foreach (var dataElement in data!)
+        foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> dataElement in data!)
         {
             jsonIntermediary.Add(dataElement.Value);
         }
@@ -71,22 +71,52 @@ public class SourceDataManager
 
         for (int i = 1; i < rows.Length; i++)
         {
-            string[] columns = rows[i].Split(',');
-            if (columns.Length != 4) throw new($"CSV: Invalid column count at row {i}");
+            //CSV comma splitter
+            List<string> columns = [];
+            int l = 0, r = 0;
+            bool inQuote = false;
+            while (r < rows[i].Length)
+            {
+                if (rows[i][r] == '"') inQuote = !inQuote;
+                if (!inQuote && rows[i][r] == ',')
+                {
+                    columns.Add(rows[i][l..r]);
+                    l = r + 1;
+                }
+                r++;
+            }
+            columns.Add(rows[i][l..r]);
+
+            //remove extra quotes from columns containing commas
+            for (int j = 0; j < columns.Count; j++)
+            {
+                try
+                {
+                    if (columns[j].Contains(',')) columns[j] = columns[j].Replace("\"\"", "\"")[1..^1];
+                }
+                catch
+                {
+                    throw new($"CSV: Invalid comma escape at row {i}, column {j + 1}");
+                }
+            }
+
+            if (columns.Count != 4) throw new($"CSV: Invalid column count at row {i}");
 
             string temp = columns[0].Replace("\"", "");
             if (!DateTime.TryParse(temp, CultureInfo.InvariantCulture, out DateTime startTime))
-                throw new($"CSV: Invalid StartTime at row {i}");
+                if (!DateTime.TryParse(temp, out startTime))
+                    throw new($"CSV: Invalid StartTime at row {i}");
 
             temp = columns[1].Replace("\"", "");
             if (!DateTime.TryParse(temp, CultureInfo.InvariantCulture, out DateTime endTime))
-                throw new($"CSV: Invalid EndTime at row {i}");
+                if (!DateTime.TryParse(temp, out endTime))
+                    throw new($"CSV: Invalid EndTime at row {i}");
 
-            temp = columns[2].Replace("\"", "");
+            temp = columns[2].Replace("\"", "").Replace(',', '.');
             if (!double.TryParse(temp, CultureInfo.InvariantCulture, out double heatDemand))
                 throw new($"CSV: Invalid HeatDemand at row {i}");
 
-            temp = columns[3].Replace("\"", "");
+            temp = columns[3].Replace("\"", "").Replace(',', '.');
             if (!double.TryParse(temp, CultureInfo.InvariantCulture, out double electricityPrice))
                 throw new($"CSV: Invalid ElectricityPrice at row {i}");
 
@@ -100,14 +130,24 @@ public class SourceDataManager
     public string ToCSV()
     {
         //standard header
-        List<string> rows = ["StartTime,EndTime,HeatDemand,ElectricityPrice"];
+        List<string[]> table = [["StartTime", "EndTime", "HeatDemand", "ElectricityPrice"]];
 
         //values
         foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> data in Data)
         {
-            rows.Add(FormattableString.Invariant($"{data.Value.StartTime:O},{data.Value.EndTime:O},{data.Value.HeatDemand},{data.Value.ElectricityPrice}"));
+            table.Add([$"{data.Value.StartTime:O}", $"{data.Value.EndTime:O}", $"{data.Value.HeatDemand}", $"{data.Value.ElectricityPrice}"]);
         }
 
+        //escape commas and quotes
+        string[] rows = new string[table.Count];
+        for (int i = 0; i < table.Count; i++)
+        {
+            for (int j = 0; j < table[i].Length; j++)
+            {
+                if (table[i][j].Contains(',')) table[i][j] = $"\"{table[i][j].Replace("\"", "\"\"")}\"";
+            }
+            rows[i] = string.Join(',', table[i]);
+        }
         return string.Join('\n', rows);
     }
 

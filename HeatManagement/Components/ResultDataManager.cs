@@ -8,13 +8,13 @@ using System.Text.Json;
 
 [method: SetsRequiredMembers]
 
-public struct ResultData(double heat, double cost, double electricity, double co2, Dictionary<string, double> additionalResources)
+public struct ResultData(double heat, double cost, double electricity, double co2, Dictionary<string, AdditionalResource> additionalResources)
 {
     public required double Heat { get; set; } = heat;
     public required double Cost { get; set; } = cost;
     public required double Electricity { get; set; } = electricity;
     public required double CO2 { get; set; } = co2;
-    public required Dictionary<string, double> AdditionalResources { get; set; } = additionalResources;
+    public required Dictionary<string, AdditionalResource> AdditionalResources { get; set; } = additionalResources;
 }
 
 public class ResultDataManager
@@ -73,7 +73,7 @@ public class ResultDataManager
     public string ToJson(JsonSerializerOptions? options = null)
     {
         JsonData jsonIntermediary = new(Assets);
-        foreach (var element in Data)
+        foreach (KeyValuePair<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> element in Data)
         {
             jsonIntermediary.Data.Add(new(element.Key.Item1, element.Key.Item2, element.Value));
         }

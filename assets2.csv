@@ -1,8 +1,11 @@
 Name,DataType,ImagePath,HeatCapacity,Cost,ElectricityCapacity,CO2,AdditionalResourceName,AdditionalResourceValue,AdditionalResourceMeasurement
+NB,Base,Assets/EK.png,12,650,2,0,,,
+NB,Additional,,,,,,uranium,-500,kg
+NB,Additional,,,,,,depleted uranium,480,kg
 EK,Base,Assets/EK.png,8,50,-8,0,,,
 GB,Base,Assets/GB.png,5,500,0,215,,,
 GB,Additional,,,,,,gas,"1,1",MWh
-GM,Base,Assets/GM.png,"3,6",1100,2.7,640,,,
+GM,Base,Assets/GM.png,"3,6",1100,"2,7",640,,,
 GM,Additional,,,,,,gas,"1,9",MWh
 OB,Base,Assets/OB.png,4,700,0,265,,,
 OB,Additional,,,,,,oil,"1,2",MWh

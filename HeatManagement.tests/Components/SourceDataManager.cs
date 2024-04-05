@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace HeatManagement.tests;
 
 public class SourceDataManagerTests
@@ -78,6 +80,7 @@ public class SourceDataManagerTests
     [Fact]
     public void CSVTest()
     {
+        CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
         string expected = """
         StartTime,EndTime,HeatDemand,ElectricityPrice
         2023-07-08T00:00:00.0000000,2023-07-08T01:00:00.0000000,1.79,752.03

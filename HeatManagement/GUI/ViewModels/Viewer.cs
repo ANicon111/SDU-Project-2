@@ -126,7 +126,7 @@ class ViewerViewModel : ViewModelBase
         };
 
         //get individual asset usage stats
-        foreach (var result in ResultData.Data)
+        foreach (KeyValuePair<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> result in ResultData.Data)
         {
             GraphValues["Cost"][result.Key] = 0;
             GraphValues["Electricity"][result.Key] = 0;
@@ -167,7 +167,7 @@ class ViewerViewModel : ViewModelBase
                 GraphValues[$"{assetName}-CO2"][result.Key] = assetResult.Value.CO2;
 
                 //get additional resource usage
-                foreach (KeyValuePair<string, double> additionalResource in assetResult.Value.AdditionalResources)
+                foreach (KeyValuePair<string, AdditionalResource> additionalResource in assetResult.Value.AdditionalResources)
                 {
                     //format resource name
                     string resourceName = additionalResource.Key[..1].ToUpper() + additionalResource.Key[1..].ToLower();
@@ -177,21 +177,21 @@ class ViewerViewModel : ViewModelBase
                     {
                         resourceOptions.Add(resourceName);
                         GraphValues.Add(resourceName, []);
-                        resourceMeasurements.Add("MWh");
+                        resourceMeasurements.Add(additionalResource.Value.Measurement);
                         resourceImagePaths.Add("");
                     }
                     if (!GraphValues[resourceName].ContainsKey(result.Key)) GraphValues[resourceName][result.Key] = 0;
-                    GraphValues[resourceName][result.Key] += additionalResource.Value;
+                    GraphValues[resourceName][result.Key] += additionalResource.Value.Value;
 
                     //initialize and set asset resource usage
                     if (!assetOptions.Contains($"{assetName}-{resourceName}"))
                     {
                         assetOptions.Add($"{assetName}-{resourceName}");
                         GraphValues.Add($"{assetName}-{resourceName}", []);
-                        assetMeasurements.Add("MWh");
+                        assetMeasurements.Add(additionalResource.Value.Measurement);
                         assetImagePaths.Add(ResultData.Assets[assetName].ImagePath);
                     }
-                    GraphValues[$"{assetName}-{resourceName}"][result.Key] = additionalResource.Value;
+                    GraphValues[$"{assetName}-{resourceName}"][result.Key] = additionalResource.Value.Value;
                 }
             }
         }

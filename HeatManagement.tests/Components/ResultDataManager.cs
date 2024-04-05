@@ -21,7 +21,10 @@ public class ResultDataManagerTests
                             "Electricity": 4,
                             "CO2": 8000,
                             "AdditionalResources": {
-                                "R1": 8
+                                "R1": {
+                                    "Measurement": "Unit1",
+                                    "Value": -8
+                                }
                             }
                         },
                         "A": {
@@ -30,7 +33,10 @@ public class ResultDataManagerTests
                             "Electricity": 0,
                             "CO2": 5000,
                             "AdditionalResources": {
-                                "R1": 5
+                                "R1": {
+                                    "Measurement": "Unit1",
+                                    "Value": -5
+                                }
                             }
                         },
                         "B": {
@@ -39,7 +45,10 @@ public class ResultDataManagerTests
                             "Electricity": -2,
                             "CO2": 0,
                             "AdditionalResources": {
-                                "R2": 1
+                                "R2": {
+                                    "Measurement": "Unit2",
+                                    "Value": -1
+                                }
                             }
                         }
                     }
@@ -54,7 +63,10 @@ public class ResultDataManagerTests
                             "Electricity": -8,
                             "CO2": 0,
                             "AdditionalResources": {
-                                "R2": 4
+                                "R2": {
+                                    "Measurement": "Unit2",
+                                    "Value": -4
+                                }
                             }
                         }
                     }
@@ -69,7 +81,10 @@ public class ResultDataManagerTests
                             "Electricity": 0,
                             "CO2": 5000,
                             "AdditionalResources": {
-                                "R1": 5
+                                "R1": {
+                                    "Measurement": "Unit1",
+                                    "Value": -5
+                                }
                             }
                         },
                         "C": {
@@ -78,7 +93,10 @@ public class ResultDataManagerTests
                             "Electricity": 3,
                             "CO2": 6000,
                             "AdditionalResources": {
-                                "R1": 6
+                                "R1": {
+                                    "Measurement": "Unit1",
+                                    "Value": -6
+                                }
                             }
                         }
                     }
@@ -109,7 +127,10 @@ public class ResultDataManagerTests
                             "Electricity": 2.7,
                             "CO2": 2304,
                             "AdditionalResources": {
-                                "gas": -6.84
+                                "gas": {
+                                    "Measurement": "MWh",
+                                    "Value": -6.84
+                                }
                             }
                         }
                     }
@@ -129,7 +150,7 @@ public class ResultDataManagerTests
                 electricity: 2.7,
                 co2: 2304,
                 additionalResources: new(){
-                    {"gas",-6.84}
+                    {"gas",new(-6.84,"MWh")}
                 }
             )
         );
@@ -155,7 +176,10 @@ public class ResultDataManagerTests
                                 "Electricity": 2.7,
                                 "CO2": 2304,
                                 "AdditionalResources": {
-                                    "gas": -6.84
+                                    "gas": {
+                                        "Measurement": "MWh",
+                                        "Value": -6.84
+                                    }
                                 }
                             }
                         }
@@ -170,7 +194,10 @@ public class ResultDataManagerTests
                                 "Electricity": 2.7,
                                 "CO2": 2304,
                                 "AdditionalResources": {
-                                    "gas": -6.84
+                                    "gas": {
+                                        "Measurement": "MWh",
+                                        "Value": -6.84
+                                    }
                                 }
                             },
                             "GB": {
@@ -179,7 +206,10 @@ public class ResultDataManagerTests
                                 "Electricity": 0,
                                 "CO2": 625.65,
                                 "AdditionalResources": {
-                                    "gas": -3.201
+                                    "gas": {
+                                        "Measurement": "MWh",
+                                        "Value": -3.201
+                                    }
                                 }
                             }
                         }
@@ -203,7 +233,10 @@ public class ResultDataManagerTests
                                 "Electricity": 2.7,
                                 "CO2": 2304,
                                 "AdditionalResources": {
-                                    "gas": -6.84
+                                    "gas": {
+                                        "Measurement": "MWh",
+                                        "Value": -6.84
+                                    }
                                 }
                             }
                         }
@@ -218,7 +251,10 @@ public class ResultDataManagerTests
                                 "Electricity": 0,
                                 "CO2": 625.65,
                                 "AdditionalResources": {
-                                    "gas": -3.201
+                                    "gas": {
+                                        "Measurement": "MWh",
+                                        "Value": -3.201
+                                    }
                                 }
                             }
                         }
@@ -241,7 +277,10 @@ public class ResultDataManagerTests
                                 "Electricity": 2.7,
                                 "CO2": 2304,
                                 "AdditionalResources": {
-                                    "gas": -6.84
+                                    "gas": {
+                                        "Measurement": "MWh",
+                                        "Value": -6.84
+                                    }
                                 }
                             }
                         }

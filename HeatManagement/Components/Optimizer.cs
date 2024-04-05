@@ -22,14 +22,14 @@ public static class Optimizer
             //precision error avoidance
             while (remainingUsage > 1e-8 && assetCostPerMWH.Count > 0)
             {
-                Dictionary<string, double> additionalResourceUsage = [];
+                Dictionary<string, AdditionalResource> additionalResourceUsage = [];
                 (string name, double costPerMWH) = assetCostPerMWH.MinBy(pair => pair.Value);
                 double coveredUsage = Math.Min(assets.Assets[name].HeatCapacity, remainingUsage);
                 remainingUsage -= coveredUsage;
-                foreach ((string resourceName, double resourceUsage) in assets.Assets[name].AdditionalResources)
+                foreach ((string resourceName, AdditionalResource additionalResource) in assets.Assets[name].AdditionalResources)
                 {
-                    if (!additionalResourceUsage.ContainsKey(resourceName)) additionalResourceUsage[resourceName] = 0;
-                    additionalResourceUsage[resourceName] -= resourceUsage * coveredUsage;
+                    if (!additionalResourceUsage.ContainsKey(resourceName)) additionalResourceUsage[resourceName] = new(0, additionalResource.Measurement);
+                    additionalResourceUsage[resourceName].Value += additionalResource.Value * coveredUsage;
                 }
                 resultData.AddData(
                     dataUnit.Value.StartTime,

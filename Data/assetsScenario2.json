@@ -6,7 +6,10 @@
         "ElectricityCapacity": 0,
         "CO2": 215,
         "AdditionalResources": {
-            "gas": 1.1
+            "gas": {
+                "Measurement": "MWh",
+                "Value": -1.1
+            }
         }
     },
     "OB": {
@@ -16,7 +19,10 @@
         "ElectricityCapacity": 0,
         "CO2": 265,
         "AdditionalResources": {
-            "oil": 1.2
+            "oil": {
+                "Measurement": "MWh",
+                "Value": -1.2
+            }
         }
     },
     "GM": {
@@ -26,7 +32,10 @@
         "ElectricityCapacity": 2.7,
         "CO2": 640,
         "AdditionalResources": {
-            "gas": 1.9
+            "gas": {
+                "Measurement": "MWh",
+                "Value": -1.9
+            }
         }
     },
     "EK": {

@@ -43,7 +43,7 @@ static partial class App
         };
 
         //get individual asset usage stats
-        foreach (var result in resultDataManager.Data)
+        foreach (KeyValuePair<Tuple<DateTime, DateTime>, Dictionary<string, ResultData>> result in resultDataManager.Data)
         {
             graphValues["Cost"][result.Key] = 0;
             graphValues["Electricity"][result.Key] = 0;
@@ -79,7 +79,7 @@ static partial class App
                 graphValues[$"{assetName}-CO2"][result.Key] = assetResult.Value.CO2;
 
                 //get additional resource usage
-                foreach (KeyValuePair<string, double> additionalResource in assetResult.Value.AdditionalResources)
+                foreach (KeyValuePair<string, AdditionalResource> additionalResource in assetResult.Value.AdditionalResources)
                 {
                     //format resource name
                     string resourceName = additionalResource.Key[..1].ToUpper() + additionalResource.Key[1..].ToLower();
@@ -89,19 +89,19 @@ static partial class App
                     {
                         resourceOptions.Add(resourceName);
                         graphValues.Add(resourceName, []);
-                        resourceMeasurements.Add("MWh");
+                        resourceMeasurements.Add(additionalResource.Value.Measurement);
                     }
                     if (!graphValues[resourceName].ContainsKey(result.Key)) graphValues[resourceName][result.Key] = 0;
-                    graphValues[resourceName][result.Key] += additionalResource.Value;
+                    graphValues[resourceName][result.Key] += additionalResource.Value.Value;
 
                     //initialize and set asset resource usage
                     if (!assetOptions.Contains($"{assetName}-{resourceName}"))
                     {
                         assetOptions.Add($"{assetName}-{resourceName}");
                         graphValues.Add($"{assetName}-{resourceName}", []);
-                        assetMeasurements.Add("MWh");
+                        assetMeasurements.Add(additionalResource.Value.Measurement);
                     }
-                    graphValues[$"{assetName}-{resourceName}"][result.Key] = additionalResource.Value;
+                    graphValues[$"{assetName}-{resourceName}"][result.Key] = additionalResource.Value.Value;
                 }
             }
         }

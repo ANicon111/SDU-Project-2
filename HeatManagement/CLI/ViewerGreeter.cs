@@ -65,7 +65,7 @@ static partial class App
         }
 
         TextBox(
-            text: arguments.DataPath ?? "data.json",
+            text: arguments.DataPath ?? "data.csv",
             title: "Input the source or result data file path:",
             fileAction: tryLoadSourceResultDataFile,
             tryInitialAction: arguments.DataPath != null
@@ -102,7 +102,7 @@ static partial class App
                     {
                         if (assetError.Message != "Invalid Data")
                             return assetError.Message;
-                        return "Assets file has invalid json";
+                        return "Assets file has invalid data";
                     }
                 }
 
