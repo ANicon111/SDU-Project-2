@@ -286,19 +286,21 @@ static partial class App
         //create the json exportable dictionary and the csv table
         List<string> csvHeader = ["StartTime", "EndTime"];
         for (int j = 0; j < names.Count; j++) csvHeader.Add(names[j]);
-        List<string> csvTable = [string.Join(',', csvHeader)];
+        List<string[]> csvTable = [[.. csvHeader]];
         List<JsonData> jsonValues = [];
         for (int i = 0; i < times.Count; i++)
         {
             jsonValues.Add(new(times[i].Item1, times[i].Item2, []));
-            List<string> csvRow = [FormattableString.Invariant($"{times[i].Item1:O},{times[i].Item2:O}")];
+            string[] csvRow = new string[csvTable[0].Length];
+            csvRow[0] = $"{times[i].Item1}";
+            csvRow[1] = $"{times[i].Item2}";
             for (int j = 0; j < graphs.Count; j++)
             {
                 graphs[j].TryGetValue(times[i], out double value);
                 jsonValues[i].Values.Add(names[j], value);
-                csvRow.Add(FormattableString.Invariant($"{value}"));
+                csvRow[2 + j] = $"{value}";
             }
-            csvTable.Add(string.Join(',', csvRow));
+            csvTable.Add(csvRow);
         }
 
         //json/csv export function for the greeter file dialogue
@@ -310,7 +312,7 @@ static partial class App
                 if (filePath.Split('.').Last().ToLower() == "json")
                     File.WriteAllText(filePath, JsonSerializer.Serialize(jsonValues, jsonOptions));
                 else
-                    File.WriteAllText(filePath, string.Join('\n', csvTable));
+                    File.WriteAllText(filePath, CSVUtils.TableToString(csvTable));
             }
             catch
             {

@@ -138,17 +138,7 @@ public class SourceDataManager
             table.Add([$"{data.Value.StartTime:O}", $"{data.Value.EndTime:O}", $"{data.Value.HeatDemand}", $"{data.Value.ElectricityPrice}"]);
         }
 
-        //escape commas and quotes
-        string[] rows = new string[table.Count];
-        for (int i = 0; i < table.Count; i++)
-        {
-            for (int j = 0; j < table[i].Length; j++)
-            {
-                if (table[i][j].Contains(',')) table[i][j] = $"\"{table[i][j].Replace("\"", "\"\"")}\"";
-            }
-            rows[i] = string.Join(',', table[i]);
-        }
-        return string.Join('\n', rows);
+        return CSVUtils.TableToString(table);
     }
 
     public static SourceDataManager FromAnySupportedFormat(string text)

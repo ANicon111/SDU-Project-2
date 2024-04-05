@@ -327,20 +327,25 @@ class ViewerViewModel : ViewModelBase
             //create the json exportable dictionary and the csv table
             List<string> csvHeader = ["StartTime", "EndTime"];
             for (int j = 0; j < SelectedGraphList.Count; j++) csvHeader.Add(Options[SelectedGraphList[j]]);
-            List<string> csvTable = [string.Join(',', csvHeader)];
+            List<string[]> csvTable = [[.. csvHeader]];
             List<JsonData> jsonValues = [];
+
             for (int i = 0; i < Times.Length; i++)
             {
                 jsonValues.Add(new(Times[i].Item1, Times[i].Item2, []));
-                List<string> csvRow = [FormattableString.Invariant($"{Times[i].Item1:O},{Times[i].Item2:O}")];
+
+                string[] csvRow = new string[csvHeader.Count];
+                csvRow[0] = $"{Times[i].Item1:O}";
+                csvRow[1] = $"{Times[i].Item2:O}";
                 for (int j = 0; j < SelectedGraphList.Count; j++)
                 {
                     GraphValues[Options[SelectedGraphList[j]]].TryGetValue(Times[i], out double value);
                     jsonValues[i].Values.Add(Options[SelectedGraphList[j]], value);
-                    csvRow.Add(FormattableString.Invariant($"{value}"));
+                    csvRow[2 + j] = $"{value}";
                 }
-                csvTable.Add(string.Join(',', csvRow));
+                csvTable.Add(csvRow);
             }
+
             try
             {
                 // Open writing stream from the file.
@@ -350,8 +355,7 @@ class ViewerViewModel : ViewModelBase
                 if (file.Name.Split('.').Last().ToLower() == "json")
                     await streamWriter.WriteAsync(JsonSerializer.Serialize(jsonValues, JsonOptions));
                 else
-                    await streamWriter.WriteAsync(string.Join('\n', csvTable));
-
+                    await streamWriter.WriteAsync(CSVUtils.TableToString(csvTable));
             }
             catch { }
         }
