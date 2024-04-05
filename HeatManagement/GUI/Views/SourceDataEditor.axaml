@@ -31,10 +31,14 @@
         </Grid>
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding NewSourceOpen}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBox HorizontalAlignment="Stretch" Watermark="dd.MM.yyyy hh:mm[:ss] (start time)" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
-                <TextBox HorizontalAlignment="Stretch" Watermark="dd.MM.yyyy hh:mm[:ss] (end time)" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
-                <TextBox HorizontalAlignment="Stretch" Watermark="heat usage in MWh" Text="{Binding NewSourceHeatUsage, Mode=TwoWay}" />
-                <TextBox HorizontalAlignment="Stretch" Watermark="electricity cost in dkk per MWh" Text="{Binding NewSourceElectricityCost, Mode=TwoWay}" />
+                <TextBlock Text="Start time (dd.MM.yyyy hh:mm[:ss])" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 00:00:00" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
+                <TextBlock Text="End time (dd.MM.yyyy hh:mm[:ss])" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 01:00:00" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
+                <TextBlock Text="Heat usage in MWh" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="1352.6" Text="{Binding NewSourceHeatUsage, Mode=TwoWay}" />
+                <TextBlock Text="Electricity price in dkk per MWh" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="674.2" Text="{Binding NewSourceElectricityCost, Mode=TwoWay}" />
                 <TextBlock Foreground="Red" Text="{Binding NewSourceError}" />
                 <Button HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding AddSourceData}" Content="Add Source Data"/>
             </StackPanel>
