@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Avalonia.Platform.Storage;
 using ReactiveUI;
@@ -91,6 +92,19 @@ class SourceDataEditorViewModel : ViewModelBase
         SourceButtonValues.Remove(element);
     }
 
+    readonly FilePickerFileType JsonFile = new("Json Files")
+    {
+        Patterns = ["*.json"],
+        AppleUniformTypeIdentifiers = ["public.json"],
+        MimeTypes = ["application/json", "text/json"]
+    };
+
+    readonly FilePickerFileType CSVFile = new("CSV Files")
+    {
+        Patterns = ["*.csv"],
+        AppleUniformTypeIdentifiers = ["public.csv"],
+        MimeTypes = ["application/csv", "text/csv"]
+    };
     private readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
     public async void ExportSourceData()
     {
@@ -98,7 +112,8 @@ class SourceDataEditorViewModel : ViewModelBase
         IStorageFile? file = await App.TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
             Title = "Export source data",
-            SuggestedFileName = "sourceData.json"
+            SuggestedFileName = "sourceData.csv",
+            FileTypeChoices = [CSVFile, JsonFile]
         });
 
         if (file != null)
@@ -109,7 +124,10 @@ class SourceDataEditorViewModel : ViewModelBase
                 await using Stream stream = await file.OpenWriteAsync();
                 using StreamWriter streamWriter = new(stream);
                 // Writes all the content of file as a text.
-                await streamWriter.WriteAsync(SourceData.ToJson(JsonOptions));
+                if (file.Name.Split('.').Last().ToLower() == "json")
+                    await streamWriter.WriteAsync(SourceData.ToJson(JsonOptions));
+                else
+                    await streamWriter.WriteAsync(SourceData.ToCSV());
             }
             catch { }
         }

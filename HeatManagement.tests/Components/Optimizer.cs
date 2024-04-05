@@ -119,7 +119,7 @@ public class OptimizerTests
             }
             """).ToJson();
 
-        AssetManager assetManager = new(
+        AssetManager assetManager = AssetManager.FromJson(
             """
             {
                 "A": {
@@ -156,7 +156,7 @@ public class OptimizerTests
             """
         );
 
-        SourceDataManager sourceDataManager = new(
+        SourceDataManager sourceDataManager = SourceDataManager.FromJson(
             """
             [
                 {

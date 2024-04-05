@@ -62,18 +62,22 @@ static partial class App
             {
                 try
                 {
-                    assets = new(text);
+                    assets = AssetManager.FromAnySupportedFormat(text);
                     editedFileType = "asset";
                 }
-                catch
+                catch (Exception assetError)
                 {
+                    if (assetError.Message != "Invalid Data")
+                        return assetError.Message;
                     try
                     {
-                        sourceData = new(text);
+                        sourceData = SourceDataManager.FromAnySupportedFormat(text);
                         editedFileType = "sourceData";
                     }
-                    catch
+                    catch (Exception sourceDataError)
                     {
+                        if (sourceDataError.Message != "Invalid Data")
+                            return sourceDataError.Message;
                         return "Edited file already exists and contains unrelated data";
                     }
                 }

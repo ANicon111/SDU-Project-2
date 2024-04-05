@@ -268,13 +268,27 @@ class ViewerViewModel : ViewModelBase
         SelectBar(0);
     }
 
+    readonly FilePickerFileType JsonFile = new("Json Files")
+    {
+        Patterns = ["*.json"],
+        AppleUniformTypeIdentifiers = ["public.json"],
+        MimeTypes = ["application/json", "text/json"]
+    };
+
+    readonly FilePickerFileType CSVFile = new("CSV Files")
+    {
+        Patterns = ["*.csv"],
+        AppleUniformTypeIdentifiers = ["public.csv"],
+        MimeTypes = ["application/csv", "text/csv"]
+    };
     public async void ExportResultData()
     {
         // Start async operation to open the dialog.
         IStorageFile? file = await App.TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
             Title = "Export result data",
-            SuggestedFileName = "resultData.json"
+            SuggestedFileName = "resultData.json",
+            FileTypeChoices = [JsonFile]
         });
 
         if (file != null)
@@ -304,21 +318,28 @@ class ViewerViewModel : ViewModelBase
         IStorageFile? file = await App.TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
             Title = "Export graph data",
-            SuggestedFileName = "graph.json"
+            SuggestedFileName = "graph.csv",
+            FileTypeChoices = [CSVFile, JsonFile]
         });
 
         if (file != null)
         {
-            //create the json exportable dictionary
+            //create the json exportable dictionary and the csv table
+            List<string> csvHeader = ["StartTime", "EndTime"];
+            for (int j = 0; j < SelectedGraphList.Count; j++) csvHeader.Add(Options[SelectedGraphList[j]]);
+            List<string> csvTable = [string.Join(',', csvHeader)];
             List<JsonData> jsonValues = [];
             for (int i = 0; i < Times.Length; i++)
             {
                 jsonValues.Add(new(Times[i].Item1, Times[i].Item2, []));
+                List<string> csvRow = [FormattableString.Invariant($"{Times[i].Item1:O},{Times[i].Item2:O}")];
                 for (int j = 0; j < SelectedGraphList.Count; j++)
                 {
                     GraphValues[Options[SelectedGraphList[j]]].TryGetValue(Times[i], out double value);
                     jsonValues[i].Values.Add(Options[SelectedGraphList[j]], value);
+                    csvRow.Add(FormattableString.Invariant($"{value}"));
                 }
+                csvTable.Add(string.Join(',', csvRow));
             }
             try
             {
@@ -326,7 +347,11 @@ class ViewerViewModel : ViewModelBase
                 await using Stream stream = await file.OpenWriteAsync();
                 using StreamWriter streamWriter = new(stream);
                 // Writes all the content of file as a text.
-                await streamWriter.WriteAsync(JsonSerializer.Serialize(jsonValues, JsonOptions));
+                if (file.Name.Split('.').Last().ToLower() == "json")
+                    await streamWriter.WriteAsync(JsonSerializer.Serialize(jsonValues, JsonOptions));
+                else
+                    await streamWriter.WriteAsync(string.Join('\n', csvTable));
+
             }
             catch { }
         }

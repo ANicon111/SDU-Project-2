@@ -22,8 +22,55 @@ static partial class App
 
         //save manager data
         JsonSerializerOptions jsonOptions = new() { WriteIndented = true };
-        void saveAssets() => File.WriteAllText(filePath, assets!.ToJson(jsonOptions));
-        void saveSourceData() => File.WriteAllText(filePath, sourceData!.ToJson(jsonOptions));
+        void saveAssets()
+        {
+            string saveFile(string filePath)
+            {
+                try
+                {
+                    string extension = filePath.Split('.').Last().ToLower();
+                    if (extension == "json")
+                    {
+                        File.WriteAllText(filePath, assets!.ToJson(jsonOptions));
+                    }
+                    else
+                    {
+                        File.WriteAllText(filePath, assets!.ToCSV());
+                    }
+                }
+                catch
+                {
+                    return "Couldn't save file";
+                }
+                return "";
+            }
+            TextBox(filePath, "Input the output file path", saveFile);
+        }
+
+        void saveSourceData()
+        {
+            string saveFile(string filePath)
+            {
+                try
+                {
+                    string extension = filePath.Split('.').Last().ToLower();
+                    if (extension == "json")
+                    {
+                        File.WriteAllText(filePath, sourceData!.ToJson(jsonOptions));
+                    }
+                    else
+                    {
+                        File.WriteAllText(filePath, sourceData!.ToCSV());
+                    }
+                }
+                catch
+                {
+                    return "Couldn't save file";
+                }
+                return "";
+            }
+            TextBox(filePath, "Input the output file path", saveFile);
+        }
 
 
         //removal functions

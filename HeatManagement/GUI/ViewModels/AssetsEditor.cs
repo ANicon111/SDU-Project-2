@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -64,7 +65,7 @@ class AssetsEditorViewModel : ViewModelBase
         NewAssetOpen = true;
     }
 
-    private string? tryParseAsset()
+    private string? TryParseAsset()
     {
         string name = NewAssetName.Trim().ToUpper();
         if (Assets.Assets.ContainsKey(name)) return "Asset name already exists";
@@ -104,7 +105,7 @@ class AssetsEditorViewModel : ViewModelBase
 
     public void AddAsset()
     {
-        NewAssetError = tryParseAsset();
+        NewAssetError = TryParseAsset();
     }
 
     public void RemoveAsset(string assetName, AssetsEditorElementViewModel element)
@@ -114,6 +115,19 @@ class AssetsEditorViewModel : ViewModelBase
 
     }
 
+    readonly FilePickerFileType JsonFile = new("Json Files")
+    {
+        Patterns = ["*.json"],
+        AppleUniformTypeIdentifiers = ["public.json"],
+        MimeTypes = ["application/json", "text/json"]
+    };
+
+    readonly FilePickerFileType CSVFile = new("CSV Files")
+    {
+        Patterns = ["*.csv"],
+        AppleUniformTypeIdentifiers = ["public.csv"],
+        MimeTypes = ["application/csv", "text/csv"]
+    };
     private readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
     public async void ExportAssets()
     {
@@ -121,7 +135,8 @@ class AssetsEditorViewModel : ViewModelBase
         IStorageFile? file = await App.TopLevel.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
             Title = "Export assets",
-            SuggestedFileName = "assets.json"
+            SuggestedFileName = "assets.csv",
+            FileTypeChoices = [CSVFile, JsonFile]
         });
 
         if (file != null)
@@ -132,7 +147,10 @@ class AssetsEditorViewModel : ViewModelBase
                 await using Stream stream = await file.OpenWriteAsync();
                 using StreamWriter streamWriter = new(stream);
                 // Writes all the content of file as a text.
-                await streamWriter.WriteAsync(Assets.ToJson(JsonOptions));
+                if (file.Name.Split('.').Last().ToLower() == "json")
+                    await streamWriter.WriteAsync(Assets.ToJson(JsonOptions));
+                else
+                    await streamWriter.WriteAsync(Assets.ToCSV());
             }
             catch { }
         }

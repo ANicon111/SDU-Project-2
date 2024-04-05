@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using ReactiveUI;
@@ -58,6 +59,13 @@ class GreeterViewModel : ViewModelBase
         MimeTypes = ["application/json", "text/json"]
     };
 
+    readonly FilePickerFileType CSVFile = new("CSV Files")
+    {
+        Patterns = ["*.csv"],
+        AppleUniformTypeIdentifiers = ["public.csv"],
+        MimeTypes = ["application/csv", "text/csv"]
+    };
+
     public GreeterViewModel(Arguments arguments)
     {
         H1Size = BaseSize * 0.75;
@@ -67,14 +75,14 @@ class GreeterViewModel : ViewModelBase
         {
             try
             {
-                SourceData = new(File.ReadAllText(arguments.EditPath!));
+                SourceData = SourceDataManager.FromAnySupportedFormat(File.ReadAllText(arguments.EditPath!));
             }
             catch
             {
                 SourceData = null;
                 try
                 {
-                    Assets = new(File.ReadAllText(arguments.EditPath!));
+                    Assets = AssetManager.FromAnySupportedFormat(File.ReadAllText(arguments.EditPath!));
                 }
                 catch
                 {
@@ -82,15 +90,15 @@ class GreeterViewModel : ViewModelBase
                 }
             }
 
-            if (Assets != null) CurrentPage = new AssetsEditorView();
-            if (SourceData != null) CurrentPage = new SourceDataEditorView();
+            if (Assets != null) CurrentPage = new AssetsEditorView() { DataContext = new AssetsEditorViewModel(BaseSize, Assets) };
+            if (SourceData != null) CurrentPage = new SourceDataEditorView() { DataContext = new SourceDataEditorViewModel(BaseSize, SourceData) };
         }
 
         if (Arguments.DataPath != null || Arguments.AssetsPath != null)
         {
             try
             {
-                SourceData = new(File.ReadAllText(arguments.DataPath!));
+                SourceData = SourceDataManager.FromAnySupportedFormat(File.ReadAllText(arguments.DataPath!));
             }
             catch
             {
@@ -107,7 +115,7 @@ class GreeterViewModel : ViewModelBase
 
             try
             {
-                Assets = new(File.ReadAllText(arguments.AssetsPath!));
+                Assets = AssetManager.FromAnySupportedFormat(File.ReadAllText(arguments.AssetsPath!));
             }
             catch
             {
@@ -160,7 +168,7 @@ class GreeterViewModel : ViewModelBase
         {
             Title = "Open a source or result data json file",
             AllowMultiple = false,
-            FileTypeFilter = [JsonFile]
+            FileTypeFilter = [CSVFile, JsonFile]
         });
 
         if (files.Count >= 1)
@@ -186,18 +194,21 @@ class GreeterViewModel : ViewModelBase
             if (text != null)
                 try
                 {
-                    SourceData = new(text);
+                    SourceData = SourceDataManager.FromAnySupportedFormat(text);
                 }
-                catch
+                catch (Exception sourceDataError)
                 {
-                    try
-                    {
-                        ResultData = new(text);
-                    }
-                    catch
-                    {
-                        DataError = "Data file contains invalid json";
-                    }
+                    if (sourceDataError.Message != "Invalid Data")
+                        DataError = sourceDataError.Message;
+                    else
+                        try
+                        {
+                            ResultData = new(text);
+                        }
+                        catch
+                        {
+                            DataError = "Data file contains invalid json";
+                        }
                 }
             if (SourceData != null)
             {
@@ -234,9 +245,9 @@ class GreeterViewModel : ViewModelBase
         // Start async operation to open the dialog.
         var files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Open an assets json file",
+            Title = "Open an assets file",
             AllowMultiple = false,
-            FileTypeFilter = [JsonFile]
+            FileTypeFilter = [CSVFile, JsonFile]
         });
 
         if (files.Count >= 1)
@@ -261,11 +272,17 @@ class GreeterViewModel : ViewModelBase
             if (text != null)
                 try
                 {
-                    Assets = new(text);
+                    if (files[0].Name.Split('.').Last().ToLower() == "json")
+                        Assets = AssetManager.FromJson(text);
+                    else
+                        Assets = AssetManager.FromCSV(text);
                 }
-                catch
+                catch (Exception assetsError)
                 {
-                    AssetsError = "File contains invalid json";
+                    if (assetsError.Message != "Invalid Data")
+                        AssetsError = assetsError.Message;
+                    else
+                        AssetsError = "Assets file contains invalid data";
                 }
 
             if (Assets != null)
@@ -292,7 +309,7 @@ class GreeterViewModel : ViewModelBase
         {
             Title = "Open an assets or source data json file",
             AllowMultiple = false,
-            FileTypeFilter = [JsonFile]
+            FileTypeFilter = [CSVFile, JsonFile]
         });
 
         if (files.Count >= 1)
@@ -318,17 +335,23 @@ class GreeterViewModel : ViewModelBase
             if (text != null)
                 try
                 {
-                    SourceData = new(text);
+                    SourceData = SourceDataManager.FromAnySupportedFormat(text);
                 }
-                catch
+                catch (Exception sourceDataError)
                 {
+
+                    if (sourceDataError.Message != "Invalid Data")
+                        EditedError = sourceDataError.Message;
                     try
                     {
-                        Assets = new(text);
+                        Assets = AssetManager.FromAnySupportedFormat(text);
+
                     }
-                    catch
+                    catch (Exception assetsError)
                     {
-                        EditedError = "Edited file contains invalid json";
+                        if (assetsError.Message != "Invalid Data")
+                            AssetsError = assetsError.Message;
+                        EditedError = "Edited file contains invalid data";
                     }
                 }
             if (SourceData != null)

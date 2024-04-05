@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using AnsiRenderer;
 namespace HeatManagement.CLI;
@@ -22,11 +23,11 @@ static partial class App
                 return "Data file path is invalid";
             else
             {
-                string json = "INVALID";
+                string text = "INVALID";
 
                 try
                 {
-                    json = File.ReadAllText(filePath);
+                    text = File.ReadAllText(filePath);
                 }
                 catch
                 {
@@ -35,7 +36,7 @@ static partial class App
 
                 try
                 {
-                    sourceData = new(json);
+                    sourceData = SourceDataManager.FromAnySupportedFormat(text);
                     if (sourceData.Data.Count == 0)
                     {
                         sourceData = null;
@@ -46,7 +47,7 @@ static partial class App
                 {
                     try
                     {
-                        resultData = new(json);
+                        resultData = new(text);
                         if (resultData.Data.Count == 0)
                         {
                             resultData = null;
@@ -55,7 +56,7 @@ static partial class App
                     }
                     catch
                     {
-                        return "Data file has invalid json";
+                        return "Data file has invalid data";
                     }
                 }
             }
@@ -79,11 +80,11 @@ static partial class App
                     return "Assets file path is invalid";
                 else
                 {
-                    string json = "INVALID";
+                    string text = "INVALID";
 
                     try
                     {
-                        json = File.ReadAllText(filePath);
+                        text = File.ReadAllText(filePath);
                     }
                     catch
                     {
@@ -91,14 +92,16 @@ static partial class App
                     }
                     try
                     {
-                        assets = new(json);
+                        assets = AssetManager.FromAnySupportedFormat(text);
                         if (assets.Assets!.Count == 0)
                         {
                             return "Assets file contains no assets";
                         }
                     }
-                    catch
+                    catch (Exception assetError)
                     {
+                        if (assetError.Message != "Invalid Data")
+                            return assetError.Message;
                         return "Assets file has invalid json";
                     }
                 }

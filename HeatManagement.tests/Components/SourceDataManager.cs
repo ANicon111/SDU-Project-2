@@ -71,7 +71,92 @@ public class SourceDataManagerTests
             }
         ]
         """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
-        string actual = new SourceDataManager(expected).ToJson();
+        string actual = SourceDataManager.FromJson(expected).ToJson();
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void CSVTest()
+    {
+        string expected = """
+        StartTime,EndTime,HeatDemand,ElectricityPrice
+        2023-07-08T00:00:00.0000000,2023-07-08T01:00:00.0000000,1.79,752.03
+        2023-07-08T01:00:00.0000000,2023-07-08T02:00:00.0000000,1.85,691.05
+        2023-07-08T02:00:00.0000000,2023-07-08T03:00:00.0000000,1.76,674.78
+        2023-07-08T03:00:00.0000000,2023-07-08T04:00:00.0000000,1.67,652.95
+        2023-07-08T04:00:00.0000000,2023-07-08T05:00:00.0000000,1.73,666.3
+        2023-07-08T05:00:00.0000000,2023-07-08T06:00:00.0000000,1.79,654.6
+        2023-07-08T06:00:00.0000000,2023-07-08T07:00:00.0000000,1.82,637.05
+        2023-07-08T07:00:00.0000000,2023-07-08T08:00:00.0000000,1.81,639.45
+        2023-07-08T08:00:00.0000000,2023-07-08T09:00:00.0000000,1.84,628.28
+        2023-07-08T09:00:00.0000000,2023-07-08T10:00:00.0000000,1.88,570.3
+        """;
+
+        string json = """
+        [
+            {
+                "StartTime": "2023-07-08T00:00:00",
+                "EndTime": "2023-07-08T01:00:00",
+                "HeatDemand": 1.79,
+                "ElectricityPrice": 752.03
+            },
+            {
+                "StartTime": "2023-07-08T01:00:00",
+                "EndTime": "2023-07-08T02:00:00",
+                "HeatDemand": 1.85,
+                "ElectricityPrice": 691.05
+            },
+            {
+                "StartTime": "2023-07-08T02:00:00",
+                "EndTime": "2023-07-08T03:00:00",
+                "HeatDemand": 1.76,
+                "ElectricityPrice": 674.78
+            },
+            {
+                "StartTime": "2023-07-08T03:00:00",
+                "EndTime": "2023-07-08T04:00:00",
+                "HeatDemand": 1.67,
+                "ElectricityPrice": 652.95
+            },
+            {
+                "StartTime": "2023-07-08T04:00:00",
+                "EndTime": "2023-07-08T05:00:00",
+                "HeatDemand": 1.73,
+                "ElectricityPrice": 666.3
+            },
+            {
+                "StartTime": "2023-07-08T05:00:00",
+                "EndTime": "2023-07-08T06:00:00",
+                "HeatDemand": 1.79,
+                "ElectricityPrice": 654.6
+            },
+            {
+                "StartTime": "2023-07-08T06:00:00",
+                "EndTime": "2023-07-08T07:00:00",
+                "HeatDemand": 1.82,
+                "ElectricityPrice": 637.05
+            },
+            {
+                "StartTime": "2023-07-08T07:00:00",
+                "EndTime": "2023-07-08T08:00:00",
+                "HeatDemand": 1.81,
+                "ElectricityPrice": 639.45
+            },
+            {
+                "StartTime": "2023-07-08T08:00:00",
+                "EndTime": "2023-07-08T09:00:00",
+                "HeatDemand": 1.84,
+                "ElectricityPrice": 628.28
+            },
+            {
+                "StartTime": "2023-07-08T09:00:00",
+                "EndTime": "2023-07-08T10:00:00",
+                "HeatDemand": 1.88,
+                "ElectricityPrice": 570.3
+            }
+        ]
+        """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
+        string actual = SourceDataManager.FromJson(json).ToCSV();
         Assert.Equal(expected, actual);
     }
 
@@ -119,7 +204,7 @@ public class SourceDataManagerTests
             }
         ]
         """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
-        SourceDataManager sourceDataManager = new(
+        SourceDataManager sourceDataManager = SourceDataManager.FromJson(
         """
         [
             {

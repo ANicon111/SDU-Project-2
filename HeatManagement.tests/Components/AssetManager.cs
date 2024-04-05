@@ -32,7 +32,47 @@ public class AssetManagerTests
             }
         }
         """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
-        string actual = new AssetManager(expected).ToJson();
+        string actual = AssetManager.FromJson(expected).ToJson();
+        Assert.Equal(expected, actual);
+    }
+
+    //Testing csv compatibility
+    [Fact]
+    public void CSVTest()
+    {
+        string expected = """
+        Name,DataType,ImagePath,HeatCapacity,Cost,ElectricityCapacity,CO2,AdditionalResourceName,AdditionalResourceValue
+        GB,Base,Assets/GB.png,5,500,0,215,,
+        GB,Additional,,,,,,gas,1.1
+        OB,Base,Assets/OB.png,4,700,0,265,,
+        OB,Additional,,,,,,oil,1.2
+        """;
+
+        string json = """
+        {
+            "GB": {
+                "ImagePath": "Assets/GB.png",
+                "HeatCapacity": 5,
+                "Cost": 500,
+                "ElectricityCapacity": 0,
+                "CO2": 215,
+                "AdditionalResources": {
+                    "gas": 1.1
+                }
+            },
+            "OB": {
+                "ImagePath": "Assets/OB.png",
+                "HeatCapacity": 4,
+                "Cost": 700,
+                "ElectricityCapacity": 0,
+                "CO2": 265,
+                "AdditionalResources": {
+                    "oil": 1.2
+                }
+            }
+        }
+        """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
+        string actual = AssetManager.FromJson(json).ToCSV();
         Assert.Equal(expected, actual);
     }
 
@@ -92,7 +132,7 @@ public class AssetManagerTests
             }
         }
         """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
-        AssetManager assetManager = new(
+        AssetManager assetManager = AssetManager.FromJson(
             """
         {
             "GB": {

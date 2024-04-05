@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using AnsiRenderer;
@@ -119,8 +120,8 @@ static partial class App
                 new(
                     text:
                     """
-                                        
-                      E export to json  
+                                
+                      E export  
                     """,
                     colorAreas:[
                         new(color:Colors.Green.WithAlpha(0.75)),
@@ -282,25 +283,34 @@ static partial class App
             }
         }
 
-        //create the json exportable dictionary
+        //create the json exportable dictionary and the csv table
+        List<string> csvHeader = ["StartTime", "EndTime"];
+        for (int j = 0; j < names.Count; j++) csvHeader.Add(names[j]);
+        List<string> csvTable = [string.Join(',', csvHeader)];
         List<JsonData> jsonValues = [];
         for (int i = 0; i < times.Count; i++)
         {
             jsonValues.Add(new(times[i].Item1, times[i].Item2, []));
+            List<string> csvRow = [FormattableString.Invariant($"{times[i].Item1:O},{times[i].Item2:O}")];
             for (int j = 0; j < graphs.Count; j++)
             {
                 graphs[j].TryGetValue(times[i], out double value);
                 jsonValues[i].Values.Add(names[j], value);
+                csvRow.Add(FormattableString.Invariant($"{value}"));
             }
+            csvTable.Add(string.Join(',', csvRow));
         }
 
-        //json export function for the greeter file dialogue
+        //json/csv export function for the greeter file dialogue
         JsonSerializerOptions jsonOptions = new() { WriteIndented = true };
         string tryExportFile(string filePath)
         {
             try
             {
-                File.WriteAllText(filePath, JsonSerializer.Serialize(jsonValues, jsonOptions));
+                if (filePath.Split('.').Last().ToLower() == "json")
+                    File.WriteAllText(filePath, JsonSerializer.Serialize(jsonValues, jsonOptions));
+                else
+                    File.WriteAllText(filePath, string.Join('\n', csvTable));
             }
             catch
             {
@@ -335,10 +345,10 @@ static partial class App
                         viewing = false;
                         break;
 
-                    //export to json
+                    //export to csv/json
                     case ConsoleKey.E:
                         TextBox(
-                            text: "graph.json",
+                            text: "graph.csv",
                             title: "Input the exported file path:",
                             fileAction: tryExportFile
                         );
