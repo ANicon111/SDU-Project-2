@@ -94,8 +94,8 @@ static partial class App
                 new(
                     text:
                     """
-                              
-                      Q  quit 
+                                
+                      ESC  quit 
                     """,
                     colorAreas:[
                         new(color:Colors.Maroon.WithAlpha(0.75)),
@@ -343,13 +343,15 @@ static partial class App
                         break;
 
                     //quit
-                    case ConsoleKey.Q:
+                    case ConsoleKey.Escape:
                         viewing = false;
                         break;
 
                     //export to csv/json
                     case ConsoleKey.E:
+                        bool escaped = false;
                         TextBox(
+                            escaped: ref escaped,
                             text: "graph.csv",
                             title: "Input the exported file path:",
                             fileAction: tryExportFile

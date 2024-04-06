@@ -64,7 +64,9 @@ static partial class App
             return "";
         }
 
+        bool escaped = false;
         TextBox(
+            escaped: ref escaped,
             text: arguments.DataPath ?? "data.csv",
             title: "Input the source or result data file path:",
             fileAction: tryLoadSourceResultDataFile,
@@ -110,6 +112,7 @@ static partial class App
             }
 
             TextBox(
+                escaped: ref escaped,
                 text: arguments.AssetsPath ?? "assets.json",
                 title: "Input the asset file path:",
                 fileAction: tryLoadAssetsFile,
@@ -117,6 +120,7 @@ static partial class App
             );
         }
 
-        RunGraphList(assets, sourceData, resultData);
+        if (!escaped)
+            RunGraphList(assets, sourceData, resultData);
     }
 }

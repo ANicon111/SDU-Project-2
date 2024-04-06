@@ -30,7 +30,8 @@
             <Button Grid.Row="2" Grid.Column="1" x:Name="OpenSourceDataImporter" HorizontalAlignment="Stretch" Command="{Binding OpenSourceDataImporter}" Content="Import" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
             <Button Grid.Row="2" Grid.Column="2" x:Name="ExportSourceData" HorizontalAlignment="Stretch" Command="{Binding ExportSourceData}" Content="Export" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
         </Grid>
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding NewSourceOpen}">
+        <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding NewSourceOpen}">
+            <Button VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="{Binding BaseSize}" Command="{Binding CloseAddSourceData}" Content="Close" Foreground="Red"/>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Foreground="White" Text="Add a source data entry" FontSize="{Binding BaseSize}"/>
                 <TextBlock Foreground="White" Text="Start time (dd.MM.yyyy hh:mm[:ss])" />
@@ -44,16 +45,17 @@
                 <TextBlock Foreground="Red" Text="{Binding NewSourceError}" />
                 <Button Foreground="White" HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding AddSourceData}" Content="Add Source Data"/>
             </StackPanel>
-        </StackPanel>
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding ImportSourceOpen}">
+        </Panel>
+        <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding ImportSourceOpen}">
+            <Button VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="{Binding BaseSize}" Command="{Binding CloseImportSourceData}" Content="Close" Foreground="Red"/>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Foreground="White" Text="Import source data from the energidataservice.dk API" FontSize="{Binding BaseSize}"/>
                 <TextBlock Foreground="White" Text="Start time (dd.MM.yyyy hh:mm)" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 00:00" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
                 <TextBlock Foreground="White" Text="End time (dd.MM.yyyy hh:mm)" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 01:00" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
-                <Button Foreground="White" HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding ImportSourceData}" Content="Add Source Data"/>
+                <Button Foreground="White" HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding ImportSourceData}" Content="Import Source Data"/>
             </StackPanel>
-        </StackPanel>
+        </Panel>
     </Panel>
 </UserControl>

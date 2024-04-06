@@ -107,6 +107,10 @@ class AssetsEditorViewModel : ViewModelBase
     {
         NewAssetError = TryParseAsset();
     }
+    public void CloseAddAsset()
+    {
+        NewAssetOpen = false;
+    }
 
     public void RemoveAsset(string assetName, AssetsEditorElementViewModel element)
     {

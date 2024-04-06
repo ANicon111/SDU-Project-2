@@ -7,7 +7,7 @@ namespace HeatManagement.CLI;
 static partial class App
 {
     //generic file loader for a manager
-    public static void TextBox(string text, string title, Func<string, string> fileAction, bool tryInitialAction = false, bool numbersOnly = false)
+    public static void TextBox(ref bool escaped, string text, string title, Func<string, string> fileAction, bool tryInitialAction = false, bool numbersOnly = false)
     {
         bool fileLoaded = false;
 
@@ -18,7 +18,7 @@ static partial class App
         int selectedChar = text.Length;
 
         renderer.Object.SubObjects.Add(new());
-        while (!fileLoaded)
+        while (!fileLoaded && !escaped)
         {
             renderer.Object.SubObjects[^1] =
                     new(
@@ -70,6 +70,9 @@ static partial class App
 
                     case ConsoleKey.LeftArrow:
                         selectedChar = Math.Max(selectedChar - 1, 0);
+                        break;
+                    case ConsoleKey.Escape:
+                        escaped = true;
                         break;
 
                     default:

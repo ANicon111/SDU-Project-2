@@ -86,12 +86,15 @@ static partial class App
             return "";
         }
 
+        bool escaped = false;
         TextBox(
+            escaped: ref escaped,
             text: arguments.EditPath ?? "data.csv",
             title: "Input the assets or source data file path:",
             fileAction: tryLoadEditedFile,
             tryInitialAction: arguments.EditPath != null
         );
+        if (escaped) return;
 
         if (editedFileType == null) EditTypeSelector(ref editedFileType);
 

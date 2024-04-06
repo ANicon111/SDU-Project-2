@@ -44,7 +44,8 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(filePath, "Input the output file path", saveFile);
+            bool escaped = false;
+            TextBox(ref escaped, filePath, "Input the output file path", saveFile);
         }
 
         void saveSourceData()
@@ -69,7 +70,8 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(filePath, "Input the output file path", saveFile);
+            bool escaped = false;
+            TextBox(ref escaped, filePath, "Input the output file path", saveFile);
         }
 
 
@@ -108,7 +110,7 @@ static partial class App
         }
 
         //addition functions
-        string addToAssets()
+        string? addToAssets()
         {
             string assetName = "";
             string setAssetName(string text)
@@ -117,11 +119,12 @@ static partial class App
                 assetName = text.Trim().ToUpper();
                 return "";
             };
-            TextBox("", "Enter the asset name", setAssetName);
+            bool escaped = false;
+            TextBox(ref escaped, "", "Enter the asset name", setAssetName);
 
             string imagePath = "";
             string setImagePath(string text) { imagePath = text.Trim(); return ""; };
-            TextBox("", "Enter the asset image path", setImagePath);
+            TextBox(ref escaped, "", "Enter the asset image path", setImagePath);
 
             double heatCapacity = 0;
             string parseHeatCapacity(string text)
@@ -132,12 +135,11 @@ static partial class App
                 }
                 catch
                 {
-
                     return "Couldn't parse heat production";
                 }
                 return "";
             }
-            TextBox("", "Enter the heat production capacity in MWh", parseHeatCapacity, numbersOnly: true);
+            TextBox(ref escaped, "", "Enter the heat production capacity in MWh", parseHeatCapacity, numbersOnly: true);
 
             double cost = 0;
             string parseCost(string text)
@@ -148,12 +150,11 @@ static partial class App
                 }
                 catch
                 {
-
                     return "Couldn't parse cost";
                 }
                 return "";
             }
-            TextBox("", "Enter the cost in dkk per MWh of heat", parseCost, numbersOnly: true);
+            TextBox(ref escaped, "", "Enter the cost in dkk per MWh of heat", parseCost, numbersOnly: true);
 
             double electricityCapacity = 0;
             string parseElectricity(string text)
@@ -164,12 +165,11 @@ static partial class App
                 }
                 catch
                 {
-
                     return "Couldn't parse electricity capacity";
                 }
                 return "";
             }
-            TextBox("", "Enter the electricity production/usage in MWh (usage is negative)", parseElectricity, numbersOnly: true);
+            TextBox(ref escaped, "", "Enter the electricity production/usage in MWh (usage is negative)", parseElectricity, numbersOnly: true);
 
             double co2 = 0;
             string parseCO2(string text)
@@ -180,12 +180,11 @@ static partial class App
                 }
                 catch
                 {
-
                     return "Couldn't parse CO2 emissions";
                 }
                 return "";
             }
-            TextBox("", "Enter the CO2 emissions in kg", parseCO2, numbersOnly: true);
+            TextBox(ref escaped, "", "Enter the CO2 emissions in kg", parseCO2, numbersOnly: true);
 
             Dictionary<string, AdditionalResource> additionalResources = [];
             string parseAdditionalResources(string text)
@@ -208,14 +207,20 @@ static partial class App
                     }
                 return "";
             }
-            TextBox("", "Enter additional resource consumption or production (oil: -1.2, MWh; water: 52.4, kg)", parseAdditionalResources);
+            TextBox(ref escaped, "", "Enter additional resource consumption or production (oil: -1.2, MWh; water: 52.4, kg)", parseAdditionalResources);
 
-            assets.AddAsset(assetName, new(imagePath, heatCapacity, cost, electricityCapacity, co2, additionalResources));
-            return assetName;
+            if (!escaped)
+            {
+                assets.AddAsset(assetName, new(imagePath, heatCapacity, cost, electricityCapacity, co2, additionalResources));
+                return assetName;
+            }
+            else
+                return null;
         }
 
-        string addToSourceData()
+        string? addToSourceData()
         {
+            bool escaped = false;
             DateTime dataStartTime = new();
             string parseStartTime(string text)
             {
@@ -236,7 +241,7 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the start time (dd.mm.yyyy hh:mm[:ss])", parseStartTime, numbersOnly: true);
+            TextBox(ref escaped, DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the start time (dd.mm.yyyy hh:mm[:ss])", parseStartTime, numbersOnly: true);
 
             DateTime dataEndTime = dataStartTime.AddHours(1);
             string parseEndTime(string text)
@@ -258,7 +263,7 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(dataEndTime.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the end time (dd.mm.yyyy hh:mm[:ss])", parseEndTime, numbersOnly: true);
+            TextBox(ref escaped, dataEndTime.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the end time (dd.mm.yyyy hh:mm[:ss])", parseEndTime, numbersOnly: true);
 
             double heatDemand = 0;
             string parseHeatDemand(string text)
@@ -274,7 +279,7 @@ static partial class App
                 }
                 return "";
             }
-            TextBox("", "Enter the heat demand in MWh", parseHeatDemand, numbersOnly: true);
+            TextBox(ref escaped, "", "Enter the heat demand in MWh", parseHeatDemand, numbersOnly: true);
 
             double electricityPrice = 0;
             string parseElectricityPrice(string text)
@@ -290,14 +295,21 @@ static partial class App
                 }
                 return "";
             }
-            TextBox("", "Enter the electricity price in dkk per MWh", parseElectricityPrice, numbersOnly: true);
+            TextBox(ref escaped, "", "Enter the electricity price in dkk per MWh", parseElectricityPrice, numbersOnly: true);
 
-            sourceData.AddData(new(dataStartTime, dataEndTime, heatDemand, electricityPrice));
-            return $"{dataStartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {dataEndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}";
+            if (!escaped)
+            {
+                sourceData.AddData(new(dataStartTime, dataEndTime, heatDemand, electricityPrice));
+                return $"{dataStartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {dataEndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}";
+            }
+            else
+            {
+                return null;
+            }
         }
-
         List<string> importToSourceData()
         {
+            bool escaped = false;
             DateTime dataStartTime = new();
             string parseStartTime(string text)
             {
@@ -311,7 +323,7 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(DateTime.Now.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), "Enter the import start time (dd.mm.yyyy hh:mm)", parseStartTime, numbersOnly: true);
+            TextBox(ref escaped, DateTime.Now.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), "Enter the import start time (dd.mm.yyyy hh:mm)", parseStartTime, numbersOnly: true);
 
             DateTime dataEndTime = dataStartTime.AddDays(7);
             string parseEndTime(string text)
@@ -326,7 +338,7 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(dataEndTime.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), "Enter the import end time (dd.mm.yyyy hh:mm)", parseEndTime, numbersOnly: true);
+            TextBox(ref escaped, dataEndTime.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), "Enter the import end time (dd.mm.yyyy hh:mm)", parseEndTime, numbersOnly: true);
 
             List<SourceData> data = [];
             List<string> names = [];
@@ -363,7 +375,7 @@ static partial class App
     }
 
     //shows all names, allows addition and deletion
-    static void EntryList(bool assetManager, List<string> names, Func<string> addToManager, Func<List<string>>? importToSourceDataManager, Func<int, string> getData, Action<int> removeFromManager, Action save)
+    static void EntryList(bool assetManager, List<string> names, Func<string?> addToManager, Func<List<string>>? importToSourceDataManager, Func<int, string> getData, Action<int> removeFromManager, Action save)
     {
         int selectedValue = 0;
         int menuHeight() => names.Count + 9;
@@ -384,7 +396,7 @@ static partial class App
                 ENTER  display the selection values
                  DEL   delete the selected value
                   S    save manager to file
-                  Q    quit the application
+                 ESC   quit the application
                 """
                 :
                 """
@@ -393,7 +405,7 @@ static partial class App
                 ENTER  display the selection values
                  DEL   delete the selected value
                   S    save manager to file
-                  Q    quit the application
+                 ESC   quit the application
                   I    import source data from energidataservice.dk
                 """;
 
@@ -509,14 +521,17 @@ static partial class App
                         break;
 
                     case ConsoleKey.A:
-                        string name = addToManager();
-                        names.Add(name);
-                        names.Sort();
-                        selectedValue = names.IndexOf(name);
-                        list().SubObjects.Clear();
-                        fillNameList();
-                        selector().ColorAreas = selectedElementColor();
-                        selector().Y = selectorPosition();
+                        string? name = addToManager();
+                        if (name != null)
+                        {
+                            names.Add(name);
+                            names.Sort();
+                            selectedValue = names.IndexOf(name);
+                            list().SubObjects.Clear();
+                            fillNameList();
+                            selector().ColorAreas = selectedElementColor();
+                            selector().Y = selectorPosition();
+                        }
                         break;
 
                     case ConsoleKey.S:
@@ -569,7 +584,7 @@ static partial class App
                                         case ConsoleKey.Enter:
                                             displaying = false;
                                             break;
-                                        case ConsoleKey.Q:
+                                        case ConsoleKey.Escape:
                                             displaying = false;
                                             running = false;
                                             break;
@@ -589,7 +604,7 @@ static partial class App
                         break;
 
                     //quit
-                    case ConsoleKey.Q:
+                    case ConsoleKey.Escape:
                         running = false;
                         break;
 

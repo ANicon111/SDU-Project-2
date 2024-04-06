@@ -34,7 +34,8 @@
             <Button Grid.Row="2" Grid.Column="0" x:Name="AddAsset" HorizontalAlignment="Stretch" Command="{Binding OpenAssetAdder}" Content="Add" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
             <Button Grid.Row="2" Grid.Column="1" x:Name="ExportAssets" HorizontalAlignment="Stretch" Command="{Binding ExportAssets}" Content="Export" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
         </Grid>
-        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding NewAssetOpen}">
+        <Panel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding NewAssetOpen}">
+            <Button VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="{Binding BaseSize}" Command="{Binding CloseAddAsset}" Content="Close" Foreground="Red"/>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Foreground="White" Text="Add an asset" FontSize="{Binding BaseSize}"/>
                 <TextBlock Foreground="White" Text="Asset name" />
@@ -52,6 +53,6 @@
                 <TextBlock Foreground="Red" Text="{Binding NewAssetError}" />
                 <Button HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding AddAsset}" Content="Add Asset"/>
             </StackPanel>
-        </StackPanel>
+        </Panel>
     </Panel>
 </UserControl>

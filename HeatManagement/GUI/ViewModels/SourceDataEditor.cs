@@ -97,6 +97,11 @@ class SourceDataEditorViewModel : ViewModelBase
         NewSourceError = TryParseSource();
     }
 
+    public void CloseAddSourceData()
+    {
+        NewSourceOpen = false;
+    }
+
     private string? TryImportSource()
     {
         if (!DateTime.TryParseExact(NewSourceStartTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime startTime))
@@ -131,6 +136,11 @@ class SourceDataEditorViewModel : ViewModelBase
     public void ImportSourceData()
     {
         NewSourceError = TryImportSource();
+    }
+
+    public void CloseImportSourceData()
+    {
+        ImportSourceOpen = false;
     }
 
     public void RemoveSourceData(DateTime startTime, DateTime endTime, SourceDataEditorElementViewModel element)

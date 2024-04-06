@@ -139,7 +139,7 @@ static partial class App
                              ↑ ↓   change the selected graph
                             ENTER  display the selected graph
                             SPACE  select multiple compatible graphs
-                              Q    quit the application
+                             ESC   quit the application
                               E    export the result data
                             """,
                             externalAlignmentX:Alignment.Center,
@@ -268,13 +268,15 @@ static partial class App
                         break;
 
                     //quit
-                    case ConsoleKey.Q:
+                    case ConsoleKey.Escape:
                         running = false;
                         break;
 
                     //export all data to json
                     case ConsoleKey.E:
+                        bool escaped = false;
                         TextBox(
+                            escaped: ref escaped,
                             text: "resultData.json",
                             title: "Input the result data file path:",
                             fileAction: tryExportFile
