@@ -335,8 +335,8 @@ class ViewerViewModel : ViewModelBase
                 jsonValues.Add(new(Times[i].Item1, Times[i].Item2, []));
 
                 string[] csvRow = new string[csvHeader.Count];
-                csvRow[0] = $"{Times[i].Item1:O}";
-                csvRow[1] = $"{Times[i].Item2:O}";
+                csvRow[0] = $"{Times[i].Item1:s}";
+                csvRow[1] = $"{Times[i].Item2:s}";
                 for (int j = 0; j < SelectedGraphList.Count; j++)
                 {
                     GraphValues[Options[SelectedGraphList[j]]].TryGetValue(Times[i], out double value);
@@ -355,7 +355,7 @@ class ViewerViewModel : ViewModelBase
                 if (file.Name.Split('.').Last().ToLower() == "json")
                     await streamWriter.WriteAsync(JsonSerializer.Serialize(jsonValues, JsonOptions));
                 else
-                    await streamWriter.WriteAsync(CSVUtils.TableToString(csvTable));
+                    await streamWriter.WriteAsync(Utils.TableToCSV(csvTable));
             }
             catch { }
         }

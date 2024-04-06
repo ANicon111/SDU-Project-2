@@ -135,10 +135,10 @@ public class SourceDataManager
         //values
         foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> data in Data)
         {
-            table.Add([$"{data.Value.StartTime:O}", $"{data.Value.EndTime:O}", $"{data.Value.HeatDemand}", $"{data.Value.ElectricityPrice}"]);
+            table.Add([$"{data.Value.StartTime:s}", $"{data.Value.EndTime:s}", $"{data.Value.HeatDemand}", $"{data.Value.ElectricityPrice}"]);
         }
 
-        return CSVUtils.TableToString(table);
+        return Utils.TableToCSV(table);
     }
 
     public static SourceDataManager FromAnySupportedFormat(string text)

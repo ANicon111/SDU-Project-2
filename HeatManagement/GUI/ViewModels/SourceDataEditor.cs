@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
@@ -11,7 +12,7 @@ namespace HeatManagement.GUI;
 
 class SourceDataEditorViewModel : ViewModelBase
 {
-    private readonly SourceDataManager SourceData;
+    private SourceDataManager SourceData;
     public ObservableCollection<SourceDataEditorElementViewModel> SourceButtonValues { get; }
     public double BaseSize { get; }
     public double TitleSize { get; }
@@ -19,6 +20,8 @@ class SourceDataEditorViewModel : ViewModelBase
     //new sourceData variables
     private bool newSourceOpen = false;
     public bool NewSourceOpen { get => newSourceOpen; set => this.RaiseAndSetIfChanged(ref newSourceOpen, value); }
+    private bool importSourceDataOpen = false;
+    public bool ImportSourceOpen { get => importSourceDataOpen; set => this.RaiseAndSetIfChanged(ref importSourceDataOpen, value); }
     private string? newSourceError = null;
     public string? NewSourceError { get => newSourceError; set => this.RaiseAndSetIfChanged(ref newSourceError, value); }
 
@@ -53,6 +56,14 @@ class SourceDataEditorViewModel : ViewModelBase
         NewSourceError = null;
         NewSourceOpen = true;
     }
+
+    public void OpenSourceDataImporter()
+    {
+        NewSourceStartTime = "";
+        NewSourceEndTime = "";
+        ImportSourceOpen = true;
+    }
+
     private string? TryParseSource()
     {
         if (!DateTime.TryParseExact(NewSourceStartTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime startTime))
@@ -86,6 +97,42 @@ class SourceDataEditorViewModel : ViewModelBase
         NewSourceError = TryParseSource();
     }
 
+    private string? TryImportSource()
+    {
+        if (!DateTime.TryParseExact(NewSourceStartTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime startTime))
+            if (!DateTime.TryParse(NewSourceStartTime, out startTime))
+                if (!DateTime.TryParse(NewSourceStartTime, CultureInfo.InvariantCulture, out startTime)) return "Invalid start time";
+        if (!DateTime.TryParseExact(NewSourceEndTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime endTime))
+            if (!DateTime.TryParse(NewSourceEndTime, out endTime))
+                if (!DateTime.TryParse(NewSourceEndTime, CultureInfo.InvariantCulture, out endTime)) return "Invalid end time";
+
+        try
+        {
+            List<SourceData> data = Utils.GetSourceDataFromAPI(startTime, endTime);
+            data.Sort((a, b) => a.StartTime != b.StartTime ? DateTime.Compare(a.StartTime, b.StartTime) : DateTime.Compare(a.EndTime, b.EndTime));
+            SourceButtonValues.Clear();
+            SourceData = new();
+            foreach (var source in data)
+            {
+                SourceData.AddData(source);
+                SourceButtonValues.Add(new(BaseSize, source.StartTime, source.EndTime, RemoveSourceData));
+            }
+        }
+        catch
+        {
+            ImportSourceOpen = false;
+            return null;
+        }
+
+        ImportSourceOpen = false;
+        return null;
+    }
+
+    public void ImportSourceData()
+    {
+        NewSourceError = TryImportSource();
+    }
+
     public void RemoveSourceData(DateTime startTime, DateTime endTime, SourceDataEditorElementViewModel element)
     {
         SourceData.RemoveData(startTime, endTime);
@@ -106,6 +153,7 @@ class SourceDataEditorViewModel : ViewModelBase
         MimeTypes = ["application/csv", "text/csv"]
     };
     private readonly JsonSerializerOptions JsonOptions = new() { WriteIndented = true };
+
     public async void ExportSourceData()
     {
         // Start async operation to open the dialog.

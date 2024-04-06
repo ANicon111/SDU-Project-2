@@ -31,22 +31,23 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-            <Button Grid.Row="2" Grid.Column="0" x:Name="AddAsset" HorizontalAlignment="Stretch" Command="{Binding OpenAssetAdder}" Content="Add Asset" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
-            <Button Grid.Row="2" Grid.Column="1" x:Name="ExportAssets" HorizontalAlignment="Stretch" Command="{Binding ExportAssets}" Content="Export Assets" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+            <Button Grid.Row="2" Grid.Column="0" x:Name="AddAsset" HorizontalAlignment="Stretch" Command="{Binding OpenAssetAdder}" Content="Add" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+            <Button Grid.Row="2" Grid.Column="1" x:Name="ExportAssets" HorizontalAlignment="Stretch" Command="{Binding ExportAssets}" Content="Export" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
         </Grid>
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding NewAssetOpen}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Asset name" />
+                <TextBlock Foreground="White" Text="Add an asset" FontSize="{Binding BaseSize}"/>
+                <TextBlock Foreground="White" Text="Asset name" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="name" Text="{Binding NewAssetName, Mode=TwoWay}" />
-                <TextBlock Text="Image path" />
+                <TextBlock Foreground="White" Text="Image path" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="image/path.jpg" Text="{Binding NewAssetImagePath, Mode=TwoWay}" />
-                <TextBlock Text="Heat Usage in MWh" />
+                <TextBlock Foreground="White" Text="Heat Usage in MWh" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="1.2" Text="{Binding NewAssetHeat, Mode=TwoWay}" />
-                <TextBlock Text="Cost in dkk" />
+                <TextBlock Foreground="White" Text="Cost in dkk" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="665.4" Text="{Binding NewAssetCost, Mode=TwoWay}" />
-                <TextBlock Text="CO2 emissions in kg" />
+                <TextBlock Foreground="White" Text="CO2 emissions in kg" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="450.3" Text="{Binding NewAssetCO2, Mode=TwoWay}" />
-                <TextBlock Text="Additional resource consumption or production" />
+                <TextBlock Foreground="White" Text="Additional resource consumption or production" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="oil: -1.2, MWh; water: 52.4, kg" Text="{Binding NewAssetAdditionalResources, Mode=TwoWay}" />
                 <TextBlock Foreground="Red" Text="{Binding NewAssetError}" />
                 <Button HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding AddAsset}" Content="Add Asset"/>

@@ -312,7 +312,7 @@ static partial class App
                 if (filePath.Split('.').Last().ToLower() == "json")
                     File.WriteAllText(filePath, JsonSerializer.Serialize(jsonValues, jsonOptions));
                 else
-                    File.WriteAllText(filePath, CSVUtils.TableToString(csvTable));
+                    File.WriteAllText(filePath, Utils.TableToCSV(csvTable));
             }
             catch
             {

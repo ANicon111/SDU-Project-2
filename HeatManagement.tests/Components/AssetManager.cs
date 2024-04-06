@@ -51,9 +51,9 @@ public class AssetManagerTests
         CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
         string expected = """
         Name,DataType,ImagePath,HeatCapacity,Cost,ElectricityCapacity,CO2,AdditionalResourceName,AdditionalResourceValue,AdditionalResourceMeasurement
-        GB,Base,Assets/GB.png,5,500,0,215,,
+        GB,Base,Assets/GB.png,5,500,0,215,,,
         GB,Additional,,,,,,gas,-1.1,MWh
-        OB,Base,Assets/OB.png,4,700,0,265,,
+        OB,Base,Assets/OB.png,4,700,0,265,,,
         OB,Additional,,,,,,oil,-1.2,MWh
         """;
 

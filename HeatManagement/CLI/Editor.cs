@@ -231,12 +231,12 @@ static partial class App
                     }
                     catch
                     {
-                        return "Couldn't parse date and time";
+                        return "Couldn't parse time";
                     }
                 }
                 return "";
             }
-            TextBox(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the start date and time (dd.mm.yyyy hh:mm[:ss])", parseStartTime, numbersOnly: true);
+            TextBox(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the start time (dd.mm.yyyy hh:mm[:ss])", parseStartTime, numbersOnly: true);
 
             DateTime dataEndTime = dataStartTime.AddHours(1);
             string parseEndTime(string text)
@@ -253,12 +253,12 @@ static partial class App
                     }
                     catch
                     {
-                        return "Couldn't parse date and time";
+                        return "Couldn't parse time";
                     }
                 }
                 return "";
             }
-            TextBox(dataEndTime.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the end date and time (dd.mm.yyyy hh:mm[:ss])", parseEndTime, numbersOnly: true);
+            TextBox(dataEndTime.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the end time (dd.mm.yyyy hh:mm[:ss])", parseEndTime, numbersOnly: true);
 
             double heatDemand = 0;
             string parseHeatDemand(string text)
@@ -296,38 +296,109 @@ static partial class App
             return $"{dataStartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {dataEndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}";
         }
 
+        List<string> importToSourceData()
+        {
+            DateTime dataStartTime = new();
+            string parseStartTime(string text)
+            {
+                try
+                {
+                    dataStartTime = DateTime.ParseExact(text, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    return "Couldn't parse time";
+                }
+                return "";
+            }
+            TextBox(DateTime.Now.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), "Enter the import start time (dd.mm.yyyy hh:mm)", parseStartTime, numbersOnly: true);
+
+            DateTime dataEndTime = dataStartTime.AddDays(7);
+            string parseEndTime(string text)
+            {
+                try
+                {
+                    dataEndTime = DateTime.ParseExact(text, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                }
+                catch
+                {
+                    return "Couldn't parse time";
+                }
+                return "";
+            }
+            TextBox(dataEndTime.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), "Enter the import end time (dd.mm.yyyy hh:mm)", parseEndTime, numbersOnly: true);
+
+            List<SourceData> data = [];
+            List<string> names = [];
+
+            try
+            {
+                data = Utils.GetSourceDataFromAPI(dataStartTime, dataEndTime);
+                sourceData = new();
+                foreach (var source in data)
+                {
+                    sourceData.AddData(source);
+                    names.Add($"{source.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {source.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
+                }
+            }
+            catch { }
+
+            return names;
+        }
+
         List<string> names;
         switch (fileType)
         {
             case "asset":
                 names = new(assets!.Assets!.Count);
                 foreach (KeyValuePair<string, Asset> asset in assets.Assets) names.Add(asset.Key);
-                EntryList(names, addToAssets, getAsset, removeFromAssets, saveAssets);
+                EntryList(true, names, addToAssets, null, getAsset, removeFromAssets, saveAssets);
                 break;
             case "sourceData":
                 names = new(sourceData!.Data.Count);
                 foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> element in sourceData.Data) names.Add($"{element.Value.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {element.Value.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
-                EntryList(names, addToSourceData, getSourceData, removeFromSourceData, saveSourceData);
+                EntryList(false, names, addToSourceData, importToSourceData, getSourceData, removeFromSourceData, saveSourceData);
                 break;
         }
     }
 
     //shows all names, allows addition and deletion
-    static void EntryList(List<string> names, Func<string> addToManager, Func<int, string> getData, Action<int> removeFromManager, Action save)
+    static void EntryList(bool assetManager, List<string> names, Func<string> addToManager, Func<List<string>>? importToSourceDataManager, Func<int, string> getData, Action<int> removeFromManager, Action save)
     {
         int selectedValue = 0;
         int menuHeight() => names.Count + 9;
         int menuWidth()
         {
-            int width = 39;
+            int width = 53;
             foreach (string name in names)
             {
                 if (width < name.Length + 4) width = name.Length + 4;
             }
             return width;
         };
-        int menuPosition() => -Math.Clamp(selectedValue - renderer.TerminalHeight / 2 + 8, 0, Math.Max(names.Count + 9 - renderer.TerminalHeight, 0));
-        int selectorPosition() => selectedValue + menuPosition() + 8;
+        int titleLength() => assetManager ? 8 : 9;
+        string title() => assetManager ?
+                """
+                 ↑ ↓   change the selected value
+                  A    add a value to the manager
+                ENTER  display the selection values
+                 DEL   delete the selected value
+                  S    save manager to file
+                  Q    quit the application
+                """
+                :
+                """
+                 ↑ ↓   change the selected value
+                  A    add a value to the manager
+                ENTER  display the selection values
+                 DEL   delete the selected value
+                  S    save manager to file
+                  Q    quit the application
+                  I    import source data from energidataservice.dk
+                """;
+
+        int menuPosition() => -Math.Clamp(selectedValue - renderer.TerminalHeight / 2 + titleLength(), 0, Math.Max(names.Count + titleLength() + 1 - renderer.TerminalHeight, 0));
+        int selectorPosition() => selectedValue + menuPosition() + titleLength();
 
         renderer.Object = new(
             geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
@@ -363,15 +434,7 @@ static partial class App
             list().Height = menuHeight();
             list().Width = menuWidth();
             list().SubObjects.Add(new(
-                text:
-                """
-                 ↑ ↓   change the selected value
-                  A    add a value to the manager
-                ENTER  display the selection values
-                 DEL   delete the selected value
-                  S    save manager to file
-                  Q    quit the application
-                """,
+                text: title(),
                 externalAlignmentX: Alignment.Center,
                 y: 1
             ));
@@ -379,7 +442,7 @@ static partial class App
             {
                 list().SubObjects.Add(new(
                     text: names[i],
-                    y: i + 8
+                    y: i + titleLength()
                 ));
             }
             list().Update();
@@ -452,6 +515,7 @@ static partial class App
                         selectedValue = names.IndexOf(name);
                         list().SubObjects.Clear();
                         fillNameList();
+                        selector().ColorAreas = selectedElementColor();
                         selector().Y = selectorPosition();
                         break;
 
@@ -527,6 +591,27 @@ static partial class App
                     //quit
                     case ConsoleKey.Q:
                         running = false;
+                        break;
+
+                    //import source data
+                    case ConsoleKey.I:
+                        if (importToSourceDataManager != null)
+                        {
+                            names = importToSourceDataManager();
+                            names.Sort();
+                            selectedValue = 0;
+                            list().SubObjects.Clear();
+                            fillNameList();
+                            if (names.Count > 0)
+                            {
+                                selector().ColorAreas = selectedElementColor();
+                                selector().Y = selectorPosition();
+                            }
+                            else
+                            {
+                                selector().ColorAreas = unselectedElementColor();
+                            }
+                        }
                         break;
                 }
             }

@@ -7,9 +7,9 @@
              x:Class="HeatManagement.GUI.SourceDataEditorView"
              x:DataType="vm:SourceDataEditorViewModel">
     <Panel>
-        <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*,*" RowDefinitions="Auto,*,Auto,Auto" VerticalAlignment="Stretch">
-            <TextBlock Grid.Row="0" Grid.ColumnSpan="2" x:Name="Title" HorizontalAlignment="Center" FontSize="{Binding TitleSize}">Source List</TextBlock>
-            <ScrollViewer Grid.Row="1" Grid.ColumnSpan="2" x:Name="SourceList" VerticalAlignment="Stretch">
+        <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*,*,*" RowDefinitions="Auto,*,Auto,Auto" VerticalAlignment="Stretch">
+            <TextBlock Grid.Row="0" Grid.ColumnSpan="3" x:Name="Title" HorizontalAlignment="Center" FontSize="{Binding TitleSize}">Source List</TextBlock>
+            <ScrollViewer Grid.Row="1" Grid.ColumnSpan="3" x:Name="SourceList" VerticalAlignment="Stretch">
                 <ItemsControl ItemsSource="{Binding SourceButtonValues}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -26,21 +26,33 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-            <Button Grid.Row="2" Grid.Column="0" x:Name="AddSource" HorizontalAlignment="Stretch" Command="{Binding OpenSourceDataAdder}" Content="Add Source Data" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
-            <Button Grid.Row="2" Grid.Column="1" x:Name="ExportSourceData" HorizontalAlignment="Stretch" Command="{Binding ExportSourceData}" Content="Export Source Data" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+            <Button Grid.Row="2" Grid.Column="0" x:Name="AddSource" HorizontalAlignment="Stretch" Command="{Binding OpenSourceDataAdder}" Content="Add" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+            <Button Grid.Row="2" Grid.Column="1" x:Name="OpenSourceDataImporter" HorizontalAlignment="Stretch" Command="{Binding OpenSourceDataImporter}" Content="Import" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
+            <Button Grid.Row="2" Grid.Column="2" x:Name="ExportSourceData" HorizontalAlignment="Stretch" Command="{Binding ExportSourceData}" Content="Export" HorizontalContentAlignment="Center" FontSize="{Binding TitleSize}" Cursor="Hand"/>
         </Grid>
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding NewSourceOpen}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Start time (dd.MM.yyyy hh:mm[:ss])" />
+                <TextBlock Foreground="White" Text="Add a source data entry" FontSize="{Binding BaseSize}"/>
+                <TextBlock Foreground="White" Text="Start time (dd.MM.yyyy hh:mm[:ss])" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 00:00:00" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
-                <TextBlock Text="End time (dd.MM.yyyy hh:mm[:ss])" />
+                <TextBlock Foreground="White" Text="End time (dd.MM.yyyy hh:mm[:ss])" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 01:00:00" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
-                <TextBlock Text="Heat usage in MWh" />
+                <TextBlock Foreground="White" Text="Heat usage in MWh" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="1352.6" Text="{Binding NewSourceHeatUsage, Mode=TwoWay}" />
-                <TextBlock Text="Electricity price in dkk per MWh" />
+                <TextBlock Foreground="White" Text="Electricity price in dkk per MWh" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="674.2" Text="{Binding NewSourceElectricityCost, Mode=TwoWay}" />
                 <TextBlock Foreground="Red" Text="{Binding NewSourceError}" />
-                <Button HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding AddSourceData}" Content="Add Source Data"/>
+                <Button Foreground="White" HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding AddSourceData}" Content="Add Source Data"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#dd000000" IsVisible="{Binding ImportSourceOpen}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Foreground="White" Text="Import source data from the energidataservice.dk API" FontSize="{Binding BaseSize}"/>
+                <TextBlock Foreground="White" Text="Start time (dd.MM.yyyy hh:mm)" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 00:00" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
+                <TextBlock Foreground="White" Text="End time (dd.MM.yyyy hh:mm)" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 01:00" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
+                <Button Foreground="White" HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding ImportSourceData}" Content="Add Source Data"/>
             </StackPanel>
         </StackPanel>
     </Panel>

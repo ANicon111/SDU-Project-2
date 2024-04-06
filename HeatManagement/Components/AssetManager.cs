@@ -156,7 +156,7 @@ public class AssetManager
                 table.Add([$"{asset.Key}", $"Additional", $"", $"", $"", $"", $"", $"{additionalResource.Key}", $"{additionalResource.Value.Value}", $"{additionalResource.Value.Measurement}"]);
             }
         }
-        return CSVUtils.TableToString(table);
+        return Utils.TableToCSV(table);
     }
 
     public static AssetManager FromAnySupportedFormat(string text)
