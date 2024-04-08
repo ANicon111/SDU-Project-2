@@ -1,8 +1,8 @@
 namespace HeatManagement;
 
-partial class Optimizer(AssetManager assetmanager, SourceDataManager sourceDataManager, ResultDataManager resultDataManager)
+partial class Optimizer(AssetManager assetManager, SourceDataManager sourceDataManager, ResultDataManager resultDataManager)
 {
-    private AssetManager Assetmanager = assetmanager;
+    private AssetManager Assetmanager = assetManager;
     private SourceDataManager SourceDataManager = sourceDataManager;
     private ResultDataManager ResultDataManager = resultDataManager;
 }
