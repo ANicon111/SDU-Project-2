@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
@@ -178,7 +179,7 @@ static partial class App
         List<int> selectedList = [];
 
         //color getters for readability
-        List<ColorArea> selectedElementColor() => [
+        ObservableCollection<ColorArea> selectedElementColor() => [
             //only color compatible selections
             new(
                 color: selectedList.Count > 0 && measurements[selectedList[0]] != measurements[selectedGraph]
@@ -194,7 +195,7 @@ static partial class App
             )
         ];
 
-        List<ColorArea> unselectedElementColor() => [
+        ObservableCollection<ColorArea> unselectedElementColor() => [
             new(
                 color: selectedList.Contains(selectedGraph)
                 ? colorList[selectedGraph]

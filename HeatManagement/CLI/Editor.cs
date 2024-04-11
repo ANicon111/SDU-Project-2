@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -438,8 +439,8 @@ static partial class App
         RendererObject selector() => renderer.Object.SubObjects[1];
 
         //color getters for readability
-        List<ColorArea> selectedElementColor() => [new(Colors.White.WithAlpha(0.25))];
-        List<ColorArea> unselectedElementColor() => [];
+        ObservableCollection<ColorArea> selectedElementColor() => [new(Colors.White.WithAlpha(0.25))];
+        ObservableCollection<ColorArea> unselectedElementColor() => [];
         //create a RendererObject for each name
         void fillNameList()
         {

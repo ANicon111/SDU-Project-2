@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using DynamicData.Binding;
 
 namespace AnsiRenderer
 {
@@ -400,10 +404,10 @@ namespace AnsiRenderer
 
         public override readonly string ToString()
         {
-            List<string> name = new()
-            {
+            List<string> name =
+            [
                 $"#{Convert.ToString((uint)this, 16).PadLeft(8, '0')}"
-            };
+            ];
             Colors value = (Colors)((uint)this / 0x100 * 0x100 + 0xff);
             if (Enum.IsDefined(value))
             {
@@ -684,23 +688,12 @@ namespace AnsiRenderer
         public override readonly int GetHashCode() => Ch;
     }
 
-    public struct ColorArea
+    public struct ColorArea(Color color, bool foreground = false, Rectangle? geometry = null, Alignment? alignmentX = null, Alignment? alignmentY = null)
     {
-        public Color Color;
-        public Rectangle? Geometry;
-        public bool Foreground;
-        public Alignment? AlignmentX, AlignmentY;
-
-        //the foreground bool decides if you are coloring the text or the background.
-        //the overlayColors bool decides if you are setting or overlaying the color over the existing valid pixels
-        public ColorArea(Color color, bool foreground = false, Rectangle? geometry = null, Alignment? alignmentX = null, Alignment? alignmentY = null)
-        {
-            Color = color;
-            Geometry = geometry;
-            Foreground = foreground;
-            AlignmentX = alignmentX;
-            AlignmentY = alignmentY;
-        }
+        public Color Color = color;
+        public Rectangle? Geometry = geometry;
+        public bool Foreground = foreground;
+        public Alignment? AlignmentX = alignmentX, AlignmentY = alignmentY;
     }
 
     public enum Alignment : byte
@@ -723,7 +716,7 @@ namespace AnsiRenderer
 
         public BufferedConsole()
         {
-            buffer = new();
+            buffer = [];
         }
 
         public void Write(char c) => buffer.Add(c.ToString());
@@ -767,7 +760,7 @@ namespace AnsiRenderer
             SetBgColor(ConsoleColor.Black);
             SetFgColor(ConsoleColor.White);
             SetCursorPosition(0, 0);
-            buffer = new();
+            buffer = [];
         }
     }
 
@@ -779,13 +772,13 @@ namespace AnsiRenderer
         private int height;
         private char defaultCharacter;
 
-        private readonly string[] lines;
-        private readonly List<string[]> animation = new();
+        private string[] lines;
+        private List<string[]> animation = [];
         private int animationFrame = 0;
         private Pixel[,] pixels;
         private bool update = true;
-        private List<RendererObject> subObjects = new();
-        private List<ColorArea> colorAreas = new();
+        private ObservableCollection<RendererObject> subObjects = [];
+        private ObservableCollection<ColorArea> colorAreas = [];
         private Border? border;
 
 
@@ -794,71 +787,46 @@ namespace AnsiRenderer
         private Alignment? externalAlignmentX;
         private Alignment? externalAlignmentY;
 
-        private readonly List<RendererObject> Parents = new();
+        private readonly bool preRendered = false;
+        private readonly int renderBuffer = 0;
+
+        private RendererObject? Parent;
+        private bool geometryExplicitlySet = false;
         private bool sizeChanged = false;
 
-        public void UpdateParents()
+        public void UpdateParent()
         {
-            foreach (RendererObject parent in Parents)
+            if (Parent != null)
             {
-                parent.update = true;
-                parent.UpdateParents();
+                Parent.update = true;
+                Parent.UpdateParent();
             }
         }
 
         public void Update()
         {
             update = true;
-            UpdateParents();
+            UpdateParent();
+        }
+        public void ColorAreaUpdate(object? sender, NotifyCollectionChangedEventArgs e) => Update();
+
+        public void SubObjectUpdate(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            foreach (RendererObject rendererObject in SubObjects)
+            {
+                rendererObject.Parent = this;
+            }
+            Update();
         }
 
-        public RendererObject(
-            Rectangle? geometry = null,
-            int x = 0,
-            int y = 0,
-            string text = "",
-            string[]? animation = null,
-            int startFrame = 0,
-            char defaultCharacter = '\0',
-            RendererObject[]? subObjects = null,
-            ColorArea[]? colorAreas = null,
-            Border? border = null,
-            Alignment internalAlignmentX = Alignment.Start,
-            Alignment internalAlignmentY = Alignment.Start,
-            Alignment? externalAlignmentX = null,
-            Alignment? externalAlignmentY = null
-            )
+        public void GuessGeometry()
         {
-            lines = text.Split(new string[] { "\r\n", "\n\r", "\r", "\n" }, StringSplitOptions.None);
-
-            if (colorAreas != null)
-                this.colorAreas = colorAreas.ToList();
-
-            if (subObjects != null)
+            if (!geometryExplicitlySet)
             {
-                this.subObjects = subObjects.ToList();
-                foreach (RendererObject subObject in subObjects) subObject.Parents.Add(this);
-            }
-
-            if (animation != null)
-                foreach (string animationText in animation)
-                    this.animation.Add(animationText.Split(new string[] { "\r\n", "\n\r", "\r", "\n" }, StringSplitOptions.None));
-
-            if (geometry != null)
-            {
-                Rectangle Geometry = (Rectangle)geometry;
-                width = Geometry.Width;
-                height = Geometry.Height;
-                X = Geometry.X;
-                Y = Geometry.Y;
-            }
-            else
-            {
-                //geometry guesser in case it isn't provided
                 int width = 0;
                 int height = lines.Length;
                 if (animation != null)
-                    foreach (string[] animationLines in this.animation)
+                    foreach (string[] animationLines in animation)
                     {
                         height = int.Max(height, animationLines.Length);
                         foreach (string line in animationLines) width = int.Max(width, line.Length);
@@ -869,330 +837,450 @@ namespace AnsiRenderer
                 {
                     foreach (RendererObject subObject in subObjects)
                     {
-                        width = int.Max(width, subObject.width + subObject.X);
-                        height = int.Max(height, subObject.height + subObject.Y);
+                        width = int.Max(width, subObject.width + subObject.x);
+                        height = int.Max(height, subObject.height + subObject.y);
                     }
                 }
+
                 if (border != null)
                 {
-                    width += 2;
-                    height += 2;
+                    if (border.Value.Top != null || border.Value.TopLeft != null || border.Value.TopRight != null)
+                        height++;
+
+                    if (border.Value.Bottom != null || border.Value.BottomLeft != null || border.Value.BottomRight != null)
+                        height++;
+
+                    if (border.Value.TopLeft != null || border.Value.Left != null || border.Value.BottomLeft != null)
+                        width++;
+
+                    if (border.Value.TopRight != null || border.Value.Right != null || border.Value.BottomRight != null)
+                        width++;
                 }
-                X = x;
-                Y = y;
-                this.width = width;
-                this.height = height;
+
+                if (this.width != width)
+                {
+                    this.width = width;
+                    sizeChanged = true;
+                }
+
+                if (this.height != height)
+                {
+                    this.height = height;
+                    sizeChanged = true;
+                }
+            }
+        }
+
+        public RendererObject(
+            Rectangle? geometry = null,
+            int x = 0,
+            int y = 0,
+            string text = "",
+            IList<string>? animation = null,
+            int startFrame = 0,
+            char defaultCharacter = '\0',
+            IList<RendererObject>? subObjects = null,
+            IList<ColorArea>? colorAreas = null,
+            Border? border = null,
+            Alignment internalAlignmentX = Alignment.Start,
+            Alignment internalAlignmentY = Alignment.Start,
+            Alignment? externalAlignmentX = null,
+            Alignment? externalAlignmentY = null,
+            bool preRendered = false,
+            int renderBuffer = 0
+            )
+        {
+            lines = text.Split(["\r\n", "\n\r", "\r", "\n"], StringSplitOptions.None);
+
+            if (colorAreas != null)
+                this.colorAreas = [.. colorAreas];
+
+            if (subObjects != null)
+            {
+                this.subObjects = [.. subObjects];
+                foreach (RendererObject subObject in subObjects) subObject.Parent = this;
+            }
+
+            if (animation != null)
+                foreach (string animationText in animation)
+                    this.animation.Add(animationText.Split(["\r\n", "\n\r", "\r", "\n"], StringSplitOptions.None));
+            this.border = border;
+
+            if (geometry != null)
+            {
+                geometryExplicitlySet = true;
+                width = geometry.Value.Width;
+                height = geometry.Value.Height;
+                this.x = geometry.Value.X;
+                this.y = geometry.Value.Y;
+            }
+            else
+            {
+                GuessGeometry();
+                this.x = x;
+                this.y = y;
             }
             pixels = new Pixel[width, height];
             animationFrame = startFrame;
-            this.border = border;
             this.defaultCharacter = defaultCharacter;
             this.externalAlignmentX = externalAlignmentX;
             this.externalAlignmentY = externalAlignmentY;
             this.internalAlignmentX = internalAlignmentX;
             this.internalAlignmentY = internalAlignmentY;
-        }
-        public Pixel[,] Pixels
-        {
-            get
-            {
-                if (!update)
-                    return pixels;
-                update = false;
+            this.preRendered = preRendered;
+            this.renderBuffer = renderBuffer;
 
-                if (sizeChanged)
+            ColorAreas.CollectionChanged += ColorAreaUpdate;
+            SubObjects.CollectionChanged += SubObjectUpdate;
+        }
+
+        private readonly ObservableCollection<RendererObject> OnScreenObjects = [];
+        public readonly struct RendererContext(int x, int y, int width, int height)
+        {
+            public readonly int X = x, Y = y, Width = width, Height = height;
+        }
+        public Pixel[,] Pixels(RendererContext ctx)
+        {
+            if (!preRendered)
+            {
+                bool newObjects()
                 {
-                    pixels = new Pixel[width, height];
-                    sizeChanged = false;
+                    List<RendererObject> newOnScreenObjects = [];
+                    for (int i = 0; i < SubObjects.Count; i++)
+                    {
+                        if (SubObjects[i].x + ctx.X + SubObjects[i].width > 0
+                         && SubObjects[i].y + ctx.Y + SubObjects[i].height > 0
+                         && SubObjects[i].x + ctx.X < ctx.Width
+                         && SubObjects[i].y + ctx.Y < ctx.Height)
+                        {
+                            newOnScreenObjects.Add(SubObjects[i]);
+                        }
+                    }
+                    for (int i = 0; i < newOnScreenObjects.Count; i++)
+                    {
+                        if (!OnScreenObjects.Contains(newOnScreenObjects[i]))
+                            return true;
+                    }
+                    return false;
                 }
 
-                for (int i = 0; i < width; i++)
+                if (newObjects() || update)
                 {
-                    for (int j = 0; j < height; j++)
+                    update = true;
+                    OnScreenObjects.Clear();
+                    for (int i = 0; i < SubObjects.Count; i++)
                     {
-                        pixels[i, j] = new(defaultCharacter);
+                        if (SubObjects[i].x + ctx.X + SubObjects[i].width > -renderBuffer
+                         && SubObjects[i].y + ctx.Y + SubObjects[i].height > -renderBuffer
+                         && SubObjects[i].x + ctx.X < ctx.Width + renderBuffer
+                         && SubObjects[i].y + ctx.Y < ctx.Height + renderBuffer)
+                        {
+                            OnScreenObjects.Add(SubObjects[i]);
+                        }
                     }
                 }
+            }
 
-                int borderOffset = border == null ? 0 : 1;
-                //text drawing
-                int yStart = borderOffset;
-                int yEnd = lines.Length + borderOffset;
+            if (!update)
+                return pixels;
+            update = false;
+
+            if (sizeChanged)
+            {
+                pixels = new Pixel[width, height];
+                sizeChanged = false;
+            }
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    pixels[i, j] = new(defaultCharacter);
+                }
+            }
+
+            int borderOffset = border == null ? 0 : 1;
+            //text drawing
+            int yStart = borderOffset;
+            int yEnd = lines.Length + borderOffset;
+            if (InternalAlignmentY == Alignment.Center)
+            {
+                yStart = height / 2 - lines.Length / 2;
+                yEnd = height / 2 - lines.Length / 2 + lines.Length;
+            }
+            if (InternalAlignmentY == Alignment.Bottom)
+            {
+                yStart = height - lines.Length - borderOffset;
+                yEnd = height - borderOffset;
+            }
+            for (int j = int.Max(0, yStart); j < int.Min(height, yEnd); j++)
+            {
+                int xStart = borderOffset;
+                int xEnd = lines[j - yStart].Length + borderOffset;
+                if (InternalAlignmentX == Alignment.Center)
+                {
+                    xStart = width / 2 - lines[j - yStart].Length / 2;
+                    xEnd = width / 2 - lines[j - yStart].Length / 2 + lines[j - yStart].Length;
+                }
+                if (InternalAlignmentX == Alignment.Right)
+                {
+                    xStart = width - lines[j - yStart].Length - borderOffset;
+                    xEnd = width - borderOffset;
+                }
+                for (int i = int.Max(0, xStart); i < int.Min(width, xEnd); i++)
+                {
+                    pixels[i, j].Ch = lines[j - yStart][i - xStart];
+                }
+            }
+
+            //animation drawing
+            if (animation.Count != 0)
+            {
+                string[] animationLines = animation[animationFrame];
+                int animationYStart = borderOffset;
+                int animationYEnd = animationLines.Length + borderOffset;
                 if (InternalAlignmentY == Alignment.Center)
                 {
-                    yStart = height / 2 - lines.Length / 2;
-                    yEnd = height / 2 - lines.Length / 2 + lines.Length;
+                    animationYStart = height / 2 - animationLines.Length / 2;
+                    animationYEnd = height / 2 - animationLines.Length / 2 + animationLines.Length;
                 }
                 if (InternalAlignmentY == Alignment.Bottom)
                 {
-                    yStart = height - lines.Length - borderOffset;
-                    yEnd = height - borderOffset;
+                    animationYStart = height - animationLines.Length - borderOffset;
+                    animationYEnd = height - borderOffset;
                 }
-                for (int j = int.Max(0, yStart); j < int.Min(height, yEnd); j++)
+                for (int j = int.Max(0, animationYStart); j < int.Min(height, animationYEnd); j++)
                 {
-                    int xStart = borderOffset;
-                    int xEnd = lines[j - yStart].Length + borderOffset;
+                    int animationXStart = borderOffset;
+                    int animationXEnd = animationLines[j - animationYStart].Length + borderOffset;
                     if (InternalAlignmentX == Alignment.Center)
                     {
-                        xStart = width / 2 - lines[j - yStart].Length / 2;
-                        xEnd = width / 2 - lines[j - yStart].Length / 2 + lines[j - yStart].Length;
+                        animationXStart = width / 2 - animationLines[j - animationYStart].Length / 2;
+                        animationXEnd = width / 2 - animationLines[j - animationYStart].Length / 2 + animationLines[j - animationYStart].Length;
                     }
                     if (InternalAlignmentX == Alignment.Right)
                     {
-                        xStart = width - lines[j - yStart].Length - borderOffset;
-                        xEnd = width - borderOffset;
+                        animationXStart = width - animationLines[j - animationYStart].Length - borderOffset;
+                        animationXEnd = width - borderOffset;
                     }
-                    for (int i = int.Max(0, xStart); i < int.Min(width, xEnd); i++)
+                    for (int i = int.Max(0, animationXStart); i < int.Min(width, animationXEnd); i++)
                     {
-                        pixels[i, j].Ch = lines[j - yStart][i - xStart];
+                        pixels[i, j].Ch = animationLines[j - animationYStart][i - animationXStart];
                     }
                 }
+            }
 
-                //animation drawing
-                if (animation.Count != 0)
-                {
-                    string[] animationLines = animation[animationFrame];
-                    int animationYStart = borderOffset;
-                    int animationYEnd = animationLines.Length + borderOffset;
-                    if (InternalAlignmentY == Alignment.Center)
+            //border drawing
+            if (border != null && width > 0 && height > 0)
+            {
+                Border b = (Border)border;
+
+                if (b.Top != null)
+                    for (int i = 0; i < width; i++)
                     {
-                        animationYStart = height / 2 - animationLines.Length / 2;
-                        animationYEnd = height / 2 - animationLines.Length / 2 + animationLines.Length;
+                        pixels[i, 0].Ch = (char)b.Top;
                     }
-                    if (InternalAlignmentY == Alignment.Bottom)
+
+                if (b.Bottom != null)
+                    for (int i = 0; i < width; i++)
                     {
-                        animationYStart = height - animationLines.Length - borderOffset;
-                        animationYEnd = height - borderOffset;
+                        pixels[i, height - 1].Ch = (char)b.Bottom;
                     }
-                    for (int j = int.Max(0, animationYStart); j < int.Min(height, animationYEnd); j++)
-                    {
-                        int animationXStart = borderOffset;
-                        int animationXEnd = animationLines[j - animationYStart].Length + borderOffset;
-                        if (InternalAlignmentX == Alignment.Center)
-                        {
-                            animationXStart = width / 2 - animationLines[j - animationYStart].Length / 2;
-                            animationXEnd = width / 2 - animationLines[j - animationYStart].Length / 2 + animationLines[j - animationYStart].Length;
-                        }
-                        if (InternalAlignmentX == Alignment.Right)
-                        {
-                            animationXStart = width - animationLines[j - animationYStart].Length - borderOffset;
-                            animationXEnd = width - borderOffset;
-                        }
-                        for (int i = int.Max(0, animationXStart); i < int.Min(width, animationXEnd); i++)
-                        {
-                            pixels[i, j].Ch = animationLines[j - animationYStart][i - animationXStart];
-                        }
-                    }
-                }
 
-                //border drawing
-                if (border != null && width > 0 && height > 0)
-                {
-                    Border b = (Border)border;
-
-                    if (b.Top != null)
-                        for (int i = 0; i < width; i++)
-                        {
-                            pixels[i, 0].Ch = (char)b.Top;
-                        }
-
-                    if (b.Bottom != null)
-                        for (int i = 0; i < width; i++)
-                        {
-                            pixels[i, height - 1].Ch = (char)b.Bottom;
-                        }
-
-                    if (b.Left != null)
-                        for (int j = 0; j < height; j++)
-                        {
-                            pixels[0, j].Ch = (char)b.Left;
-                        }
-
-                    if (b.Right != null)
-                        for (int j = 0; j < height; j++)
-                        {
-                            pixels[width - 1, j].Ch = (char)b.Right;
-                        }
-
-                    if (b.TopLeft != null) pixels[0, 0].Ch = (char)b.TopLeft;
-                    if (b.TopRight != null) pixels[width - 1, 0].Ch = (char)b.TopRight;
-                    if (b.BottomLeft != null) pixels[0, height - 1].Ch = (char)b.BottomLeft;
-                    if (b.BottomRight != null) pixels[width - 1, height - 1].Ch = (char)b.BottomRight;
-                }
-
-
-                //sub-objects and colors drawing
-                for (int i = 0; i < width; i++)
-                {
+                if (b.Left != null)
                     for (int j = 0; j < height; j++)
                     {
-                        foreach (ColorArea colorArea in colorAreas)
+                        pixels[0, j].Ch = (char)b.Left;
+                    }
+
+                if (b.Right != null)
+                    for (int j = 0; j < height; j++)
+                    {
+                        pixels[width - 1, j].Ch = (char)b.Right;
+                    }
+
+                if (b.TopLeft != null) pixels[0, 0].Ch = (char)b.TopLeft;
+                if (b.TopRight != null) pixels[width - 1, 0].Ch = (char)b.TopRight;
+                if (b.BottomLeft != null) pixels[0, height - 1].Ch = (char)b.BottomLeft;
+                if (b.BottomRight != null) pixels[width - 1, height - 1].Ch = (char)b.BottomRight;
+            }
+
+
+            //colors drawing
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    foreach (ColorArea colorArea in colorAreas)
+                    {
+                        if (colorArea.Geometry != null)
                         {
-                            if (colorArea.Geometry != null)
-                            {
-                                int extraX = 0;
-                                int extraY = 0;
-
-                                if (colorArea.AlignmentX != null)
-                                {
-                                    if (colorArea.AlignmentX == Alignment.Center)
-                                    {
-                                        extraX = width / 2 - new Rectangle(colorArea.Geometry).Width / 2;
-                                    }
-                                    if (colorArea.AlignmentX == Alignment.Right)
-                                    {
-                                        extraX = width - (colorArea.Geometry ?? new Rectangle()).Width;
-                                    }
-                                }
-                                else
-                                {
-                                    if (InternalAlignmentX == Alignment.Center)
-                                    {
-                                        extraX = width / 2 - new Rectangle(colorArea.Geometry).Width / 2;
-                                    }
-                                    if (InternalAlignmentX == Alignment.Right)
-                                    {
-                                        extraX = width - (colorArea.Geometry ?? new Rectangle()).Width;
-                                    }
-                                }
-
-                                if (colorArea.AlignmentY != null)
-                                {
-                                    if (colorArea.AlignmentY == Alignment.Center)
-                                    {
-                                        extraY = height / 2 - new Rectangle(colorArea.Geometry).Height / 2;
-                                    }
-                                    if (colorArea.AlignmentY == Alignment.Right)
-                                    {
-                                        extraY = height - (colorArea.Geometry ?? new Rectangle()).Height;
-                                    }
-                                }
-                                else
-                                {
-                                    if (InternalAlignmentY == Alignment.Center)
-                                    {
-                                        extraY = height / 2 - (colorArea.Geometry ?? new Rectangle()).Height / 2;
-                                    }
-                                    if (InternalAlignmentY == Alignment.Bottom)
-                                    {
-                                        extraY = height - (colorArea.Geometry ?? new Rectangle()).Height;
-                                    }
-                                }
-
-                                if (
-                                    (colorArea.Geometry ?? new Rectangle()).X + extraX <= i && i < (colorArea.Geometry ?? new Rectangle()).X + extraX + (colorArea.Geometry ?? new Rectangle()).Width &&
-                                    (colorArea.Geometry ?? new Rectangle()).Y + extraY <= j && j < (colorArea.Geometry ?? new Rectangle()).Y + extraY + (colorArea.Geometry ?? new Rectangle()).Height
-                                )
-                                    if (colorArea.Foreground)
-                                        pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
-                                    else
-                                        pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
-                            }
-                            else
-                            {
-                                if (colorArea.Foreground)
-                                    pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
-                                else
-                                    pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
-                            }
-                        }
-                        //if color isn't set, default to white on transparent(black)
-                        if (pixels[i, j].FG == Color.Invalid) pixels[i, j].FG = new(255, 255, 255, 1);
-                        if (pixels[i, j].BG == Color.Invalid) pixels[i, j].BG = new(0, 0, 0, 0);
-                        foreach (RendererObject subObject in subObjects)
-                        {
-                            Pixel[,] subPixels = subObject.Pixels;
                             int extraX = 0;
                             int extraY = 0;
-                            if (subObject.ExternalAlignmentX != null)
+
+                            if (colorArea.AlignmentX != null)
                             {
-                                if (subObject.ExternalAlignmentX == Alignment.Center)
+                                if (colorArea.AlignmentX == Alignment.Center)
                                 {
-                                    extraX = width / 2 - subObject.width / 2;
+                                    extraX = width / 2 - new Rectangle(colorArea.Geometry).Width / 2;
                                 }
-                                if (subObject.ExternalAlignmentX == Alignment.Right)
+                                if (colorArea.AlignmentX == Alignment.Right)
                                 {
-                                    extraX = width - subObject.width;
+                                    extraX = width - (colorArea.Geometry ?? new Rectangle()).Width;
                                 }
                             }
                             else
                             {
                                 if (InternalAlignmentX == Alignment.Center)
                                 {
-                                    extraX = width / 2 - subObject.width / 2;
+                                    extraX = width / 2 - new Rectangle(colorArea.Geometry).Width / 2;
                                 }
                                 if (InternalAlignmentX == Alignment.Right)
                                 {
-                                    extraX = width - subObject.width;
+                                    extraX = width - (colorArea.Geometry ?? new Rectangle()).Width;
                                 }
                             }
 
-                            if (subObject.ExternalAlignmentY != null)
+                            if (colorArea.AlignmentY != null)
                             {
-                                if (subObject.ExternalAlignmentY == Alignment.Center)
+                                if (colorArea.AlignmentY == Alignment.Center)
                                 {
-                                    extraY = height / 2 - subObject.height / 2;
+                                    extraY = height / 2 - new Rectangle(colorArea.Geometry).Height / 2;
                                 }
-                                if (subObject.ExternalAlignmentY == Alignment.Right)
+                                if (colorArea.AlignmentY == Alignment.Right)
                                 {
-                                    extraY = height - subObject.height;
+                                    extraY = height - (colorArea.Geometry ?? new Rectangle()).Height;
                                 }
                             }
                             else
                             {
                                 if (InternalAlignmentY == Alignment.Center)
                                 {
-                                    extraY = height / 2 - subObject.height / 2;
+                                    extraY = height / 2 - (colorArea.Geometry ?? new Rectangle()).Height / 2;
                                 }
                                 if (InternalAlignmentY == Alignment.Bottom)
                                 {
-                                    extraY = height - subObject.height;
+                                    extraY = height - (colorArea.Geometry ?? new Rectangle()).Height;
                                 }
                             }
+
                             if (
-                                subObject.X + extraX <= i && i < subObject.X + extraX + subObject.width &&
-                                subObject.Y + extraY <= j && j < subObject.Y + extraY + subObject.height
+                                (colorArea.Geometry ?? new Rectangle()).X + extraX <= i && i < (colorArea.Geometry ?? new Rectangle()).X + extraX + (colorArea.Geometry ?? new Rectangle()).Width &&
+                                (colorArea.Geometry ?? new Rectangle()).Y + extraY <= j && j < (colorArea.Geometry ?? new Rectangle()).Y + extraY + (colorArea.Geometry ?? new Rectangle()).Height
                             )
-                            {
-                                pixels[i, j] = pixels[i, j].WithOverlay(subPixels[i - subObject.X - extraX, j - subObject.Y - extraY]);
-                            }
+                                if (colorArea.Foreground)
+                                    pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
+                                else
+                                    pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
+                        }
+                        else
+                        {
+                            if (colorArea.Foreground)
+                                pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
+                            else
+                                pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
                         }
                     }
+                    //if color isn't set, default to white on transparent(black)
+                    if (pixels[i, j].FG == Color.Invalid) pixels[i, j].FG = new(255, 255, 255, 1);
+                    if (pixels[i, j].BG == Color.Invalid) pixels[i, j].BG = new(0, 0, 0, 0);
                 }
-                return pixels;
             }
+
+            //sub-object drawing
+            foreach (RendererObject subObject in preRendered ? SubObjects : OnScreenObjects)
+            {
+                int extraX = 0;
+                int extraY = 0;
+                if (subObject.ExternalAlignmentX != null)
+                {
+                    if (subObject.ExternalAlignmentX == Alignment.Center)
+                    {
+                        extraX = width / 2 - subObject.width / 2;
+                    }
+                    if (subObject.ExternalAlignmentX == Alignment.Right)
+                    {
+                        extraX = width - subObject.width;
+                    }
+                }
+                else
+                {
+                    if (InternalAlignmentX == Alignment.Center)
+                    {
+                        extraX = width / 2 - subObject.width / 2;
+                    }
+                    if (InternalAlignmentX == Alignment.Right)
+                    {
+                        extraX = width - subObject.width;
+                    }
+                }
+
+                if (subObject.ExternalAlignmentY != null)
+                {
+                    if (subObject.ExternalAlignmentY == Alignment.Center)
+                    {
+                        extraY = height / 2 - subObject.height / 2;
+                    }
+                    if (subObject.ExternalAlignmentY == Alignment.Right)
+                    {
+                        extraY = height - subObject.height;
+                    }
+                }
+                else
+                {
+                    if (InternalAlignmentY == Alignment.Center)
+                    {
+                        extraY = height / 2 - subObject.height / 2;
+                    }
+                    if (InternalAlignmentY == Alignment.Bottom)
+                    {
+                        extraY = height - subObject.height;
+                    }
+                }
+                Pixel[,] subPixels = subObject.Pixels(new(ctx.X + subObject.x + extraX, ctx.Y + subObject.y + extraY, ctx.Width, ctx.Height));
+                for (int i = Math.Max(0, subObject.x + extraX); i < Math.Min(width, subObject.x + extraX + subObject.width); i++)
+                {
+                    for (int j = Math.Max(0, subObject.y + extraY); j < Math.Min(height, subObject.y + extraY + subObject.height); j++)
+                    {
+                        pixels[i, j] = pixels[i, j].WithOverlay(subPixels[i - subObject.x - extraX, j - subObject.y - extraY]);
+                    }
+                }
+            }
+
+            return pixels;
         }
 
 
 
         public int X
         {
-            get => x; set { x = value; UpdateParents(); }
+            get => x; set { x = value; UpdateParent(); }
         }
         public int Y
         {
-            get => y; set { y = value; UpdateParents(); }
+            get => y; set { y = value; UpdateParent(); }
         }
         public int Width
         {
-            get => width; set { width = value; Update(); sizeChanged = true; }
+            get => width; set { width = value; Update(); sizeChanged = true; geometryExplicitlySet = true; }
         }
         public int Height
         {
-            get => height; set { height = value; Update(); sizeChanged = true; }
+            get => height; set { height = value; Update(); sizeChanged = true; geometryExplicitlySet = true; }
         }
         public char DefaultCharacter
         {
             get => defaultCharacter; set { defaultCharacter = value; Update(); }
         }
-        public List<RendererObject> SubObjects
+
+        public ObservableCollection<RendererObject> SubObjects
         {
-            get { UpdateParents(); update = true; return subObjects; }
-            set { UpdateParents(); update = true; subObjects = value; }
+            get => subObjects;
+            set { Update(); subObjects = value; }
         }
-        public List<ColorArea> ColorAreas
+        public ObservableCollection<ColorArea> ColorAreas
         {
-            get { Update(); return colorAreas; }
+            get => colorAreas;
             set { Update(); colorAreas = value; }
         }
         public Border? Border
@@ -1221,11 +1309,34 @@ namespace AnsiRenderer
         }
         public Alignment? ExternalAlignmentX
         {
-            get => externalAlignmentX; set { externalAlignmentX = value; UpdateParents(); }
+            get => externalAlignmentX; set { externalAlignmentX = value; UpdateParent(); }
         }
         public Alignment? ExternalAlignmentY
         {
-            get => externalAlignmentY; set { externalAlignmentY = value; UpdateParents(); }
+            get => externalAlignmentY; set { externalAlignmentY = value; UpdateParent(); }
+        }
+
+        public string Text
+        {
+            get => string.Join(Environment.NewLine, lines);
+
+            set
+            {
+                lines = value.Split(["\r\n", "\n\r", "\r", "\n"], StringSplitOptions.None);
+                GuessGeometry();
+                Update();
+            }
+        }
+        public List<string> Animation
+        {
+            get => [.. animation.Select((val) => string.Join(Environment.NewLine, val))];
+            set
+            {
+                foreach (string animationText in value)
+                    animation.Add(animationText.Split(["\r\n", "\n\r", "\r", "\n"], StringSplitOptions.None));
+                GuessGeometry();
+                Update();
+            }
         }
     }
 
@@ -1298,9 +1409,10 @@ namespace AnsiRenderer
             if (Object.ExternalAlignmentX == Alignment.End) x += TerminalWidth - Object.Width;
             if (Object.ExternalAlignmentY == Alignment.Center) y += TerminalHeight / 2 - Object.Height / 2;
             if (Object.ExternalAlignmentY == Alignment.End) y += TerminalHeight - Object.Height;
+            Pixel[,] objectPixels = Object.Pixels(new(0, 0, terminalWidth, terminalHeight));
             for (int j = int.Max(0, y); j < int.Min(terminalHeight, Object.Height + y); j++)
                 for (int i = int.Max(0, x); i < int.Min(terminalWidth, Object.Width + x); i++)
-                    frameBuffer[i, j] = Object.Pixels[i - x, j - y];
+                    frameBuffer[i, j] = objectPixels[i - x, j - y];
             for (int j = limitToObjectScope ? int.Max(0, y) : 0; j < (limitToObjectScope ? int.Min(terminalHeight, Object.Height + y) : terminalHeight); j++)
             {
                 bool updateRow = false;

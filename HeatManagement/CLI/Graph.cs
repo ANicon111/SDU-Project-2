@@ -35,7 +35,57 @@ static partial class App
 
         int zeroHeight = Math.Max(1, (int)((renderer.TerminalHeight - graphs.Count) * maxValue / (maxValue - minValue)));
 
-        renderer.Object.SubObjects.Add(new(
+        RendererObject nameList = new(
+                            geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
+                            subObjects: [],
+                            externalAlignmentX: Alignment.Left,
+                            internalAlignmentX: Alignment.Left
+                        );
+
+        RendererObject valueList = new(
+                            geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
+                            subObjects: [],
+                            externalAlignmentX: Alignment.Center,
+                            internalAlignmentX: Alignment.Center
+                        );
+
+        RendererObject timeSpan = new(
+                            text: $"{times[selectedTime].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {times[selectedTime].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}",
+                            colorAreas: [new(Colors.White, true)],
+                            externalAlignmentX: Alignment.Right
+                        );
+
+        RendererObject header = new(
+                    geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
+                    colorAreas: [
+                        new(Colors.Black.WithAlpha(0.25))
+                    ],
+                    defaultCharacter: ' ',
+                    subObjects: [
+                        nameList,
+                        valueList,
+                        timeSpan
+                    ]
+                );
+
+        RendererObject selectionBar = new(
+                    geometry: new(0, graphs.Count, graphs.Count, renderer.TerminalHeight - graphs.Count),
+                    defaultCharacter: ' ',
+                    colorAreas: [new(Colors.White.WithAlpha(0.5))]
+                );
+
+        RendererObject zeroLine = new(
+                    geometry: new(0, zeroHeight + graphs.Count - 1, renderer.TerminalWidth, 1),
+                    defaultCharacter: '▁'
+                );
+
+        RendererObject graphBarList = new(
+                    geometry: new(0, graphs.Count, times.Count * graphs.Count, renderer.TerminalHeight - graphs.Count),
+                    defaultCharacter: ' ',
+                    preRendered: true
+                );
+
+        RendererObject root = new(
             geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
             defaultCharacter: ' ',
             colorAreas: [
@@ -44,52 +94,10 @@ static partial class App
                 )
             ],
             subObjects: [
-                //header
-                new(
-                    geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
-                    colorAreas:[
-                        new(Colors.Black.WithAlpha(0.25))
-                    ],
-                    defaultCharacter: ' ',
-                    subObjects:[
-                        //name list
-                        new(
-                            geometry:new(0, 0, renderer.TerminalWidth, graphs.Count),
-                            subObjects:[],
-                            externalAlignmentX: Alignment.Left,
-                            internalAlignmentX: Alignment.Left
-                        ),
-                        //value list
-                        new(
-                            geometry:new(0, 0, renderer.TerminalWidth, graphs.Count),
-                            subObjects:[],
-                            externalAlignmentX: Alignment.Center,
-                            internalAlignmentX: Alignment.Center
-                        ),
-                        //time
-                        new(
-                            text: $"{times[selectedTime].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {times[selectedTime].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}",
-                            colorAreas: [new(Colors.White,true)],
-                            externalAlignmentX: Alignment.Right
-                        ),
-                    ]
-                ),
-                //selection bar
-                new(
-                    geometry: new(0, graphs.Count, graphs.Count, renderer.TerminalHeight - graphs.Count),
-                    defaultCharacter: ' ',
-                    colorAreas: [new(Colors.White.WithAlpha(0.5))]
-                ),
-                //zero line
-                new(
-                    geometry: new(0, zeroHeight + graphs.Count - 1, renderer.TerminalWidth, 1),
-                    defaultCharacter: '▁'
-                ),
-                //graph bar list
-                new(
-                    geometry: new(0, graphs.Count, times.Count*graphs.Count, renderer.TerminalHeight - graphs.Count),
-                    defaultCharacter:' '
-                ),
+                header,
+                selectionBar,
+                zeroLine,
+                graphBarList,
                 //helpers
                 new(
                     text:
@@ -131,27 +139,20 @@ static partial class App
                     externalAlignmentY:Alignment.Bottom
                 ),
             ]
-        ));
+        );
 
-        //getters for readability
-        RendererObject root() => renderer.Object.SubObjects[1];
-        RendererObject header() => renderer.Object.SubObjects[1].SubObjects[0];
-        RendererObject nameList() => renderer.Object.SubObjects[1].SubObjects[0].SubObjects[0];
-        RendererObject valueList() => renderer.Object.SubObjects[1].SubObjects[0].SubObjects[1];
-        RendererObject selectionBar() => renderer.Object.SubObjects[1].SubObjects[1];
-        RendererObject zeroLine() => renderer.Object.SubObjects[1].SubObjects[2];
-        RendererObject graphBarList() => renderer.Object.SubObjects[1].SubObjects[3];
+        renderer.Object.SubObjects.Add(root);
 
         for (int i = 0; i < graphs.Count; i++)
         {
-            nameList().SubObjects.Add(
+            nameList.SubObjects.Add(
                 new(
                     y: i,
                     text: names[i],
                     colorAreas: [new(colors[i], true)]
                 )
             );
-            valueList().SubObjects.Add(
+            valueList.SubObjects.Add(
                 new(
                     y: i,
                     text: $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0):0.##} {unitOfMeasurement}",
@@ -169,7 +170,7 @@ static partial class App
         //add graph bars
         for (int i = 0; i < times.Count; i++)
         {
-            graphBarList().ColorAreas.Add(new(grays[i % 2], false, new(i * graphs.Count, 0, graphs.Count, 100000)));
+            graphBarList.ColorAreas.Add(new(grays[i % 2], false, new(i * graphs.Count, 0, graphs.Count, 100000)));
             for (int j = 0; j < graphs.Count; j++)
             {
                 double graphValue = 0;
@@ -181,7 +182,7 @@ static partial class App
                 int sign = Math.Sign(height);
                 height *= sign;
                 int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - height) * 8);
-                graphBarList().SubObjects.Add(new(
+                graphBarList.SubObjects.Add(new(
                     geometry: new(
                         i * graphs.Count + j,
                         sign > 0 ? zeroHeight - height : zeroHeight,
@@ -205,45 +206,32 @@ static partial class App
             }
         }
 
-
-
         //initial render
         renderer.Update();
 
         void updateGraph(bool resize = false)
         {
             //set graph position
-            graphBarList().X =
+            graphBarList.X =
                 -Math.Clamp(selectedTime * graphs.Count - renderer.TerminalWidth / 2, 0, Math.Max(times.Count * graphs.Count - renderer.TerminalWidth, 0));
-            selectionBar().X = selectedTime * graphs.Count + graphBarList().X;
+            selectionBar.X = selectedTime * graphs.Count + graphBarList.X;
 
             //change the values
             for (int i = 0; i < graphs.Count; i++)
             {
-                valueList().SubObjects[i] =
-                new(
-                    y: i,
-                    text: $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0):0.##} {unitOfMeasurement}",
-                    colorAreas: [new(colors[i], true)],
-                    externalAlignmentX: Alignment.Center
-                );
+                valueList.SubObjects[i].Text = $"{(graphs[i].TryGetValue(times[selectedTime], out double value) ? value : 0.0):0.##} {unitOfMeasurement}";
             }
 
             //change the time
-            header().SubObjects[2] =
-                new(
-                    text: $"{times[selectedTime].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {times[selectedTime].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}",
-                    colorAreas: [new(Colors.White, true)],
-                    externalAlignmentX: Alignment.Right
-                );
+            timeSpan.Text = $"{times[selectedTime].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {times[selectedTime].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}";
 
 
             //recalculate all geometries if terminal resized
             if (resize)
             {
                 zeroHeight = Math.Max(graphs.Count, (int)((renderer.TerminalHeight - graphs.Count) * maxValue / (maxValue - minValue)));
-                zeroLine().Width = renderer.TerminalWidth;
-                zeroLine().Y = zeroHeight + graphs.Count - 1;
+                zeroLine.Width = renderer.TerminalWidth;
+                zeroLine.Y = zeroHeight + graphs.Count - 1;
                 for (int i = 0; i < times.Count; i++)
                 {
                     for (int j = 0; j < graphs.Count; j++)
@@ -257,7 +245,7 @@ static partial class App
                         int sign = Math.Sign(height);
                         height *= sign;
                         int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - height) * 8);
-                        graphBarList().SubObjects[i * graphs.Count + j] = new(
+                        graphBarList.SubObjects[i * graphs.Count + j] = new(
                             geometry: new(
                                 i * graphs.Count + j,
                                 sign > 0 ? zeroHeight - height : zeroHeight,
@@ -366,13 +354,13 @@ static partial class App
                 zeroHeight = Math.Max(1, (int)((renderer.TerminalHeight - 1) * maxValue / (maxValue - minValue)));
                 renderer.Object.Width = renderer.TerminalWidth;
                 renderer.Object.Height = renderer.TerminalHeight;
-                root().Width = renderer.TerminalWidth;
-                root().Height = renderer.TerminalHeight;
-                graphBarList().Height = renderer.TerminalHeight - graphs.Count;
-                selectionBar().Height = renderer.TerminalHeight - graphs.Count;
-                header().Width = renderer.TerminalWidth;
-                nameList().Width = renderer.TerminalWidth;
-                valueList().Width = renderer.TerminalWidth;
+                root.Width = renderer.TerminalWidth;
+                root.Height = renderer.TerminalHeight;
+                graphBarList.Height = renderer.TerminalHeight - graphs.Count;
+                selectionBar.Height = renderer.TerminalHeight - graphs.Count;
+                header.Width = renderer.TerminalWidth;
+                nameList.Width = renderer.TerminalWidth;
+                valueList.Width = renderer.TerminalWidth;
                 updateGraph(true);
             }
             renderer.Update();

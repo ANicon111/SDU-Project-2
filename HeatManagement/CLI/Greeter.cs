@@ -93,13 +93,15 @@ static partial class App
                 switch (key.Key)
                 {
                     case ConsoleKey.RightArrow:
-                        renderer.Object.SubObjects[selection].ColorAreas.RemoveRange(renderer.Object.SubObjects[selection].ColorAreas.Count - 2, 2);
+                        renderer.Object.SubObjects[selection].ColorAreas.RemoveAt(renderer.Object.SubObjects[selection].ColorAreas.Count - 1);
+                        renderer.Object.SubObjects[selection].ColorAreas.RemoveAt(renderer.Object.SubObjects[selection].ColorAreas.Count - 1);
                         selection = Math.Min(selection + 1, max);
                         renderer.Object.SubObjects[selection].ColorAreas.Add(new(Colors.Black, true));
                         renderer.Object.SubObjects[selection].ColorAreas.Add(new(Colors.White));
                         break;
                     case ConsoleKey.LeftArrow:
-                        renderer.Object.SubObjects[selection].ColorAreas.RemoveRange(renderer.Object.SubObjects[selection].ColorAreas.Count - 2, 2);
+                        renderer.Object.SubObjects[selection].ColorAreas.RemoveAt(renderer.Object.SubObjects[selection].ColorAreas.Count - 1);
+                        renderer.Object.SubObjects[selection].ColorAreas.RemoveAt(renderer.Object.SubObjects[selection].ColorAreas.Count - 1);
                         selection = Math.Max(selection - 1, min);
                         renderer.Object.SubObjects[selection].ColorAreas.Add(new(Colors.Black, true));
                         renderer.Object.SubObjects[selection].ColorAreas.Add(new(Colors.White));
