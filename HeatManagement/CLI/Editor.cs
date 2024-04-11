@@ -344,17 +344,11 @@ static partial class App
             List<SourceData> data = [];
             List<string> names = [];
 
-            try
+            sourceData = Utils.GetSourceDataFromAPI(dataStartTime, dataEndTime).GetAwaiter().GetResult();
+            foreach (var source in sourceData.Data)
             {
-                data = Utils.GetSourceDataFromAPI(dataStartTime, dataEndTime);
-                sourceData = new();
-                foreach (var source in data)
-                {
-                    sourceData.AddData(source);
-                    names.Add($"{source.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {source.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
-                }
+                names.Add($"{source.Value.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {source.Value.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
             }
-            catch { }
 
             return names;
         }

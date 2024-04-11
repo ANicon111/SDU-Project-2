@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
@@ -113,14 +112,11 @@ class SourceDataEditorViewModel : ViewModelBase
 
         try
         {
-            List<SourceData> data = Utils.GetSourceDataFromAPI(startTime, endTime);
-            data.Sort((a, b) => a.StartTime != b.StartTime ? DateTime.Compare(a.StartTime, b.StartTime) : DateTime.Compare(a.EndTime, b.EndTime));
+            SourceData = Utils.GetSourceDataFromAPI(startTime, endTime).GetAwaiter().GetResult();
             SourceButtonValues.Clear();
-            SourceData = new();
-            foreach (var source in data)
+            foreach (var source in SourceData.Data)
             {
-                SourceData.AddData(source);
-                SourceButtonValues.Add(new(BaseSize, source.StartTime, source.EndTime, RemoveSourceData));
+                SourceButtonValues.Add(new(BaseSize, source.Value.StartTime, source.Value.EndTime, RemoveSourceData));
             }
         }
         catch

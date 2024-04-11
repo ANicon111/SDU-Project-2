@@ -3,20 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using DynamicData.Binding;
 
 namespace AnsiRenderer
 {
-    public struct Border
+    public struct Border(char? topLeft = null, char? top = null, char? topRight = null, char? right = null, char? bottomRight = null, char? bottom = null, char? bottomLeft = null, char? left = null)
     {
-        public char? TopLeft, Top, TopRight, Right, BottomRight, Bottom, BottomLeft, Left;
-
-        public Border(char? topLeft = null, char? top = null, char? topRight = null, char? right = null, char? bottomRight = null, char? bottom = null, char? bottomLeft = null, char? left = null)
-        {
-            TopLeft = topLeft; Top = top; TopRight = topRight; Right = right; BottomRight = bottomRight; Bottom = bottom; BottomLeft = bottomLeft; Left = left;
-        }
+        public char? TopLeft = topLeft, Top = top, TopRight = topRight, Right = right, BottomRight = bottomRight, Bottom = bottom, BottomLeft = bottomLeft, Left = left;
 
         public static Border FromString(string sides) => new(sides[0], sides[1], sides[2], sides[3], sides[4], sides[5], sides[6], sides[7]);
     }
@@ -30,10 +23,10 @@ namespace AnsiRenderer
         public static readonly Border Double = new('╔', '═', '╗', '║', '╝', '═', '╚', '║');
     }
 
-    public struct Color
+    public struct Color(uint red, uint green, uint blue, double alpha = 1)
     {
-        private uint r, g, b;
-        private double a;
+        private uint r = uint.Clamp(red, 0, 255), g = uint.Clamp(green, 0, 255), b = uint.Clamp(blue, 0, 255);
+        private double a = double.Clamp(alpha, 0, 1);
 
         public static readonly Color Invalid = new()
         {
@@ -98,13 +91,7 @@ namespace AnsiRenderer
         {
             get { return (uint.Max(uint.Max(R, G), B) / 255.0d + uint.Min(uint.Min(R, G), B) / 255.0d) / 2; }
         }
-        public Color(uint red, uint green, uint blue, double alpha = 1)
-        {
-            r = uint.Clamp(red, 0, 255);
-            g = uint.Clamp(green, 0, 255);
-            b = uint.Clamp(blue, 0, 255);
-            a = double.Clamp(alpha, 0, 1);
-        }
+
         public static Color FromHSLA(double hue, double saturation, double luminosity, double a = 1)
         {
             uint R, G, B;
@@ -197,7 +184,7 @@ namespace AnsiRenderer
             else
             {
                 //#HEXADECIMAL
-                if (html.StartsWith("#"))
+                if (html.StartsWith('#'))
                 {
                     try
                     {
@@ -397,9 +384,9 @@ namespace AnsiRenderer
 
         public static bool operator !=(Color left, Color right) => !(left == right);
 
-        public override readonly bool Equals(object? obj) => Equals(obj as Color?);
+        public override readonly bool Equals(object? obj) => base.Equals(obj);
 
-        public override readonly int GetHashCode() => (int)(uint)this;
+        public override readonly int GetHashCode() => base.GetHashCode();
 
 
         public override readonly string ToString()
@@ -683,9 +670,9 @@ namespace AnsiRenderer
 
         public static bool operator !=(Pixel left, Pixel right) => !(left == right);
 
-        public override readonly bool Equals(object? obj) => Equals(obj as Pixel?);
+        public override readonly bool Equals(object? obj) => base.Equals(obj);
 
-        public override readonly int GetHashCode() => Ch;
+        public override readonly int GetHashCode() => base.GetHashCode();
     }
 
     public struct ColorArea(Color color, bool foreground = false, Rectangle? geometry = null, Alignment? alignmentX = null, Alignment? alignmentY = null)
@@ -812,7 +799,7 @@ namespace AnsiRenderer
 
         public void SubObjectUpdate(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach (RendererObject rendererObject in SubObjects)
+            foreach (RendererObject rendererObject in subObjects)
             {
                 rendererObject.Parent = this;
             }
@@ -934,7 +921,9 @@ namespace AnsiRenderer
             SubObjects.CollectionChanged += SubObjectUpdate;
         }
 
-        private readonly ObservableCollection<RendererObject> OnScreenObjects = [];
+
+        private readonly ObservableCollection<RendererObject> onScreenObjects = [];
+        private readonly ObservableCollection<ColorArea> onScreenColors = [];
         public readonly struct RendererContext(int x, int y, int width, int height)
         {
             public readonly int X = x, Y = y, Width = width, Height = height;
@@ -958,8 +947,10 @@ namespace AnsiRenderer
                     }
                     for (int i = 0; i < newOnScreenObjects.Count; i++)
                     {
-                        if (!OnScreenObjects.Contains(newOnScreenObjects[i]))
+                        if (!onScreenObjects.Contains(newOnScreenObjects[i]))
+                        {
                             return true;
+                        }
                     }
                     return false;
                 }
@@ -967,15 +958,75 @@ namespace AnsiRenderer
                 if (newObjects() || update)
                 {
                     update = true;
-                    OnScreenObjects.Clear();
-                    for (int i = 0; i < SubObjects.Count; i++)
+                    onScreenObjects.Clear();
+                    for (int i = 0; i < subObjects.Count; i++)
                     {
-                        if (SubObjects[i].x + ctx.X + SubObjects[i].width > -renderBuffer
-                         && SubObjects[i].y + ctx.Y + SubObjects[i].height > -renderBuffer
-                         && SubObjects[i].x + ctx.X < ctx.Width + renderBuffer
-                         && SubObjects[i].y + ctx.Y < ctx.Height + renderBuffer)
+                        if (subObjects[i].x + ctx.X + subObjects[i].width > -renderBuffer
+                         && subObjects[i].y + ctx.Y + subObjects[i].height > -renderBuffer
+                         && subObjects[i].x + ctx.X < ctx.Width + renderBuffer
+                         && subObjects[i].y + ctx.Y < ctx.Height + renderBuffer)
                         {
-                            OnScreenObjects.Add(SubObjects[i]);
+                            onScreenObjects.Add(subObjects[i]);
+                        }
+                    }
+                }
+
+                bool newColors()
+                {
+                    List<ColorArea> newOnScreenColors = [];
+                    for (int i = 0; i < colorAreas.Count; i++)
+                    {
+                        if (colorAreas[i].Geometry != null)
+                        {
+                            if (colorAreas[i].Geometry!.Value.X + ctx.X + colorAreas[i].Geometry!.Value.Width > 0
+                             && colorAreas[i].Geometry!.Value.Y + ctx.Y + colorAreas[i].Geometry!.Value.Height > 0
+                             && colorAreas[i].Geometry!.Value.X + ctx.X < ctx.Width
+                             && colorAreas[i].Geometry!.Value.Y + ctx.Y < ctx.Height)
+                            {
+                                newOnScreenColors.Add(colorAreas[i]);
+                            }
+                        }
+                        else
+                        {
+                            newOnScreenColors.Add(colorAreas[i]);
+                        }
+                    }
+                    for (int i = 0; i < newOnScreenColors.Count; i++)
+                    {
+                        bool contains = false;
+                        for (int j = 0; j < onScreenColors.Count; j++)
+                        {
+                            if (onScreenColors[j].Equals(newOnScreenColors[i]))
+                            {
+                                contains = true;
+                                break;
+                            }
+                        }
+                        if (!contains)
+                            return true;
+                    }
+                    return false;
+                }
+
+                if (newColors() || update)
+                {
+                    update = true;
+                    onScreenColors.Clear();
+                    for (int i = 0; i < colorAreas.Count; i++)
+                    {
+                        if (colorAreas[i].Geometry != null)
+                        {
+                            if (colorAreas[i].Geometry!.Value.X + ctx.X + colorAreas[i].Geometry!.Value.Width > -renderBuffer
+                             && colorAreas[i].Geometry!.Value.Y + ctx.Y + colorAreas[i].Geometry!.Value.Height > -renderBuffer
+                             && colorAreas[i].Geometry!.Value.X + ctx.X < ctx.Width + renderBuffer
+                             && colorAreas[i].Geometry!.Value.Y + ctx.Y < ctx.Height + renderBuffer)
+                            {
+                                onScreenColors.Add(colorAreas[i]);
+                            }
+                        }
+                        else
+                        {
+                            onScreenColors.Add(colorAreas[i]);
                         }
                     }
                 }
@@ -983,6 +1034,7 @@ namespace AnsiRenderer
 
             if (!update)
                 return pixels;
+
             update = false;
 
             if (sizeChanged)
@@ -999,8 +1051,8 @@ namespace AnsiRenderer
                 }
             }
 
-            int borderOffset = border == null ? 0 : 1;
             //text drawing
+            int borderOffset = border == null ? 0 : 1;
             int yStart = borderOffset;
             int yEnd = lines.Length + borderOffset;
             if (InternalAlignmentY == Alignment.Center)
@@ -1107,73 +1159,76 @@ namespace AnsiRenderer
 
 
             //colors drawing
-            for (int i = 0; i < width; i++)
+            foreach (ColorArea colorArea in preRendered ? colorAreas : onScreenColors)
             {
-                for (int j = 0; j < height; j++)
+                int extraX = 0;
+                int extraY = 0;
+
+                if (colorArea.AlignmentX != null)
                 {
-                    foreach (ColorArea colorArea in colorAreas)
+                    if (colorArea.AlignmentX == Alignment.Center)
                     {
-                        if (colorArea.Geometry != null)
+                        extraX = width / 2 - new Rectangle(colorArea.Geometry).Width / 2;
+                    }
+                    if (colorArea.AlignmentX == Alignment.Right)
+                    {
+                        extraX = width - (colorArea.Geometry ?? new Rectangle()).Width;
+                    }
+                }
+                else
+                {
+                    if (InternalAlignmentX == Alignment.Center)
+                    {
+                        extraX = width / 2 - new Rectangle(colorArea.Geometry).Width / 2;
+                    }
+                    if (InternalAlignmentX == Alignment.Right)
+                    {
+                        extraX = width - (colorArea.Geometry ?? new Rectangle()).Width;
+                    }
+                }
+
+                if (colorArea.AlignmentY != null)
+                {
+                    if (colorArea.AlignmentY == Alignment.Center)
+                    {
+                        extraY = height / 2 - new Rectangle(colorArea.Geometry).Height / 2;
+                    }
+                    if (colorArea.AlignmentY == Alignment.Right)
+                    {
+                        extraY = height - (colorArea.Geometry ?? new Rectangle()).Height;
+                    }
+                }
+                else
+                {
+                    if (InternalAlignmentY == Alignment.Center)
+                    {
+                        extraY = height / 2 - (colorArea.Geometry ?? new Rectangle()).Height / 2;
+                    }
+                    if (InternalAlignmentY == Alignment.Bottom)
+                    {
+                        extraY = height - (colorArea.Geometry ?? new Rectangle()).Height;
+                    }
+                }
+                if (colorArea.Geometry != null)
+                {
+                    for (int i = Math.Max(0, colorArea.Geometry!.Value.X + extraX); i < Math.Min(width, colorArea.Geometry!.Value.X + extraX + colorArea.Geometry!.Value.Width); i++)
+                    {
+                        for (int j = Math.Max(0, colorArea.Geometry!.Value.Y + extraY); j < Math.Min(height, colorArea.Geometry!.Value.Y + extraY + colorArea.Geometry!.Value.Height); j++)
                         {
-                            int extraX = 0;
-                            int extraY = 0;
 
-                            if (colorArea.AlignmentX != null)
-                            {
-                                if (colorArea.AlignmentX == Alignment.Center)
-                                {
-                                    extraX = width / 2 - new Rectangle(colorArea.Geometry).Width / 2;
-                                }
-                                if (colorArea.AlignmentX == Alignment.Right)
-                                {
-                                    extraX = width - (colorArea.Geometry ?? new Rectangle()).Width;
-                                }
-                            }
+                            if (colorArea.Foreground)
+                                pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
                             else
-                            {
-                                if (InternalAlignmentX == Alignment.Center)
-                                {
-                                    extraX = width / 2 - new Rectangle(colorArea.Geometry).Width / 2;
-                                }
-                                if (InternalAlignmentX == Alignment.Right)
-                                {
-                                    extraX = width - (colorArea.Geometry ?? new Rectangle()).Width;
-                                }
-                            }
+                                pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
 
-                            if (colorArea.AlignmentY != null)
-                            {
-                                if (colorArea.AlignmentY == Alignment.Center)
-                                {
-                                    extraY = height / 2 - new Rectangle(colorArea.Geometry).Height / 2;
-                                }
-                                if (colorArea.AlignmentY == Alignment.Right)
-                                {
-                                    extraY = height - (colorArea.Geometry ?? new Rectangle()).Height;
-                                }
-                            }
-                            else
-                            {
-                                if (InternalAlignmentY == Alignment.Center)
-                                {
-                                    extraY = height / 2 - (colorArea.Geometry ?? new Rectangle()).Height / 2;
-                                }
-                                if (InternalAlignmentY == Alignment.Bottom)
-                                {
-                                    extraY = height - (colorArea.Geometry ?? new Rectangle()).Height;
-                                }
-                            }
-
-                            if (
-                                (colorArea.Geometry ?? new Rectangle()).X + extraX <= i && i < (colorArea.Geometry ?? new Rectangle()).X + extraX + (colorArea.Geometry ?? new Rectangle()).Width &&
-                                (colorArea.Geometry ?? new Rectangle()).Y + extraY <= j && j < (colorArea.Geometry ?? new Rectangle()).Y + extraY + (colorArea.Geometry ?? new Rectangle()).Height
-                            )
-                                if (colorArea.Foreground)
-                                    pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
-                                else
-                                    pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
                         }
-                        else
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
                         {
                             if (colorArea.Foreground)
                                 pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
@@ -1181,6 +1236,12 @@ namespace AnsiRenderer
                                 pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
                         }
                     }
+                }
+            }
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
                     //if color isn't set, default to white on transparent(black)
                     if (pixels[i, j].FG == Color.Invalid) pixels[i, j].FG = new(255, 255, 255, 1);
                     if (pixels[i, j].BG == Color.Invalid) pixels[i, j].BG = new(0, 0, 0, 0);
@@ -1188,7 +1249,7 @@ namespace AnsiRenderer
             }
 
             //sub-object drawing
-            foreach (RendererObject subObject in preRendered ? SubObjects : OnScreenObjects)
+            foreach (RendererObject subObject in preRendered ? subObjects : onScreenObjects)
             {
                 int extraX = 0;
                 int extraY = 0;

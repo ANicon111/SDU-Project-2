@@ -113,7 +113,7 @@ static partial class App
 
             TextBox(
                 escaped: ref escaped,
-                text: arguments.AssetsPath ?? "assets.json",
+                text: arguments.AssetsPath ?? "assets.csv",
                 title: "Input the asset file path:",
                 fileAction: tryLoadAssetsFile,
                 tryInitialAction: arguments.AssetsPath != null
