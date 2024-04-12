@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AnsiRenderer
 {
@@ -964,14 +964,14 @@ namespace AnsiRenderer
                 {
                     update = true;
                     onScreenObjects.Clear();
-                    for (int i = 0; i < subObjects.Count; i++)
+                    foreach (RendererObject subObject in subObjects)
                     {
-                        if (subObjects[i].x + ctx.X + subObjects[i].width > -renderBuffer
-                         && subObjects[i].y + ctx.Y + subObjects[i].height > -renderBuffer
-                         && subObjects[i].x + ctx.X < ctx.Width + renderBuffer
-                         && subObjects[i].y + ctx.Y < ctx.Height + renderBuffer)
+                        if (subObject.x + ctx.X + subObject.width > -renderBuffer
+                         && subObject.y + ctx.Y + subObject.height > -renderBuffer
+                         && subObject.x + ctx.X < ctx.Width + renderBuffer
+                         && subObject.y + ctx.Y < ctx.Height + renderBuffer)
                         {
-                            onScreenObjects.Add(subObjects[i]);
+                            onScreenObjects.Add(subObject);
                         }
                     }
                 }
@@ -983,10 +983,11 @@ namespace AnsiRenderer
                     {
                         if (colorAreas[i].Geometry != null)
                         {
-                            if (colorAreas[i].Geometry!.Value.X + ctx.X + colorAreas[i].Geometry!.Value.Width > 0
-                             && colorAreas[i].Geometry!.Value.Y + ctx.Y + colorAreas[i].Geometry!.Value.Height > 0
-                             && colorAreas[i].Geometry!.Value.X + ctx.X < ctx.Width
-                             && colorAreas[i].Geometry!.Value.Y + ctx.Y < ctx.Height)
+                            Rectangle geometry = colorAreas[i].Geometry!.Value;
+                            if (geometry.X + ctx.X + geometry.Width > 0
+                             && geometry.Y + ctx.Y + geometry.Height > 0
+                             && geometry.X + ctx.X < ctx.Width
+                             && geometry.Y + ctx.Y < ctx.Height)
                             {
                                 newOnScreenColors.Add(colorAreas[i]);
                             }
@@ -998,17 +999,11 @@ namespace AnsiRenderer
                     }
                     for (int i = 0; i < newOnScreenColors.Count; i++)
                     {
-                        bool contains = false;
-                        for (int j = 0; j < onScreenColors.Count; j++)
+                        if (!onScreenColors.Contains(newOnScreenColors[i]))
                         {
-                            if (onScreenColors[j].Equals(newOnScreenColors[i]))
-                            {
-                                contains = true;
-                                break;
-                            }
-                        }
-                        if (!contains)
                             return true;
+                        }
+
                     }
                     return false;
                 }
@@ -1021,10 +1016,11 @@ namespace AnsiRenderer
                     {
                         if (colorAreas[i].Geometry != null)
                         {
-                            if (colorAreas[i].Geometry!.Value.X + ctx.X + colorAreas[i].Geometry!.Value.Width > -renderBuffer
-                             && colorAreas[i].Geometry!.Value.Y + ctx.Y + colorAreas[i].Geometry!.Value.Height > -renderBuffer
-                             && colorAreas[i].Geometry!.Value.X + ctx.X < ctx.Width + renderBuffer
-                             && colorAreas[i].Geometry!.Value.Y + ctx.Y < ctx.Height + renderBuffer)
+                            Rectangle geometry = colorAreas[i].Geometry!.Value;
+                            if (geometry.X + ctx.X + geometry.Width > -renderBuffer
+                             && geometry.Y + ctx.Y + geometry.Height > -renderBuffer
+                             && geometry.X + ctx.X < ctx.Width + renderBuffer
+                             && geometry.Y + ctx.Y < ctx.Height + renderBuffer)
                             {
                                 onScreenColors.Add(colorAreas[i]);
                             }
@@ -1048,11 +1044,17 @@ namespace AnsiRenderer
                 sizeChanged = false;
             }
 
-            for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < height; j++)
+                int x = Math.Max(0, -ctx.X - renderBuffer);
+                int y = Math.Max(0, -ctx.Y - renderBuffer);
+                int w = Math.Min(width, -ctx.X + ctx.Width + renderBuffer);
+                int h = Math.Min(height, -ctx.Y + ctx.Height + renderBuffer);
+                for (int i = x; i < w; i++)
                 {
-                    pixels[i, j] = new(defaultCharacter);
+                    for (int j = y; j < h; j++)
+                    {
+                        pixels[i, j] = new(defaultCharacter);
+                    }
                 }
             }
 
@@ -1106,7 +1108,10 @@ namespace AnsiRenderer
                     animationYStart = height - animationLines.Length - borderOffset;
                     animationYEnd = height - borderOffset;
                 }
-                for (int j = int.Max(0, animationYStart); j < int.Min(height, animationYEnd); j++)
+
+                int y = Math.Max(0, animationYStart);
+                int h = Math.Min(height, animationYEnd);
+                for (int j = y; j < h; j++)
                 {
                     int animationXStart = borderOffset;
                     int animationXEnd = animationLines[j - animationYStart].Length + borderOffset;
@@ -1120,7 +1125,10 @@ namespace AnsiRenderer
                         animationXStart = width - animationLines[j - animationYStart].Length - borderOffset;
                         animationXEnd = width - borderOffset;
                     }
-                    for (int i = int.Max(0, animationXStart); i < int.Min(width, animationXEnd); i++)
+
+                    int x = Math.Max(0, animationXStart);
+                    int w = Math.Min(width, animationXEnd);
+                    for (int i = x; i < w; i++)
                     {
                         pixels[i, j].Ch = animationLines[j - animationYStart][i - animationXStart];
                     }
@@ -1216,9 +1224,13 @@ namespace AnsiRenderer
                 }
                 if (colorArea.Geometry != null)
                 {
-                    for (int i = Math.Max(0, colorArea.Geometry!.Value.X + extraX); i < Math.Min(width, colorArea.Geometry!.Value.X + extraX + colorArea.Geometry!.Value.Width); i++)
+                    int x = Math.Max(0, colorArea.Geometry!.Value.X + extraX);
+                    int y = Math.Max(0, colorArea.Geometry!.Value.Y + extraY);
+                    int w = Math.Min(width, colorArea.Geometry!.Value.X + extraX + colorArea.Geometry!.Value.Width);
+                    int h = Math.Min(height, colorArea.Geometry!.Value.Y + extraY + colorArea.Geometry!.Value.Height);
+                    for (int i = x; i < w; i++)
                     {
-                        for (int j = Math.Max(0, colorArea.Geometry!.Value.Y + extraY); j < Math.Min(height, colorArea.Geometry!.Value.Y + extraY + colorArea.Geometry!.Value.Height); j++)
+                        for (int j = y; j < h; j++)
                         {
                             if (colorArea.Color != Color.Invalid)
                             {
@@ -1256,13 +1268,19 @@ namespace AnsiRenderer
                     }
                 }
             }
-            for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < height; j++)
+                int x = Math.Max(0, -ctx.X - renderBuffer);
+                int y = Math.Max(0, -ctx.Y - renderBuffer);
+                int w = Math.Min(width, -ctx.X + ctx.Width + renderBuffer);
+                int h = Math.Min(height, -ctx.Y + ctx.Height + renderBuffer);
+                for (int i = x; i < w; i++)
                 {
-                    //if color isn't set, default to white on transparent(black)
-                    if (pixels[i, j].FG == Color.Invalid) pixels[i, j].FG = new(255, 255, 255, 1);
-                    if (pixels[i, j].BG == Color.Invalid) pixels[i, j].BG = new(0, 0, 0, 0);
+                    for (int j = y; j < h; j++)
+                    {
+                        //if color isn't set, default to white on transparent(black)
+                        if (pixels[i, j].FG == Color.Invalid) pixels[i, j].FG = new(255, 255, 255, 1);
+                        if (pixels[i, j].BG == Color.Invalid) pixels[i, j].BG = new(0, 0, 0, 0);
+                    }
                 }
             }
 
@@ -1317,9 +1335,13 @@ namespace AnsiRenderer
                     }
                 }
                 Pixel[,] subPixels = subObject.Pixels(new(ctx.X + subObject.x + extraX, ctx.Y + subObject.y + extraY, ctx.Width, ctx.Height));
-                for (int i = Math.Max(0, subObject.x + extraX); i < Math.Min(width, subObject.x + extraX + subObject.width); i++)
+                int x = Math.Max(0, subObject.x + extraX);
+                int y = Math.Max(0, subObject.y + extraY);
+                int w = Math.Min(width, subObject.x + extraX + subObject.width);
+                int h = Math.Min(height, subObject.y + extraY + subObject.height);
+                for (int i = x; i < w; i++)
                 {
-                    for (int j = Math.Max(0, subObject.y + extraY); j < Math.Min(height, subObject.y + extraY + subObject.height); j++)
+                    for (int j = y; j < h; j++)
                     {
                         pixels[i, j] = pixels[i, j].WithOverlay(subPixels[i - subObject.x - extraX, j - subObject.y - extraY]);
                     }
