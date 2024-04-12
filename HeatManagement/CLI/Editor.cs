@@ -103,8 +103,8 @@ static partial class App
         {
             SourceData source = sourceData!.Data.ElementAt(index).Value;
             return FormattableString.Invariant($"""
-             Start time: {source.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} 
-             End time: {source.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} 
+             Start time: {source.StartTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss} 
+             End time: {source.EndTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss} 
              Heat demand: {source.HeatDemand} MWh 
              Electricity price: {source.ElectricityPrice} dkk per MWh 
             """);
@@ -227,13 +227,13 @@ static partial class App
             {
                 try
                 {
-                    dataStartTime = DateTime.ParseExact(text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                    dataStartTime = DateTime.ParseExact(text, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                 }
                 catch
                 {
                     try
                     {
-                        dataStartTime = DateTime.ParseExact(text, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                        dataStartTime = DateTime.ParseExact(text, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
                     }
                     catch
                     {
@@ -242,20 +242,20 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(ref escaped, DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the start time (dd.mm.yyyy hh:mm[:ss])", parseStartTime, numbersOnly: true);
+            TextBox(ref escaped, DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), "Enter the start time (yyyy-MM-dd hh:mm[:ss])", parseStartTime, numbersOnly: true);
 
             DateTime dataEndTime = dataStartTime.AddHours(1);
             string parseEndTime(string text)
             {
                 try
                 {
-                    dataEndTime = DateTime.ParseExact(text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                    dataEndTime = DateTime.ParseExact(text, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                 }
                 catch
                 {
                     try
                     {
-                        dataEndTime = DateTime.ParseExact(text, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                        dataEndTime = DateTime.ParseExact(text, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
                     }
                     catch
                     {
@@ -264,7 +264,7 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(ref escaped, dataEndTime.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture), "Enter the end time (dd.mm.yyyy hh:mm[:ss])", parseEndTime, numbersOnly: true);
+            TextBox(ref escaped, dataEndTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture), "Enter the end time (yyyy-MM-dd hh:mm[:ss])", parseEndTime, numbersOnly: true);
 
             double heatDemand = 0;
             string parseHeatDemand(string text)
@@ -301,7 +301,7 @@ static partial class App
             if (!escaped)
             {
                 sourceData.AddData(new(dataStartTime, dataEndTime, heatDemand, electricityPrice));
-                return $"{dataStartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {dataEndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}";
+                return $"{dataStartTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss} - {dataEndTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss}";
             }
             else
             {
@@ -316,7 +316,7 @@ static partial class App
             {
                 try
                 {
-                    dataStartTime = DateTime.ParseExact(text, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                    dataStartTime = DateTime.ParseExact(text, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
                 }
                 catch
                 {
@@ -324,14 +324,14 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(ref escaped, DateTime.Now.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), "Enter the import start time (dd.mm.yyyy hh:mm)", parseStartTime, numbersOnly: true);
+            TextBox(ref escaped, DateTime.Now.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), "Enter the import start time (yyyy-MM-dd hh:mm)", parseStartTime, numbersOnly: true);
 
             DateTime dataEndTime = dataStartTime.AddDays(7);
             string parseEndTime(string text)
             {
                 try
                 {
-                    dataEndTime = DateTime.ParseExact(text, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture);
+                    dataEndTime = DateTime.ParseExact(text, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
                 }
                 catch
                 {
@@ -339,7 +339,7 @@ static partial class App
                 }
                 return "";
             }
-            TextBox(ref escaped, dataEndTime.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture), "Enter the import end time (dd.mm.yyyy hh:mm)", parseEndTime, numbersOnly: true);
+            TextBox(ref escaped, dataEndTime.ToString("yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), "Enter the import end time (yyyy-MM-dd hh:mm)", parseEndTime, numbersOnly: true);
 
             List<SourceData> data = [];
             List<string> names = [];
@@ -347,7 +347,7 @@ static partial class App
             sourceData = Utils.GetSourceDataFromAPI(dataStartTime, dataEndTime).GetAwaiter().GetResult();
             foreach (var source in sourceData.Data)
             {
-                names.Add($"{source.Value.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {source.Value.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
+                names.Add($"{source.Value.StartTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss} - {source.Value.EndTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss}");
             }
 
             return names;
@@ -363,7 +363,7 @@ static partial class App
                 break;
             case "sourceData":
                 names = new(sourceData!.Data.Count);
-                foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> element in sourceData.Data) names.Add($"{element.Value.StartTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {element.Value.EndTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}");
+                foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> element in sourceData.Data) names.Add($"{element.Value.StartTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss} - {element.Value.EndTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss}");
                 EntryList(false, names, addToSourceData, importToSourceData, getSourceData, removeFromSourceData, saveSourceData);
                 break;
         }
@@ -474,13 +474,15 @@ static partial class App
         {
             while (Console.KeyAvailable)
             {
-                switch (renderer.ReadKey().Key)
+                ConsoleKeyInfo consoleKeyInfo = renderer.ReadKey();
+                int moveSpace = consoleKeyInfo.Modifiers == ConsoleModifiers.Control ? 5 : 1;
+                switch (consoleKeyInfo.Key)
                 {
                     //switch selected value and move the menu to center the selection
                     case ConsoleKey.UpArrow:
                         if (names.Count > 0)
                         {
-                            selectedValue = Math.Max(selectedValue - 1, 0);
+                            selectedValue = Math.Max(selectedValue - moveSpace, 0);
                             renderer.Object.SubObjects[0].Y = menuPosition();
                             selector().Y = selectorPosition();
                         }
@@ -488,7 +490,7 @@ static partial class App
                     case ConsoleKey.DownArrow:
                         if (names.Count > 0)
                         {
-                            selectedValue = Math.Min(selectedValue + 1, names.Count - 1);
+                            selectedValue = Math.Min(selectedValue + moveSpace, names.Count - 1);
                             renderer.Object.SubObjects[0].Y = menuPosition();
                             selector().Y = selectorPosition();
                         }
@@ -585,7 +587,7 @@ static partial class App
                                             break;
                                     }
                                 }
-                                Thread.Sleep(50);
+                                Thread.Sleep(25);
                                 if (renderer.UpdateScreenSize())
                                 {
                                     renderer.Object.Width = renderer.TerminalWidth;
@@ -626,7 +628,7 @@ static partial class App
                 }
             }
 
-            Thread.Sleep(50);
+            Thread.Sleep(25);
             if (renderer.UpdateScreenSize())
             {
                 renderer.Object.Width = renderer.TerminalWidth;

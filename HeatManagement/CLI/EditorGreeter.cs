@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Threading;
 using AnsiRenderer;
-using DynamicData;
 namespace HeatManagement.CLI;
 
 static partial class App
@@ -218,7 +217,7 @@ static partial class App
                 }
             }
 
-            Thread.Sleep(50);
+            Thread.Sleep(25);
             renderer.Object.SubObjects[0].AnimationFrame++;
 
 

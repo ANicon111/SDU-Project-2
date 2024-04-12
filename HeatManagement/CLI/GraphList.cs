@@ -208,18 +208,20 @@ static partial class App
         {
             while (Console.KeyAvailable)
             {
-                switch (renderer.ReadKey().Key)
+                ConsoleKeyInfo consoleKeyInfo = renderer.ReadKey();
+                int moveSpace = consoleKeyInfo.Modifiers == ConsoleModifiers.Control ? 5 : 1;
+                switch (consoleKeyInfo.Key)
                 {
                     //switch selected graph and move the menu to center the selection
                     case ConsoleKey.UpArrow:
                         graphList[selectedGraph].ColorAreas = unselectedElementColor();
-                        selectedGraph = Math.Max(selectedGraph - 1, 0);
+                        selectedGraph = Math.Max(selectedGraph - moveSpace, 0);
                         renderer.Object.SubObjects[0].Y = menuPosition();
                         graphList[selectedGraph].ColorAreas = selectedElementColor();
                         break;
                     case ConsoleKey.DownArrow:
                         graphList[selectedGraph].ColorAreas = unselectedElementColor();
-                        selectedGraph = Math.Min(selectedGraph + 1, graphList.Length - 1);
+                        selectedGraph = Math.Min(selectedGraph + moveSpace, graphList.Length - 1);
                         renderer.Object.SubObjects[0].Y = menuPosition();
                         graphList[selectedGraph].ColorAreas = selectedElementColor();
                         break;
@@ -286,7 +288,7 @@ static partial class App
                 }
             }
 
-            Thread.Sleep(50);
+            Thread.Sleep(25);
             if (renderer.UpdateScreenSize())
             {
                 renderer.Object.Width = renderer.TerminalWidth;

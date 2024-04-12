@@ -121,7 +121,7 @@ static partial class App
                 }
             }
 
-            Thread.Sleep(50);
+            Thread.Sleep(25);
             if (renderer.UpdateScreenSize())
             {
                 renderer.Object.Width = renderer.TerminalWidth;

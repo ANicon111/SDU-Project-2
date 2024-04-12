@@ -50,7 +50,7 @@ static partial class App
                         );
 
         RendererObject timeSpan = new(
-                            text: $"{times[selectedTime].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {times[selectedTime].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}",
+                            text: $"{times[selectedTime].Item1:yyyy'-'MM'-'dd' 'HH':'mm':'ss} - {times[selectedTime].Item2:yyyy'-'MM'-'dd' 'HH':'mm':'ss}",
                             colorAreas: [new(Colors.White, true)],
                             externalAlignmentX: Alignment.Right
                         );
@@ -82,7 +82,7 @@ static partial class App
         RendererObject graphBarList = new(
                     geometry: new(0, graphs.Count, times.Count * graphs.Count, renderer.TerminalHeight - graphs.Count),
                     defaultCharacter: ' ',
-                    renderBuffer: 10
+                    renderBuffer: 30
                 );
 
         RendererObject root = new(
@@ -223,7 +223,7 @@ static partial class App
             }
 
             //change the time
-            timeSpan.Text = $"{times[selectedTime].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {times[selectedTime].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}";
+            timeSpan.Text = $"{times[selectedTime].Item1:yyyy'-'MM'-'dd' 'HH':'mm':'ss} - {times[selectedTime].Item2:yyyy'-'MM'-'dd' 'HH':'mm':'ss}";
 
 
             //recalculate all geometries if terminal resized
@@ -318,15 +318,17 @@ static partial class App
             //process keys while they are available in the buffer
             while (Console.KeyAvailable)
             {
-                switch (renderer.ReadKey().Key)
+                ConsoleKeyInfo consoleKeyInfo = renderer.ReadKey();
+                int moveSpace = consoleKeyInfo.Modifiers == ConsoleModifiers.Control ? 5 : 1;
+                switch (consoleKeyInfo.Key)
                 {
                     //switch highlighted graph bar and move graph to center it
                     case ConsoleKey.LeftArrow:
-                        selectedTime = Math.Max(selectedTime - 1, 0);
+                        selectedTime = Math.Max(selectedTime - moveSpace, 0);
                         updateGraph();
                         break;
                     case ConsoleKey.RightArrow:
-                        selectedTime = Math.Min(selectedTime + 1, times.Count - 1);
+                        selectedTime = Math.Min(selectedTime + moveSpace, times.Count - 1);
                         updateGraph();
                         break;
 
@@ -348,7 +350,7 @@ static partial class App
                 }
             }
 
-            Thread.Sleep(50);
+            Thread.Sleep(25);
             if (renderer.UpdateScreenSize())
             {
                 zeroHeight = Math.Max(1, (int)((renderer.TerminalHeight - 1) * maxValue / (maxValue - minValue)));

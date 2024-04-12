@@ -34,10 +34,10 @@
             <Button VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="{Binding BaseSize}" Command="{Binding CloseAddSourceData}" Content="Close" Foreground="Red"/>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Foreground="White" Text="Add a source data entry" FontSize="{Binding BaseSize}"/>
-                <TextBlock Foreground="White" Text="Start time (dd.MM.yyyy hh:mm[:ss])" />
-                <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 00:00:00" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
-                <TextBlock Foreground="White" Text="End time (dd.MM.yyyy hh:mm[:ss])" />
-                <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 01:00:00" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
+                <TextBlock Foreground="White" Text="Start time (yyyy-MM-dd hh:mm[:ss])" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="2001-01-01 00:00:00" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
+                <TextBlock Foreground="White" Text="End time (yyyy-MM-dd hh:mm[:ss])" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="2001-01-01 01:00:00" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
                 <TextBlock Foreground="White" Text="Heat usage in MWh" />
                 <TextBox HorizontalAlignment="Stretch" Watermark="1352.6" Text="{Binding NewSourceHeatUsage, Mode=TwoWay}" />
                 <TextBlock Foreground="White" Text="Electricity price in dkk per MWh" />
@@ -50,10 +50,10 @@
             <Button VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="{Binding BaseSize}" Command="{Binding CloseImportSourceData}" Content="Close" Foreground="Red"/>
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Foreground="White" Text="Import source data from the energidataservice.dk API" FontSize="{Binding BaseSize}"/>
-                <TextBlock Foreground="White" Text="Start time (dd.MM.yyyy hh:mm)" />
-                <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 00:00" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
-                <TextBlock Foreground="White" Text="End time (dd.MM.yyyy hh:mm)" />
-                <TextBox HorizontalAlignment="Stretch" Watermark="01.01.2001 01:00" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
+                <TextBlock Foreground="White" Text="Start time (yyyy-MM-dd hh:mm)" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="2001-01-01 00:00" Text="{Binding NewSourceStartTime, Mode=TwoWay}" />
+                <TextBlock Foreground="White" Text="End time (yyyy-MM-dd hh:mm)" />
+                <TextBox HorizontalAlignment="Stretch" Watermark="2001-01-08 00:00" Text="{Binding NewSourceEndTime, Mode=TwoWay}" />
                 <Button Foreground="White" HorizontalAlignment="Center" FontSize="{Binding BaseSize}" Command="{Binding ImportSourceData}" Content="Import Source Data"/>
             </StackPanel>
         </Panel>

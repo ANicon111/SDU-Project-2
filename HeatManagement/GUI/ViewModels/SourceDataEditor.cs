@@ -65,12 +65,12 @@ class SourceDataEditorViewModel : ViewModelBase
 
     private string? TryParseSource()
     {
-        if (!DateTime.TryParseExact(NewSourceStartTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime startTime))
-            if (!DateTime.TryParseExact(NewSourceStartTime, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out startTime))
+        if (!DateTime.TryParseExact(NewSourceStartTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime startTime))
+            if (!DateTime.TryParseExact(NewSourceStartTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out startTime))
                 if (!DateTime.TryParse(NewSourceStartTime, out startTime))
                     if (!DateTime.TryParse(NewSourceStartTime, CultureInfo.InvariantCulture, out startTime)) return "Invalid start time";
-        if (!DateTime.TryParseExact(NewSourceEndTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime endTime))
-            if (!DateTime.TryParseExact(NewSourceEndTime, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out endTime))
+        if (!DateTime.TryParseExact(NewSourceEndTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime endTime))
+            if (!DateTime.TryParseExact(NewSourceEndTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out endTime))
                 if (!DateTime.TryParse(NewSourceEndTime, out endTime))
                     if (!DateTime.TryParse(NewSourceEndTime, CultureInfo.InvariantCulture, out endTime)) return "Invalid end time";
         if (endTime <= startTime) return "End time cannot be before or equal to the start time";
@@ -103,10 +103,10 @@ class SourceDataEditorViewModel : ViewModelBase
 
     private string? TryImportSource()
     {
-        if (!DateTime.TryParseExact(NewSourceStartTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime startTime))
+        if (!DateTime.TryParseExact(NewSourceStartTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime startTime))
             if (!DateTime.TryParse(NewSourceStartTime, out startTime))
                 if (!DateTime.TryParse(NewSourceStartTime, CultureInfo.InvariantCulture, out startTime)) return "Invalid start time";
-        if (!DateTime.TryParseExact(NewSourceEndTime, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime endTime))
+        if (!DateTime.TryParseExact(NewSourceEndTime, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AllowWhiteSpaces, out DateTime endTime))
             if (!DateTime.TryParse(NewSourceEndTime, out endTime))
                 if (!DateTime.TryParse(NewSourceEndTime, CultureInfo.InvariantCulture, out endTime)) return "Invalid end time";
 
@@ -193,7 +193,7 @@ class SourceDataEditorElementViewModel(double baseSize, DateTime startTime, Date
     public double BaseSize { get; } = baseSize;
     public readonly DateTime StartTime = startTime;
     public readonly DateTime EndTime = endTime;
-    public string TimeRange { get; } = $"{startTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss} - {endTime:dd'.'MM'.'yyyy' 'HH':'mm':'ss}";
+    public string TimeRange { get; } = $"{startTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss} - {endTime:yyyy'-'MM'-'dd' 'HH':'mm':'ss}";
     private readonly Action<DateTime, DateTime, SourceDataEditorElementViewModel> removeSourceData = removeSourceData;
     public void RemoveSourceData() => removeSourceData(StartTime, EndTime, this);
 }
