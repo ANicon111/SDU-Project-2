@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -81,7 +82,8 @@ static partial class App
 
         RendererObject graphBarList = new(
             geometry: new(0, graphs.Count, times.Count * graphs.Count, renderer.TerminalHeight - graphs.Count),
-            defaultCharacter: ' '
+            defaultCharacter: ' ',
+            renderBuffer: 1000
         );
 
         RendererObject root = new(
@@ -246,19 +248,20 @@ static partial class App
                         }
                         int height = (int)(renderer.TerminalHeight * graphValue / (maxValue - minValue));
                         int sign = Math.Sign(height);
+                        height *= sign;
+                        int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - height) * 8);
                         graphBarList.SubObjects[i * graphs.Count + j].Height = Math.Abs(height);
                         graphBarList.SubObjects[i * graphs.Count + j].Y = sign > 0 ? zeroHeight - height : zeroHeight;
-                        int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - Math.Abs(height)) * 8);
                         graphBarList.SubObjects[i * graphs.Count + j].Border = new(
-                                top: sign < 0 ? null : (char)('▁' + heightFractions8),
-                                bottom: sign > 0 ? null : (char)('█' - heightFractions8)
-                            );
+                            top: sign < 0 ? null : (char)('▁' + heightFractions8),
+                            bottom: sign > 0 ? null : (char)('█' - heightFractions8)
+                        );
                         graphBarList.SubObjects[i * graphs.Count + j].ColorAreas = sign < 0 ?
-                            [
-                                new(colors[j], true),
-                                new(colors[j], false, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom),
-                                new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom)
-                            ] : [new(colors[j], true)];
+                        [
+                            new(colors[j], true),
+                            new(colors[j], false, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom),
+                            new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom, true)
+                        ] : [new(colors[j], true)];
                     }
                 }
             }
@@ -301,6 +304,31 @@ static partial class App
             }
             return "";
         }
+
+
+        string searchStartTime(string text)
+        {
+            DateTime? searchedStartTime = null;
+            try
+            {
+                searchedStartTime = DateTime.ParseExact(text, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                return "Couldn't parse time";
+            }
+
+            for (selectedTime = 0; selectedTime < times.Count - 1; selectedTime++)
+            {
+                if (searchedStartTime <= times[selectedTime].Item1)
+                {
+                    break;
+                }
+            }
+            updateGraph();
+            return "";
+        }
+
         //funky trick to reuse the greeter file dialogue without using an argument
         string[] _notArgs = [];
 
@@ -313,6 +341,7 @@ static partial class App
             {
                 ConsoleKeyInfo consoleKeyInfo = renderer.ReadKey();
                 int moveSpace = consoleKeyInfo.Modifiers == ConsoleModifiers.Control ? 5 : 1;
+                bool escaped = false;
                 switch (consoleKeyInfo.Key)
                 {
                     //switch highlighted graph bar and move graph to center it
@@ -332,12 +361,20 @@ static partial class App
 
                     //export to csv/json
                     case ConsoleKey.E:
-                        bool escaped = false;
                         TextBox(
                             escaped: ref escaped,
                             text: "graph.csv",
                             title: "Input the exported file path:",
                             fileAction: tryExportFile
+                        );
+                        break;
+                    //jump to time
+                    case ConsoleKey.J:
+                        TextBox(
+                            escaped: ref escaped,
+                            text: $"{times[selectedTime].Item1:yyyy'-'MM'-'dd' 'HH':'mm':'ss}",
+                            title: "Jump to time:",
+                            fileAction: searchStartTime
                         );
                         break;
                 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -81,8 +82,8 @@ namespace AnsiRenderer
         {
             get
             {
-                double max = uint.Max(uint.Max(R, G), B) / 255.0d;
-                double min = uint.Min(uint.Min(R, G), B) / 255.0d;
+                double max = Math.Max(Math.Max(R, G), B) / 255.0d;
+                double min = Math.Min(Math.Min(R, G), B) / 255.0d;
 
                 if (max == min) return 0;
                 return (max - min) / (1 - double.Abs(2 * L - 1));
@@ -90,7 +91,7 @@ namespace AnsiRenderer
         }
         public readonly double L
         {
-            get { return (uint.Max(uint.Max(R, G), B) / 255.0d + uint.Min(uint.Min(R, G), B) / 255.0d) / 2; }
+            get { return (Math.Max(Math.Max(R, G), B) / 255.0d + Math.Min(Math.Min(R, G), B) / 255.0d) / 2; }
         }
 
         public static Color FromHSLA(double hue, double saturation, double luminosity, double a = 1)
@@ -820,17 +821,17 @@ namespace AnsiRenderer
                 if (animation != null)
                     foreach (string[] animationLines in animation)
                     {
-                        height = int.Max(height, animationLines.Length);
-                        foreach (string line in animationLines) width = int.Max(width, line.Length);
+                        height = Math.Max(height, animationLines.Length);
+                        foreach (string line in animationLines) width = Math.Max(width, line.Length);
                     }
-                foreach (string line in lines) width = int.Max(width, line.Length);
+                foreach (string line in lines) width = Math.Max(width, line.Length);
 
                 if (subObjects != null)
                 {
                     foreach (RendererObject subObject in subObjects)
                     {
-                        width = int.Max(width, subObject.width + subObject.x);
-                        height = int.Max(height, subObject.height + subObject.y);
+                        width = Math.Max(width, subObject.width + subObject.x);
+                        height = Math.Max(height, subObject.height + subObject.y);
                     }
                 }
 
@@ -933,8 +934,10 @@ namespace AnsiRenderer
         {
             public readonly int X = x, Y = y, Width = width, Height = height;
         }
-        public Pixel[,] Pixels(RendererContext ctx)
+        public Pixel[,] Pixels(RendererContext ctx, bool preRendered, int renderBuffer)
         {
+            preRendered = preRendered || this.preRendered;
+            renderBuffer = Math.Max(renderBuffer, this.renderBuffer);
             if (!preRendered)
             {
                 bool newObjects()
@@ -1045,10 +1048,17 @@ namespace AnsiRenderer
             }
 
             {
-                int x = Math.Max(0, -ctx.X - renderBuffer);
-                int y = Math.Max(0, -ctx.Y - renderBuffer);
-                int w = Math.Min(width, -ctx.X + ctx.Width + renderBuffer);
-                int h = Math.Min(height, -ctx.Y + ctx.Height + renderBuffer);
+                int x = 0;
+                int y = 0;
+                int w = width;
+                int h = height;
+                if (!preRendered)
+                {
+                    x = Math.Max(x, -ctx.X - renderBuffer);
+                    y = Math.Max(y, -ctx.Y - renderBuffer);
+                    w = Math.Min(w, -ctx.X + ctx.Width + renderBuffer);
+                    h = Math.Min(h, -ctx.Y + ctx.Height + renderBuffer);
+                }
                 for (int i = x; i < w; i++)
                 {
                     for (int j = y; j < h; j++)
@@ -1059,36 +1069,52 @@ namespace AnsiRenderer
             }
 
             //text drawing
-            int borderOffset = border == null ? 0 : 1;
-            int yStart = borderOffset;
-            int yEnd = lines.Length + borderOffset;
-            if (InternalAlignmentY == Alignment.Center)
+            int borderOffsetXStart = 0;
+            int borderOffsetXEnd = 0;
+            int borderOffsetYStart = 0;
+            int borderOffsetYEnd = 0;
+            if (border != null)
             {
-                yStart = height / 2 - lines.Length / 2;
-                yEnd = height / 2 - lines.Length / 2 + lines.Length;
+                if (border.Value.Top != null) borderOffsetYStart = 1;
+                if (border.Value.Right != null) borderOffsetXEnd = 1;
+                if (border.Value.Bottom != null) borderOffsetYEnd = 1;
+                if (border.Value.Top != null) borderOffsetXStart = 1;
             }
-            if (InternalAlignmentY == Alignment.Bottom)
             {
-                yStart = height - lines.Length - borderOffset;
-                yEnd = height - borderOffset;
-            }
-            for (int j = int.Max(0, yStart); j < int.Min(height, yEnd); j++)
-            {
-                int xStart = borderOffset;
-                int xEnd = lines[j - yStart].Length + borderOffset;
-                if (InternalAlignmentX == Alignment.Center)
+                int yStart = borderOffsetYStart;
+                int yEnd = lines.Length + borderOffsetYStart;
+                if (InternalAlignmentY == Alignment.Center)
                 {
-                    xStart = width / 2 - lines[j - yStart].Length / 2;
-                    xEnd = width / 2 - lines[j - yStart].Length / 2 + lines[j - yStart].Length;
+                    yStart = height / 2 - lines.Length / 2;
+                    yEnd = height / 2 - lines.Length / 2 + lines.Length;
                 }
-                if (InternalAlignmentX == Alignment.Right)
+                if (InternalAlignmentY == Alignment.Bottom)
                 {
-                    xStart = width - lines[j - yStart].Length - borderOffset;
-                    xEnd = width - borderOffset;
+                    yStart = height - lines.Length - borderOffsetYEnd;
+                    yEnd = height - borderOffsetYEnd;
                 }
-                for (int i = int.Max(0, xStart); i < int.Min(width, xEnd); i++)
+                int y = Math.Max(0, yStart);
+                int h = Math.Min(height, yEnd);
+                for (int j = y; j < h; j++)
                 {
-                    pixels[i, j].Ch = lines[j - yStart][i - xStart];
+                    int xStart = borderOffsetXStart;
+                    int xEnd = lines[j - yStart].Length + borderOffsetXStart;
+                    if (InternalAlignmentX == Alignment.Center)
+                    {
+                        xStart = width / 2 - lines[j - yStart].Length / 2;
+                        xEnd = width / 2 - lines[j - yStart].Length / 2 + lines[j - yStart].Length;
+                    }
+                    if (InternalAlignmentX == Alignment.Right)
+                    {
+                        xStart = width - lines[j - yStart].Length - borderOffsetXEnd;
+                        xEnd = width - borderOffsetXEnd;
+                    }
+                    int x = Math.Max(0, xStart);
+                    int w = Math.Min(width, xEnd);
+                    for (int i = x; i < w; i++)
+                    {
+                        pixels[i, j].Ch = lines[j - yStart][i - xStart];
+                    }
                 }
             }
 
@@ -1096,8 +1122,8 @@ namespace AnsiRenderer
             if (animation.Count != 0)
             {
                 string[] animationLines = animation[animationFrame];
-                int animationYStart = borderOffset;
-                int animationYEnd = animationLines.Length + borderOffset;
+                int animationYStart = borderOffsetYStart;
+                int animationYEnd = animationLines.Length + borderOffsetYStart;
                 if (InternalAlignmentY == Alignment.Center)
                 {
                     animationYStart = height / 2 - animationLines.Length / 2;
@@ -1105,16 +1131,16 @@ namespace AnsiRenderer
                 }
                 if (InternalAlignmentY == Alignment.Bottom)
                 {
-                    animationYStart = height - animationLines.Length - borderOffset;
-                    animationYEnd = height - borderOffset;
+                    animationYStart = height - animationLines.Length - borderOffsetYEnd;
+                    animationYEnd = height - borderOffsetYEnd;
                 }
 
                 int y = Math.Max(0, animationYStart);
                 int h = Math.Min(height, animationYEnd);
                 for (int j = y; j < h; j++)
                 {
-                    int animationXStart = borderOffset;
-                    int animationXEnd = animationLines[j - animationYStart].Length + borderOffset;
+                    int animationXStart = borderOffsetXStart;
+                    int animationXEnd = animationLines[j - animationYStart].Length + borderOffsetXStart;
                     if (InternalAlignmentX == Alignment.Center)
                     {
                         animationXStart = width / 2 - animationLines[j - animationYStart].Length / 2;
@@ -1122,8 +1148,8 @@ namespace AnsiRenderer
                     }
                     if (InternalAlignmentX == Alignment.Right)
                     {
-                        animationXStart = width - animationLines[j - animationYStart].Length - borderOffset;
-                        animationXEnd = width - borderOffset;
+                        animationXStart = width - animationLines[j - animationYStart].Length - borderOffsetYEnd;
+                        animationXEnd = width - borderOffsetYEnd;
                     }
 
                     int x = Math.Max(0, animationXStart);
@@ -1269,10 +1295,17 @@ namespace AnsiRenderer
                 }
             }
             {
-                int x = Math.Max(0, -ctx.X - renderBuffer);
-                int y = Math.Max(0, -ctx.Y - renderBuffer);
-                int w = Math.Min(width, -ctx.X + ctx.Width + renderBuffer);
-                int h = Math.Min(height, -ctx.Y + ctx.Height + renderBuffer);
+                int x = 0;
+                int y = 0;
+                int w = width;
+                int h = height;
+                if (!preRendered)
+                {
+                    x = Math.Max(x, -ctx.X - renderBuffer);
+                    y = Math.Max(y, -ctx.Y - renderBuffer);
+                    w = Math.Min(w, -ctx.X + ctx.Width + renderBuffer);
+                    h = Math.Min(h, -ctx.Y + ctx.Height + renderBuffer);
+                }
                 for (int i = x; i < w; i++)
                 {
                     for (int j = y; j < h; j++)
@@ -1334,7 +1367,7 @@ namespace AnsiRenderer
                         extraY = height - subObject.height;
                     }
                 }
-                Pixel[,] subPixels = subObject.Pixels(new(ctx.X + subObject.x + extraX, ctx.Y + subObject.y + extraY, ctx.Width, ctx.Height));
+                Pixel[,] subPixels = subObject.Pixels(new(ctx.X + subObject.x + extraX, ctx.Y + subObject.y + extraY, ctx.Width, ctx.Height), preRendered, renderBuffer);
                 int x = Math.Max(0, subObject.x + extraX);
                 int y = Math.Max(0, subObject.y + extraY);
                 int w = Math.Min(width, subObject.x + extraX + subObject.width);
@@ -1395,7 +1428,7 @@ namespace AnsiRenderer
         public Border? Border
         {
             get { Update(); return border; }
-            set { Update(); border = value; }
+            set { Update(); border = value; GuessGeometry(); }
         }
         public int AnimationFrame
         {
@@ -1518,14 +1551,18 @@ namespace AnsiRenderer
             if (Object.ExternalAlignmentX == Alignment.End) x += TerminalWidth - Object.Width;
             if (Object.ExternalAlignmentY == Alignment.Center) y += TerminalHeight / 2 - Object.Height / 2;
             if (Object.ExternalAlignmentY == Alignment.End) y += TerminalHeight - Object.Height;
-            Pixel[,] objectPixels = Object.Pixels(new(0, 0, terminalWidth, terminalHeight));
-            for (int j = int.Max(0, y); j < int.Min(terminalHeight, Object.Height + y); j++)
-                for (int i = int.Max(0, x); i < int.Min(terminalWidth, Object.Width + x); i++)
+            Pixel[,] objectPixels = Object.Pixels(new(0, 0, terminalWidth, terminalHeight), false, 0);
+            x = Math.Max(0, x);
+            y = Math.Max(0, y);
+            int w = Math.Min(terminalWidth, Object.Width + x);
+            int h = Math.Min(terminalHeight, Object.Height + y);
+            for (int j = y; j < h; j++)
+                for (int i = x; i < w; i++)
                     frameBuffer[i, j] = objectPixels[i - x, j - y];
-            for (int j = limitToObjectScope ? int.Max(0, y) : 0; j < (limitToObjectScope ? int.Min(terminalHeight, Object.Height + y) : terminalHeight); j++)
+            for (int j = limitToObjectScope ? y : 0; j < (limitToObjectScope ? h : terminalHeight); j++)
             {
                 bool updateRow = false;
-                for (int i = limitToObjectScope ? int.Max(0, x) : 0; i < (limitToObjectScope ? int.Min(terminalWidth, Object.Width + x) : terminalWidth); i++)
+                for (int i = limitToObjectScope ? x : 0; i < (limitToObjectScope ? w : terminalWidth); i++)
                     if (frameBuffer[i, j] != oldFrameBuffer[i, j] || updateRow || forceRedraw)
                     {
                         if (!updateRow)
