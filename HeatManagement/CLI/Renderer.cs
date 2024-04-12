@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 
 namespace AnsiRenderer
@@ -675,12 +676,13 @@ namespace AnsiRenderer
         public override readonly int GetHashCode() => base.GetHashCode();
     }
 
-    public struct ColorArea(Color color, bool foreground = false, Rectangle? geometry = null, Alignment? alignmentX = null, Alignment? alignmentY = null)
+    public struct ColorArea(Color color, bool foreground = false, Rectangle? geometry = null, Alignment? alignmentX = null, Alignment? alignmentY = null, bool replace = false)
     {
         public Color Color = color;
         public Rectangle? Geometry = geometry;
         public bool Foreground = foreground;
         public Alignment? AlignmentX = alignmentX, AlignmentY = alignmentY;
+        public bool Replace = replace;
     }
 
     public enum Alignment : byte
@@ -799,9 +801,12 @@ namespace AnsiRenderer
 
         public void SubObjectUpdate(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            foreach (RendererObject rendererObject in subObjects)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                rendererObject.Parent = this;
+                foreach (RendererObject rendererObject in e.NewItems!)
+                {
+                    rendererObject.Parent = this;
+                }
             }
             Update();
         }
@@ -1215,12 +1220,25 @@ namespace AnsiRenderer
                     {
                         for (int j = Math.Max(0, colorArea.Geometry!.Value.Y + extraY); j < Math.Min(height, colorArea.Geometry!.Value.Y + extraY + colorArea.Geometry!.Value.Height); j++)
                         {
-
-                            if (colorArea.Foreground)
-                                pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
-                            else
-                                pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
-
+                            if (colorArea.Color != Color.Invalid)
+                            {
+                                if (colorArea.Foreground)
+                                {
+                                    if (colorArea.Replace)
+                                    {
+                                        pixels[i, j].FG = Color.Invalid;
+                                    }
+                                    pixels[i, j].FG = pixels[i, j].FG.WithOverlay(colorArea.Color);
+                                }
+                                else
+                                {
+                                    if (colorArea.Replace)
+                                    {
+                                        pixels[i, j].BG = Color.Invalid;
+                                    }
+                                    pixels[i, j].BG = pixels[i, j].BG.WithOverlay(colorArea.Color);
+                                }
+                            }
                         }
                     }
                 }
@@ -1323,21 +1341,29 @@ namespace AnsiRenderer
         }
         public int Width
         {
-            get => width; set { width = value; Update(); sizeChanged = true; geometryExplicitlySet = true; }
+            get => width; set { Update(); width = value; sizeChanged = true; geometryExplicitlySet = true; }
         }
         public int Height
         {
-            get => height; set { height = value; Update(); sizeChanged = true; geometryExplicitlySet = true; }
+            get => height; set { Update(); height = value; sizeChanged = true; geometryExplicitlySet = true; }
         }
         public char DefaultCharacter
         {
-            get => defaultCharacter; set { defaultCharacter = value; Update(); }
+            get => defaultCharacter; set { Update(); defaultCharacter = value; }
         }
 
         public ObservableCollection<RendererObject> SubObjects
         {
             get => subObjects;
-            set { Update(); subObjects = value; }
+            set
+            {
+                Update();
+                subObjects = value;
+                for (int i = 0; i < subObjects.Count; i++)
+                {
+                    subObjects[i].Parent = this;
+                }
+            }
         }
         public ObservableCollection<ColorArea> ColorAreas
         {

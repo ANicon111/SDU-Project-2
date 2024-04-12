@@ -36,54 +36,54 @@ static partial class App
         int zeroHeight = Math.Max(1, (int)((renderer.TerminalHeight - graphs.Count) * maxValue / (maxValue - minValue)));
 
         RendererObject nameList = new(
-                            geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
-                            subObjects: [],
-                            externalAlignmentX: Alignment.Left,
-                            internalAlignmentX: Alignment.Left
-                        );
+            geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
+            subObjects: [],
+            externalAlignmentX: Alignment.Left,
+            internalAlignmentX: Alignment.Left
+        );
 
         RendererObject valueList = new(
-                            geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
-                            subObjects: [],
-                            externalAlignmentX: Alignment.Center,
-                            internalAlignmentX: Alignment.Center
-                        );
+            geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
+            subObjects: [],
+            externalAlignmentX: Alignment.Center,
+            internalAlignmentX: Alignment.Center
+        );
 
         RendererObject timeSpan = new(
-                            text: $"{times[selectedTime].Item1:yyyy'-'MM'-'dd' 'HH':'mm':'ss} - {times[selectedTime].Item2:yyyy'-'MM'-'dd' 'HH':'mm':'ss}",
-                            colorAreas: [new(Colors.White, true)],
-                            externalAlignmentX: Alignment.Right
-                        );
+            text: $"{times[selectedTime].Item1:yyyy'-'MM'-'dd' 'HH':'mm':'ss} - {times[selectedTime].Item2:yyyy'-'MM'-'dd' 'HH':'mm':'ss}",
+            colorAreas: [new(Colors.White, true)],
+            externalAlignmentX: Alignment.Right
+        );
 
         RendererObject header = new(
-                    geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
-                    colorAreas: [
-                        new(Colors.Black.WithAlpha(0.25))
-                    ],
-                    defaultCharacter: ' ',
-                    subObjects: [
-                        nameList,
-                        valueList,
-                        timeSpan
-                    ]
-                );
+            geometry: new(0, 0, renderer.TerminalWidth, graphs.Count),
+            colorAreas: [
+                new(Colors.Black.WithAlpha(0.25))
+            ],
+            defaultCharacter: ' ',
+            subObjects: [
+                nameList,
+                valueList,
+                timeSpan
+            ]
+        );
 
         RendererObject selectionBar = new(
-                    geometry: new(0, graphs.Count, graphs.Count, renderer.TerminalHeight - graphs.Count),
-                    defaultCharacter: ' ',
-                    colorAreas: [new(Colors.White.WithAlpha(0.5))]
-                );
+            geometry: new(0, graphs.Count, graphs.Count, renderer.TerminalHeight - graphs.Count),
+            defaultCharacter: ' ',
+            colorAreas: [new(Colors.White.WithAlpha(0.5))]
+        );
 
         RendererObject zeroLine = new(
-                    geometry: new(0, zeroHeight + graphs.Count - 1, renderer.TerminalWidth, 1),
-                    defaultCharacter: '▁'
-                );
+            geometry: new(0, zeroHeight + graphs.Count - 1, renderer.TerminalWidth, 1),
+            defaultCharacter: '▁'
+        );
 
         RendererObject graphBarList = new(
-                    geometry: new(0, graphs.Count, times.Count * graphs.Count, renderer.TerminalHeight - graphs.Count),
-                    defaultCharacter: ' ',
-                    renderBuffer: 30
-                );
+            geometry: new(0, graphs.Count, times.Count * graphs.Count, renderer.TerminalHeight - graphs.Count),
+            defaultCharacter: ' ',
+            renderBuffer: 1000
+        );
 
         RendererObject root = new(
             geometry: new(0, 0, renderer.TerminalWidth, renderer.TerminalHeight),
@@ -170,7 +170,11 @@ static partial class App
         //add graph bars
         for (int i = 0; i < times.Count; i++)
         {
-            graphBarList.ColorAreas.Add(new(grays[i % 2], false, new(i * graphs.Count, 0, graphs.Count, 100000)));
+            graphBarList.ColorAreas.Add(new(
+                grays[i % 2],
+                false,
+                new(i * graphs.Count, 0, graphs.Count, 100000)
+                ));
             for (int j = 0; j < graphs.Count; j++)
             {
                 double graphValue = 0;
@@ -194,14 +198,15 @@ static partial class App
                     [
                         new(colors[j], true),
                         new(colors[j], false, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom),
-                        new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom)
+                        new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom, true)
                     ] : [new(colors[j], true)],
                     defaultCharacter: '█',
                     //modify the top and bottom borders for extra precision
                     border: new(
                         top: sign < 0 ? null : (char)('▁' + heightFractions8),
                         bottom: sign > 0 ? null : (char)('█' - heightFractions8)
-                    )
+                    ),
+                    renderBuffer: 1000
                 ));
             }
         }
@@ -229,7 +234,7 @@ static partial class App
             //recalculate all geometries if terminal resized
             if (resize)
             {
-                zeroHeight = Math.Max(graphs.Count, (int)((renderer.TerminalHeight - graphs.Count) * maxValue / (maxValue - minValue)));
+                zeroHeight = Math.Max(1, (int)((renderer.TerminalHeight - graphs.Count) * maxValue / (maxValue - minValue)));
                 zeroLine.Width = renderer.TerminalWidth;
                 zeroLine.Y = zeroHeight + graphs.Count - 1;
                 for (int i = 0; i < times.Count; i++)
@@ -243,29 +248,19 @@ static partial class App
                         }
                         int height = (int)(renderer.TerminalHeight * graphValue / (maxValue - minValue));
                         int sign = Math.Sign(height);
-                        height *= sign;
-                        int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - height) * 8);
-                        graphBarList.SubObjects[i * graphs.Count + j] = new(
-                            geometry: new(
-                                i * graphs.Count + j,
-                                sign > 0 ? zeroHeight - height : zeroHeight,
-                                1,
-                                height
-                            ),
-                            //invert bottom slice if graph value is negative
-                            colorAreas: sign < 0 ?
+                        graphBarList.SubObjects[i * graphs.Count + j].Height = Math.Abs(height);
+                        graphBarList.SubObjects[i * graphs.Count + j].Y = sign > 0 ? zeroHeight - height : zeroHeight;
+                        int heightFractions8 = (int)((Math.Abs(renderer.TerminalHeight * graphValue / (maxValue - minValue)) - Math.Abs(height)) * 8);
+                        graphBarList.SubObjects[i * graphs.Count + j].Border = new(
+                                top: sign < 0 ? null : (char)('▁' + heightFractions8),
+                                bottom: sign > 0 ? null : (char)('█' - heightFractions8)
+                            );
+                        graphBarList.SubObjects[i * graphs.Count + j].ColorAreas = sign < 0 ?
                             [
                                 new(colors[j], true),
                                 new(colors[j], false, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom),
                                 new(Color.FromUInt(0), true, new(0, 0, 1, 1), Alignment.Center, Alignment.Bottom)
-                            ] : [new(colors[j], true)],
-                            defaultCharacter: '█',
-                            //modify the top and bottom borders for extra precision
-                            border: new(
-                                top: sign < 0 ? null : (char)('▁' + heightFractions8),
-                                bottom: sign > 0 ? null : (char)('█' - heightFractions8)
-                            )
-                        );
+                            ] : [new(colors[j], true)];
                     }
                 }
             }

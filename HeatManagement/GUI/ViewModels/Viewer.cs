@@ -54,7 +54,7 @@ class ViewerViewModel : ViewModelBase
         GraphBarList[LastSelectedIndex].BarBackground = LastSelectedIndex % 2 == 0 ? new SolidColorBrush(0x20303030) : new SolidColorBrush(0x20101010);
         LastSelectedIndex = index;
         GraphBarList[index].BarBackground = new SolidColorBrush(0x20ffffff);
-        GraphTime = $"{Times[index].Item1:dd'.'MM'.'yyyy' 'HH':'mm':'ss}\n{Times[index].Item2:dd'.'MM'.'yyyy' 'HH':'mm':'ss}";
+        GraphTime = $"{Times[index].Item1:yyyy'-'MM'-'dd' 'HH':'mm':'ss}\n{Times[index].Item2:yyyy'-'MM'-'dd' 'HH':'mm':'ss}";
         for (int i = 0; i < SelectedGraphList.Count; i++)
         {
             GraphValues[Options[SelectedGraphList[i]]].TryGetValue(Times[index], out double value);
