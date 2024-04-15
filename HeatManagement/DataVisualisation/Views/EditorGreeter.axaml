@@ -6,5 +6,7 @@
         xmlns:vm="using:HeatManagement.ViewModels"
         x:DataType="vm:MainWindowViewModel"
         x:Class="HeatManagement.Views.EditorGreeter">
-Editor Greeter Placeholder
+        <StackPanel>
+                <Button Content="Open File" Command="{Binding OpenAssetOrSourceFile}"/>
+        </StackPanel>
 </UserControl>
