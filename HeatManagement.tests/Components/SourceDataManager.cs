@@ -37,7 +37,7 @@ public class SourceDataManagerTests
             heatDemand: 1.79,
             electricityPrice: 752.03
         );
-        
+
         string expected = """
         [
             {
@@ -48,7 +48,7 @@ public class SourceDataManagerTests
             }
         ]
         """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
-        
+
         string actual = sourceDataManager.JsonExport();
         Assert.Equal(expected, actual);
     }
@@ -84,9 +84,67 @@ public class SourceDataManagerTests
         ]
         """);
         sourceDataManager.DataRemove(
-            startTime: new DateTime(year:2023, month:02, day: 08, hour: 02, minute: 0, second: 0)
+            startTime: new DateTime(year: 2023, month: 02, day: 08, hour: 02, minute: 0, second: 0)
         );
         string actual = sourceDataManager.JsonExport();
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void CSVExportTest()
+    {
+        string expected = """
+            StartTime, EndTime, HeatDemand, ElectricityPrice
+            07/08/2023 00:00:00, 07/08/2023 01:00:00, 1.79, 752.03
+            07/08/2022 00:00:00, 07/08/2022 01:00:00, 1.05, 743.03
+            """.Replace("\r\n", "\n");
+        SourceDataManager sourceDataManager = new();
+        sourceDataManager.DataAdd(
+            startTime: new DateTime(year: 2023, month: 07, day: 08, hour: 0, minute: 0, second: 0),
+            endTime: new DateTime(year: 2023, month: 07, day: 08, hour: 1, minute: 0, second: 0),
+            heatDemand: 1.79,
+            electricityPrice: 752.03
+        );
+        sourceDataManager.DataAdd(
+            startTime: new DateTime(year: 2022, month: 07, day: 08, hour: 0, minute: 0, second: 0),
+            endTime: new DateTime(year: 2022, month: 07, day: 08, hour: 1, minute: 0, second: 0),
+            heatDemand: 1.05,
+            electricityPrice: 743.03
+        );
+        string actual = sourceDataManager.CSVExport();
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void CSVImportTest()
+    {
+        string data = """
+            StartTime, EndTime, HeatDemand, ElectricityPrice
+            07/08/2023 00:00:00, 07/08/2023 01:00:00, 1.79, 752.03
+            07/08/2022 00:00:00, 07/08/2022 01:00:00, 1.05, 743.03
+            """.Replace("\r\n", "\n");
+
+        SourceDataManager sourceDataManager = new();
+        SourceDataManager sourceDataManager1 = new();
+
+        sourceDataManager.CSVImport(data);
+        string actual = sourceDataManager.JsonExport();
+
+        sourceDataManager1.DataAdd(
+            startTime: new DateTime(year: 2023, month: 07, day: 08, hour: 0, minute: 0, second: 0),
+            endTime: new DateTime(year: 2023, month: 07, day: 08, hour: 1, minute: 0, second: 0),
+            heatDemand: 1.79,
+            electricityPrice: 752.03
+        );
+        sourceDataManager1.DataAdd(
+            startTime: new DateTime(year: 2022, month: 07, day: 08, hour: 0, minute: 0, second: 0),
+            endTime: new DateTime(year: 2022, month: 07, day: 08, hour: 1, minute: 0, second: 0),
+            heatDemand: 1.05,
+            electricityPrice: 743.03
+        );
+
+        string expected = sourceDataManager1.JsonExport();
+
         Assert.Equal(expected, actual);
     }
 
