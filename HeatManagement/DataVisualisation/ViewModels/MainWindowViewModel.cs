@@ -20,7 +20,6 @@ class MainWindowViewModel: ViewModelBase{
     public void GoToEditor(){
         CurrentPage = new EditorGreeter();
     }
-
     public string? ReadFile()
     {
         try{
@@ -63,5 +62,4 @@ class MainWindowViewModel: ViewModelBase{
             }
         }
     }
-
 }
