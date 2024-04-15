@@ -82,7 +82,8 @@ static partial class App
 
         RendererObject graphBarList = new(
             geometry: new(0, graphs.Count, times.Count * graphs.Count, renderer.TerminalHeight - graphs.Count),
-            defaultCharacter: ' '
+            defaultCharacter: ' ',
+            renderBuffer: 100
         );
 
         RendererObject root = new(
