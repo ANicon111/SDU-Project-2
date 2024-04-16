@@ -120,7 +120,42 @@ static partial class App
             );
         }
 
+        Optimizer.Value sortedBy = Optimizer.Value.Cost;
+        if (sourceData != null && assets != null)
+        {
+            string tryGetSortedBy(string sortedByString)
+            {
+                sortedByString = sortedByString.ToLower().Replace(" ", "");
+                /* spell-checker: disable */
+                switch (sortedByString)
+                {
+                    case "cost":
+                        sortedBy = Optimizer.Value.Cost;
+                        return "";
+                    case "co2":
+                        sortedBy = Optimizer.Value.CO2;
+                        return "";
+                    case "electricityproduction":
+                        sortedBy = Optimizer.Value.ElectricityProduction;
+                        return "";
+                    case "electricityconsumption":
+                        sortedBy = Optimizer.Value.ElectricityConsumption;
+                        return "";
+                    default:
+                        return "Invalid selection";
+                }
+                /* spell-checker: enable */
+            }
+
+            TextBox(
+                escaped: ref escaped,
+                text: "Cost",
+                title: "Sort by - Cost, CO2, Electricity Production, Electricity Consumption",
+                fileAction: tryGetSortedBy
+            );
+        }
+
         if (!escaped)
-            RunGraphList(assets, sourceData, resultData);
+            RunGraphList(assets, sourceData, resultData, sortedBy);
     }
 }

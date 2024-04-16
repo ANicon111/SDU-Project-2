@@ -10,12 +10,12 @@ namespace HeatManagement.CLI;
 
 static partial class App
 {
-    static void RunGraphList(AssetManager? assetManager, SourceDataManager? sourceDataManager = null, ResultDataManager? resultDataManager = null)
+    static void RunGraphList(AssetManager? assetManager, SourceDataManager? sourceDataManager = null, ResultDataManager? resultDataManager = null, Optimizer.Value sortedBy = Optimizer.Value.Cost)
     {
         if (assetManager != null && sourceDataManager != null)
         {
             resultDataManager = new();
-            Optimizer.GetResult(assetManager, sourceDataManager, resultDataManager);
+            Optimizer.GetResult(assetManager, sourceDataManager, resultDataManager, sortedBy);
         }
 
         List<string> resourceOptions = [

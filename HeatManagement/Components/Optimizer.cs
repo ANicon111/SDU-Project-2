@@ -6,25 +6,39 @@ namespace HeatManagement;
 
 public static class Optimizer
 {
-    public static void GetResult(AssetManager assets, SourceDataManager sourceData, ResultDataManager resultData)
+    public enum Value
+    {
+        Cost,
+        CO2,
+        ElectricityProduction,
+        ElectricityConsumption
+    }
+    public static void GetResult(AssetManager assets, SourceDataManager sourceData, ResultDataManager resultData, Value sortedBy)
     {
         resultData.Assets = assets.Assets;
         foreach (KeyValuePair<Tuple<DateTime, DateTime>, SourceData> dataUnit in sourceData.Data)
         {
-            Dictionary<string, double> assetCostPerMWH = [];
+            Dictionary<string, NewStruct> assetSortingValues = [];
             double remainingUsage = dataUnit.Value.HeatDemand;
 
             foreach ((string name, Asset asset) in assets.Assets!)
             {
                 double costPerMWH = asset.Cost - asset.ElectricityCapacity * dataUnit.Value.ElectricityPrice / asset.HeatCapacity;
-                assetCostPerMWH.Add(name, costPerMWH);
+                assetSortingValues.Add(name, new(costPerMWH, asset.CO2, asset.ElectricityCapacity));
             }
             //precision error avoidance
-            while (remainingUsage > 1e-8 && assetCostPerMWH.Count > 0)
+            while (remainingUsage > 1e-8 && assetSortingValues.Count > 0)
             {
                 Dictionary<string, AdditionalResource> additionalResourceUsage = [];
-                (string name, double costPerMWH) = assetCostPerMWH.MinBy(pair => pair.Value);
+                string name = sortedBy switch
+                {
+                    Value.CO2 => assetSortingValues.MinBy(pair => pair.Value.CO2PerMWh).Key,
+                    Value.ElectricityConsumption => assetSortingValues.MinBy(pair => pair.Value.ElectricityPerMWh).Key,
+                    Value.ElectricityProduction => assetSortingValues.MinBy(pair => -pair.Value.ElectricityPerMWh).Key,
+                    _ => assetSortingValues.MinBy(pair => pair.Value.CostPerMWh).Key,
+                };
                 double coveredUsage = Math.Min(assets.Assets[name].HeatCapacity, remainingUsage);
+                double costPerMWH = assets.Assets[name].Cost - assets.Assets[name].ElectricityCapacity * dataUnit.Value.ElectricityPrice / assets.Assets[name].HeatCapacity;
                 remainingUsage -= coveredUsage;
                 foreach ((string resourceName, AdditionalResource additionalResource) in assets.Assets[name].AdditionalResources)
                 {
@@ -44,8 +58,15 @@ public static class Optimizer
                         additionalResourceUsage
                     )
                 );
-                assetCostPerMWH.Remove(name);
+                assetSortingValues.Remove(name);
             }
         }
     }
+}
+
+internal struct NewStruct(double costPerMWh, double co2PerMWh, double electricityPerMWh)
+{
+    public double CostPerMWh = costPerMWh;
+    public double CO2PerMWh = co2PerMWh;
+    public double ElectricityPerMWh = electricityPerMWh;
 }

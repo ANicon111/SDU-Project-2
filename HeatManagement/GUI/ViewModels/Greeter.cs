@@ -36,6 +36,11 @@ class GreeterViewModel : ViewModelBase
 
     private bool canPickAsset = false;
     public bool CanPickAsset { get => canPickAsset; set => this.RaiseAndSetIfChanged(ref canPickAsset, value); }
+    public string[] SortedByValues { get; } = ["Cost", "CO2", "Electricity Consumption", "Electricity Production"];
+    private bool canPickSortedBy = false;
+    public bool CanPickSortedBy { get => canPickSortedBy; set => this.RaiseAndSetIfChanged(ref canPickSortedBy, value); }
+    private int sortedByIndex = 0;
+    public int SortedByIndex { get => sortedByIndex; set => this.RaiseAndSetIfChanged(ref sortedByIndex, value); }
     private bool canGoToViewer = false;
     public bool CanGoToViewer { get => canGoToViewer; set => this.RaiseAndSetIfChanged(ref canGoToViewer, value); }
     private bool canNotGoToViewer = true;
@@ -125,7 +130,7 @@ class GreeterViewModel : ViewModelBase
             if (SourceData != null && SourceData.Data.Count > 0 && Assets != null && Assets.Assets!.Count > 0)
             {
                 ResultData = new();
-                Optimizer.GetResult(Assets, SourceData, ResultData);
+                Optimizer.GetResult(Assets, SourceData, ResultData, Optimizer.Value.Cost);
             }
 
             if (ResultData != null) CurrentPage = new ViewerGraphListView() { DataContext = new ViewerViewModel(BaseSize, ResultData) };
@@ -142,7 +147,13 @@ class GreeterViewModel : ViewModelBase
         if (ResultData == null)
         {
             ResultData = new();
-            Optimizer.GetResult(Assets!, SourceData!, ResultData);
+            Optimizer.GetResult(Assets!, SourceData!, ResultData, SortedByIndex switch
+            {
+                1 => Optimizer.Value.CO2,
+                2 => Optimizer.Value.ElectricityConsumption,
+                3 => Optimizer.Value.ElectricityProduction,
+                _ => Optimizer.Value.Cost,
+            });
         }
         CurrentPage = new ViewerGraphListView
         {
@@ -299,6 +310,7 @@ class GreeterViewModel : ViewModelBase
             }
         }
 
+        CanPickSortedBy = SourceData != null && Assets != null;
         CanGoToViewer = ResultData != null || SourceData != null && Assets != null;
         CanNotGoToViewer = !CanGoToViewer;
     }
