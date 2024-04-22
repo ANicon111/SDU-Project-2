@@ -1,15 +1,18 @@
 using Avalonia.Controls;
 namespace HeatManagement.ViewModels;
 
+using System;
 using System.IO;
+using System.Text.Json;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using HeatManagement.Views;
 using ReactiveUI;
 
-class ViewModelBase: ReactiveObject;
+class ViewModelBase : ReactiveObject;
 
-class MainWindowViewModel: ViewModelBase{
+class MainWindowViewModel : ViewModelBase
+{
     private UserControl currentPage = new Greeter();
     public UserControl CurrentPage { get => currentPage; set => this.RaiseAndSetIfChanged(ref currentPage, value); }
 
@@ -22,7 +25,7 @@ class MainWindowViewModel: ViewModelBase{
     public string? DataFileName { get => dataFileName; set => this.RaiseAndSetIfChanged(ref dataFileName, value); }
     private string? assetsFileName = null;
     public string? AssetsFileName { get => assetsFileName; set => this.RaiseAndSetIfChanged(ref assetsFileName, value); }
-    
+
     readonly FilePickerFileType JsonFile = new("Json Files")
     {
         Patterns = ["*.json"],
@@ -37,16 +40,24 @@ class MainWindowViewModel: ViewModelBase{
         MimeTypes = ["application/csv", "text/csv"]
     };
 
-    public void GoToViewer(){
+
+    private string error = "";
+    public string Error { get => error; set => this.RaiseAndSetIfChanged(ref error, value); }
+
+
+    public void GoToViewer()
+    {
         CurrentPage = new ViewerGreeter();
     }
 
-    public void GoToEditor(){
+    public void GoToEditor()
+    {
         CurrentPage = new EditorGreeter();
     }
     public string? ReadFile()
     {
-        try{
+        try
+        {
             var topLevel = App.TopLevel;
             var files = topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
@@ -60,7 +71,8 @@ class MainWindowViewModel: ViewModelBase{
                 using var streamReader = new StreamReader(stream);
                 return streamReader.ReadToEnd();
             }
-        }catch{}
+        }
+        catch { }
         return null;
     }
 
@@ -68,22 +80,65 @@ class MainWindowViewModel: ViewModelBase{
     SourceDataManager? sourceDataManager = new();
     ResultDataManager resultDataManager = new();
 
-    public void OpenAssetOrSourceFile()
-    {
-        string? fileContent=ReadFile();
 
-        if(fileContent == null){
+    public void OpenAssetFile()
+    {
+        string? fileContent = ReadFile();
+
+        if (fileContent == null)
+        {
+            Error = "No file selected";
             return;
         }
 
-        try{
+        try
+        {
+            assetManager.JsonImport(fileContent!);
+        }
+        catch (FileNotFoundException)
+        {
+            assetManager = null;
+            Error = "The Json file could not be found";
+        }
+        catch (JsonException)
+        {
+            assetManager = null;
+            Error = "The Selected file is not a valid Json file";
+        }
+        catch (Exception ex)
+        {
+            assetManager = null;
+            Error = $"An error has Ocured {ex.Message}";
+        }
+    }
+
+    public void OpenSourceFile()
+    {
+        string? fileContent = ReadFile();
+
+        if (fileContent == null)
+        {
+            return;
+        }
+
+        try
+        {
             sourceDataManager.JsonImport(fileContent!);
-        }catch{
-            try{
-                assetManager.JsonImport(fileContent!);
-            }catch{
-                return;
-            }
+        }
+        catch (FileNotFoundException)
+        {
+            assetManager = null;
+            Error = "The Json file could not be found";
+        }
+        catch (JsonException)
+        {
+            assetManager = null;
+            Error = "The Selected file is not a valid Json file";
+        }
+        catch (Exception ex)
+        {
+            assetManager = null;
+            Error = $"An error has Ocured {ex.Message}";
         }
     }
     public async void LoadDataFile()
@@ -117,6 +172,6 @@ class MainWindowViewModel: ViewModelBase{
             }
         }
 
-           
+
     }
 }

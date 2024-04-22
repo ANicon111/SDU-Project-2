@@ -7,6 +7,7 @@
         x:DataType="vm:MainWindowViewModel"
         x:Class="HeatManagement.Views.EditorGreeter">
         <StackPanel>
-                <Button Content="Open File" Command="{Binding OpenAssetOrSourceFile}"/>
+                <Button Content="Open Asset File" Command="{Binding OpenAssetFile}"/>
+                <Button Content="Open Source File" Command="{Binding OpenSourceFile}"/>
         </StackPanel>
 </UserControl>
