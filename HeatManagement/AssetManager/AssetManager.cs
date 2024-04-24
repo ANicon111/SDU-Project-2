@@ -29,16 +29,10 @@ public struct Asset(string name, string imagePath, double heatCapacity, double c
 class AssetManager
 {
     public List<Asset> Assets = [];
+    public bool Loaded { get; private set; } = false;
     public void JsonImport(string json)
     {
-        try
-        {
-            Assets = JsonSerializer.Deserialize<List<Asset>>(json)!;
-        }
-        catch
-        {
-            throw new Exception("Error: Failed to parse Json");
-        }
+        Assets = JsonSerializer.Deserialize<List<Asset>>(json) ?? throw new("Null json result");
     }
 
     public string JsonExport() => JsonSerializer.Serialize(Assets);

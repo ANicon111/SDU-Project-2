@@ -1,16 +1,17 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        xmlns:vm="using:HeatManagement.ViewModels"
-        x:DataType="vm:MainWindowViewModel"
-        x:Class="HeatManagement.Views.EditorGreeter">
-        <StackPanel Orientation="Horizontal">
-                <Button Content="Open Asset File" Command="{Binding OpenAssetFile}"/>
-                <Button Content="Open Source File" Command="{Binding OpenSourceFile}"/>
-
-                <TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Errors:</TextBlock>
-                <TextBlock x:Name="ErrorTextBlock" Margin="0 5" FontStyle="Italic" Text="{Binding Error}"/>
-        </StackPanel>
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    xmlns:vm="using:HeatManagement.ViewModels"
+    x:DataType="vm:MainWindowViewModel"
+    x:Class="HeatManagement.Views.EditorGreeter">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" >
+        <Button Content="Open Asset File" HorizontalAlignment="Center"  Command="{Binding OpenAssetsFile}"/>
+        <TextBlock Margin="0 5" FontStyle="Italic" HorizontalAlignment="Center" Text="{Binding AssetsError}"/>
+        <Border Margin="10" Height="2" Width="50" Background="#ff808080" />
+        <Button Content="Open Source File" HorizontalAlignment="Center" Command="{Binding OpenSourceFile}"/>
+        <TextBlock Margin="0 5" FontStyle="Italic" HorizontalAlignment="Center" Text="{Binding SourceError}"/>
+        <Button Margin="25" HorizontalAlignment="Center" Command="{Binding }" IsEnabled="{Binding CanOpenEditor}" Content="Start" Cursor="Hand"/>
+    </StackPanel>
 </UserControl>

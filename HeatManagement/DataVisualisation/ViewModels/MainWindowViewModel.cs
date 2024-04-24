@@ -3,6 +3,7 @@ namespace HeatManagement.ViewModels;
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using HeatManagement.Views;
@@ -15,34 +16,25 @@ class MainWindowViewModel : ViewModelBase
     private UserControl currentPage = new Greeter();
     public UserControl CurrentPage { get => currentPage; set => this.RaiseAndSetIfChanged(ref currentPage, value); }
 
-    private string? dataError = null;
-    public string? DataError { get => dataError; set => this.RaiseAndSetIfChanged(ref dataError, value); }
+
     private string? assetsError = null;
     public string? AssetsError { get => assetsError; set => this.RaiseAndSetIfChanged(ref assetsError, value); }
+    private string? sourceError = null;
+    public string? SourceError { get => sourceError; set => this.RaiseAndSetIfChanged(ref sourceError, value); }
+    private string? resultError = null;
+    public string? ResultError { get => resultError; set => this.RaiseAndSetIfChanged(ref resultError, value); }
 
-    private string? dataFileName = null;
-    public string? DataFileName { get => dataFileName; set => this.RaiseAndSetIfChanged(ref dataFileName, value); }
-    private string? assetsFileName = null;
-    public string? AssetsFileName { get => assetsFileName; set => this.RaiseAndSetIfChanged(ref assetsFileName, value); }
+    private string? assetsSuccess = null;
+    public string? AssetsSuccess { get => assetsSuccess; set => this.RaiseAndSetIfChanged(ref assetsSuccess, value); }
+    private string? sourceSuccess = null;
+    public string? SourceSuccess { get => sourceSuccess; set => this.RaiseAndSetIfChanged(ref sourceSuccess, value); }
+    private string? resultSuccess = null;
+    public string? ResultSuccess { get => resultSuccess; set => this.RaiseAndSetIfChanged(ref resultSuccess, value); }
 
-    readonly FilePickerFileType JsonFile = new("Json Files")
-    {
-        Patterns = ["*.json"],
-        AppleUniformTypeIdentifiers = ["public.json"],
-        MimeTypes = ["application/json", "text/json"]
-    };
-
-    readonly FilePickerFileType CSVFile = new("CSV Files")
-    {
-        Patterns = ["*.csv"],
-        AppleUniformTypeIdentifiers = ["public.csv"],
-        MimeTypes = ["application/csv", "text/csv"]
-    };
-
-
-    private string error = "";
-    public string Error { get => error; set => this.RaiseAndSetIfChanged(ref error, value); }
-
+    private bool canOpenEditor = false;
+    public bool CanOpenEditor { get => canOpenEditor; set => this.RaiseAndSetIfChanged(ref canOpenEditor, value); }
+    private bool canOpenViewer = false;
+    public bool CanOpenViewer { get => canOpenViewer; set => this.RaiseAndSetIfChanged(ref canOpenViewer, value); }
 
     public void GoToViewer()
     {
@@ -53,125 +45,141 @@ class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = new EditorGreeter();
     }
-    public string? ReadFile()
+    public static async Task<string?> ReadFile(string title)
     {
-        try
+        var files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            var topLevel = App.TopLevel;
-            var files = topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-            {
-                Title = "Open Text File",
-                AllowMultiple = false
-            }).GetAwaiter().GetResult();
-
-            if (files.Count >= 1)
-            {
-                using var stream = files[0].OpenReadAsync().GetAwaiter().GetResult();
-                using var streamReader = new StreamReader(stream);
-                return streamReader.ReadToEnd();
-            }
-        }
-        catch { }
-        return null;
-    }
-
-    AssetManager? assetManager = new();
-    SourceDataManager? sourceDataManager = new();
-    ResultDataManager resultDataManager = new();
-
-    public void OpenAssetFile()
-    {
-        string? fileContent = ReadFile();
-
-        if (fileContent == null)
-        {
-            Error = "No file selected";
-            return;
-        }
-
-        try
-        {
-            assetManager.JsonImport(fileContent!);
-        }
-        catch (FileNotFoundException)
-        {
-            assetManager = null;
-            Error = "The Json file could not be found";
-        }
-        catch (JsonException)
-        {
-            assetManager = null;
-            Error = "The Selected file is not a valid Json file";
-        }
-        catch (Exception ex)
-        {
-            assetManager = null;
-            Error = $"An error has occurred {ex.Message}";
-        }
-    }
-
-    public void OpenSourceFile()
-    {
-        string? fileContent = ReadFile();
-
-        if (fileContent == null)
-        {
-            Error = "No file selected";
-            return;
-        }
-
-        try
-        {
-            sourceDataManager.JsonImport(fileContent!);
-        }
-        catch (FileNotFoundException)
-        {
-            assetManager = null;
-            Error = "The Json file could not be found";
-        }
-        catch (JsonException)
-        {
-            assetManager = null;
-            Error = "The Selected file is not a valid Json file";
-        }
-        catch (Exception ex)
-        {
-            assetManager = null;
-            Error = $"An error has occurred {ex.Message}";
-        }
-    }
-
-    public async void LoadDataFile()
-    {
-        // Start async operation to open the dialog.
-        System.Collections.Generic.IReadOnlyList<IStorageFile> files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-        {
-            Title = "Open a source or result data file",
-            AllowMultiple = false,
-            FileTypeFilter = [CSVFile, JsonFile]
+            Title = title,
+            AllowMultiple = false
         });
 
         if (files.Count >= 1)
         {
-            sourceDataManager = new();
-            resultDataManager = new();
-            DataFileName = null;
-            DataError = null;
-            string? text = null;
-            try
+            using var stream = await files[0].OpenReadAsync();
+            using var streamReader = new StreamReader(stream);
+            return streamReader.ReadToEnd();
+        }
+        return null;
+    }
+
+    AssetManager assetManager = new();
+    SourceDataManager sourceDataManager = new();
+    ResultDataManager resultDataManager = new();
+
+    void UpdateOpenButtonState()
+    {
+        canOpenViewer = resultDataManager.Loaded || assetManager.Loaded && sourceDataManager.Loaded;
+        canOpenEditor = assetManager.Loaded || sourceDataManager.Loaded;
+    }
+
+    public async void OpenAssetsFile()
+    {
+        AssetsError = null;
+        AssetsSuccess = null;
+
+        try
+        {
+            string? fileContent = await ReadFile("Open Asset File");
+
+            if (fileContent == null)
             {
-                // Open reading stream from the first file.
-                await using Stream stream = await files[0].OpenReadAsync();
-                using StreamReader streamReader = new(stream);
-                // Reads all the content of file as a text.
-                text = await streamReader.ReadToEndAsync();
+                AssetsError = "No file selected";
+                return;
             }
-            catch
-            {
-                DataError = "Couldn't read file";
-            }
+
+            assetManager.JsonImport(fileContent!);
+            AssetsSuccess = "File opened successfully";
+        }
+        catch (FileNotFoundException)
+        {
+            assetManager = new();
+            AssetsError = "The Json file could not be found";
+        }
+        catch (JsonException)
+        {
+            assetManager = new();
+            AssetsError = "The selected file is not a valid Json file";
+        }
+        catch (Exception ex)
+        {
+            assetManager = new();
+            AssetsError = $"An error has occurred {ex.Message}";
         }
 
+        UpdateOpenButtonState();
+    }
 
+    public async void OpenSourceFile()
+    {
+        SourceError = null;
+        SourceSuccess = null;
+
+        try
+        {
+            string? fileContent = await ReadFile("Open Source Data File");
+
+            if (fileContent == null)
+            {
+                SourceError = "No file selected";
+                return;
+            }
+
+            sourceDataManager.JsonImport(fileContent!);
+            SourceSuccess = "File opened successfully";
+        }
+        catch (FileNotFoundException)
+        {
+            sourceDataManager = new();
+            SourceError = "The Json file could not be found";
+        }
+        catch (JsonException)
+        {
+            sourceDataManager = new();
+            SourceError = "The selected file is not a valid Json file";
+        }
+        catch (Exception ex)
+        {
+            sourceDataManager = new();
+            SourceError = $"An error has occurred {ex.Message}";
+        }
+
+        UpdateOpenButtonState();
+    }
+
+    public async void OpenResultFile()
+    {
+        ResultError = null;
+        ResultSuccess = null;
+
+        try
+        {
+            string? fileContent = await ReadFile("Open Result Data File");
+
+            if (fileContent == null)
+            {
+                ResultError = "No file selected";
+                return;
+            }
+
+            resultDataManager.JsonImport(fileContent!);
+            ResultSuccess = "File opened successfully";
+        }
+        catch (FileNotFoundException)
+        {
+            resultDataManager = new();
+            ResultError = "The Json file could not be found";
+        }
+        catch (JsonException)
+        {
+            resultDataManager = new();
+            ResultError = "The selected file is not a valid Json file";
+        }
+        catch (Exception ex)
+        {
+            resultDataManager = new();
+            ResultError = $"An error has occurred {ex.Message}";
+        }
+
+        UpdateOpenButtonState();
     }
 }
