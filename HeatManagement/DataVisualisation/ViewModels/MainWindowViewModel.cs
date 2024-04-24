@@ -1,6 +1,5 @@
 using Avalonia.Controls;
 namespace HeatManagement.ViewModels;
-
 using System;
 using System.IO;
 using System.Text.Json;
@@ -55,7 +54,6 @@ class MainWindowViewModel : ViewModelBase
     SourceDataManager sourceDataManager = new();
     ResultDataManager resultDataManager = new();
 
-
     public void OpenAssetFile()
     {
         string? fileContent = ReadFile();
@@ -83,7 +81,7 @@ class MainWindowViewModel : ViewModelBase
         catch (Exception ex)
         {
             assetManager = null;
-            Error = $"An error has Ocured {ex.Message}";
+            Error = $"An error has occurred {ex.Message}";
         }
     }
 
@@ -93,6 +91,7 @@ class MainWindowViewModel : ViewModelBase
 
         if (fileContent == null)
         {
+            Error = "No file selected";
             return;
         }
 
@@ -113,7 +112,8 @@ class MainWindowViewModel : ViewModelBase
         catch (Exception ex)
         {
             assetManager = null;
-            Error = $"An error has Ocured {ex.Message}";
+            Error = $"An error has occurred {ex.Message}";
         }
     }
+
 }
