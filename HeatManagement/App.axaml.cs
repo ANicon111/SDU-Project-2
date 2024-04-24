@@ -7,7 +7,7 @@ namespace HeatManagement.Views;
 
 public partial class App : Application
 {
-    public static TopLevel TopLevel{get;private set;}= null!;
+    public static TopLevel TopLevel { get; private set; } = null!;
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -18,7 +18,7 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
-            TopLevel = TopLevel.GetTopLevel(desktop.MainWindow)!;
+            TopLevel = TopLevel.GetTopLevel(desktop.MainWindow) ?? throw new("Null top level");
         }
 
         base.OnFrameworkInitializationCompleted();

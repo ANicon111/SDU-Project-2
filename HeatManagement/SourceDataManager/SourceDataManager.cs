@@ -22,16 +22,12 @@ public struct Source(DateTime startTime, DateTime endTime, double heatDemand, do
 public class SourceDataManager
 {
     public List<Source> SourceData = [];
+    public bool Loaded { get; private set; }
     public void JsonImport(string json)
     {
-        try
-        {
-            SourceData = JsonSerializer.Deserialize<List<Source>>(json)!;
-        }
-        catch
-        {
-            throw new Exception("Error: Failed to parse Json");
-        }
+        Loaded = false;
+        SourceData = JsonSerializer.Deserialize<List<Source>>(json) ?? throw new("Null json result");
+        Loaded = true;
     }
 
     public string JsonExport() => JsonSerializer.Serialize(SourceData);
@@ -60,6 +56,7 @@ public class SourceDataManager
     }
     public void CSVImport(string stringCSV)
     {
+        Loaded = false;
         string[] rows = stringCSV.Split("\n");
         if (rows[0] != "StartTime, EndTime, HeatDemand, ElectricityPrice")
         {
@@ -77,6 +74,6 @@ public class SourceDataManager
 
             SourceData.Add(new Source(startTime, endTime, heatDemand, electricityPrice));
         }
-
+        Loaded = true;
     }
 }

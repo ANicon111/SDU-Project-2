@@ -42,16 +42,13 @@ public class ResultDataManager
 
     public List<UnitResults> TimeResults { get => timeResults; set => timeResults = value; }
 
+    public bool Loaded { get; private set; } = false;
+
     public void JsonImport(string json)
     {
-        try
-        {
-            TimeResults = JsonSerializer.Deserialize<List<UnitResults>>(json)!;
-        }
-        catch
-        {
-            throw new Exception("Error: Failed to parse Json");
-        }
+        Loaded = false;
+        TimeResults = JsonSerializer.Deserialize<List<UnitResults>>(json) ?? throw new("Null json result");
+        Loaded = true;
     }
     public string JsonExport() => JsonSerializer.Serialize(TimeResults);
 
