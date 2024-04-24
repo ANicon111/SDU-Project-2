@@ -6,8 +6,11 @@
         xmlns:vm="using:HeatManagement.ViewModels"
         x:DataType="vm:MainWindowViewModel"
         x:Class="HeatManagement.Views.EditorGreeter">
-        <StackPanel>
+        <StackPanel Orientation="Horizontal">
                 <Button Content="Open Asset File" Command="{Binding OpenAssetFile}"/>
                 <Button Content="Open Source File" Command="{Binding OpenSourceFile}"/>
+
+                <TextBlock Margin="0 5" FontSize="18" FontWeight="Bold">Errors:</TextBlock>
+                <TextBlock x:Name="ErrorTextBlock" Margin="0 5" FontStyle="Italic" Text="{Binding Error}"/>
         </StackPanel>
 </UserControl>
