@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using System;
+using System.Collections.Generic;
 
 namespace HeatManagement.Views;
 

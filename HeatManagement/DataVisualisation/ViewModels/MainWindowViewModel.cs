@@ -12,7 +12,31 @@ class ViewModelBase: ReactiveObject;
 class MainWindowViewModel: ViewModelBase{
     private UserControl currentPage = new Greeter();
     public UserControl CurrentPage { get => currentPage; set => this.RaiseAndSetIfChanged(ref currentPage, value); }
+
+    private string? dataError = null;
+    public string? DataError { get => dataError; set => this.RaiseAndSetIfChanged(ref dataError, value); }
+    private string? assetsError = null;
+    public string? AssetsError { get => assetsError; set => this.RaiseAndSetIfChanged(ref assetsError, value); }
+
+    private string? dataFileName = null;
+    public string? DataFileName { get => dataFileName; set => this.RaiseAndSetIfChanged(ref dataFileName, value); }
+    private string? assetsFileName = null;
+    public string? AssetsFileName { get => assetsFileName; set => this.RaiseAndSetIfChanged(ref assetsFileName, value); }
     
+    readonly FilePickerFileType JsonFile = new("Json Files")
+    {
+        Patterns = ["*.json"],
+        AppleUniformTypeIdentifiers = ["public.json"],
+        MimeTypes = ["application/json", "text/json"]
+    };
+
+    readonly FilePickerFileType CSVFile = new("CSV Files")
+    {
+        Patterns = ["*.csv"],
+        AppleUniformTypeIdentifiers = ["public.csv"],
+        MimeTypes = ["application/csv", "text/csv"]
+    };
+
     public void GoToViewer(){
         CurrentPage = new ViewerGreeter();
     }
@@ -40,8 +64,8 @@ class MainWindowViewModel: ViewModelBase{
         return null;
     }
 
-    AssetManager assetManager = new();
-    SourceDataManager sourceDataManager = new();
+    AssetManager? assetManager = new();
+    SourceDataManager? sourceDataManager = new();
     ResultDataManager resultDataManager = new();
 
     public void OpenAssetOrSourceFile()
@@ -61,5 +85,38 @@ class MainWindowViewModel: ViewModelBase{
                 return;
             }
         }
+    }
+    public async void LoadDataFile()
+    {
+        // Start async operation to open the dialog.
+        System.Collections.Generic.IReadOnlyList<IStorageFile> files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        {
+            Title = "Open a source or result data file",
+            AllowMultiple = false,
+            FileTypeFilter = [CSVFile, JsonFile]
+        });
+
+        if (files.Count >= 1)
+        {
+            sourceDataManager = new();
+            resultDataManager = new();
+            DataFileName = null;
+            DataError = null;
+            string? text = null;
+            try
+            {
+                // Open reading stream from the first file.
+                await using Stream stream = await files[0].OpenReadAsync();
+                using StreamReader streamReader = new(stream);
+                // Reads all the content of file as a text.
+                text = await streamReader.ReadToEndAsync();
+            }
+            catch
+            {
+                DataError = "Couldn't read file";
+            }
+        }
+
+           
     }
 }
