@@ -16,7 +16,7 @@ partial class Optimizer
     public void Optimize()
     {
         //heatCapacity * asset.cost - electricityCapacity * electricityPrice
-        List<Asset> assets = Assetmanager.Assets;
+        List<Asset> assets = AssetManager.Assets;
         List<Source> sourceData = SourceDataManager.SourceData;
 
         foreach (Source source in sourceData)
@@ -45,7 +45,7 @@ partial class Optimizer
                     additionalResourceUsage.Add(resource.Key, resource.Value * producedHeat);
                 }
                 results.Add(new(
-                    unit: asset.Asset.Name,
+                    asset: asset.Asset.Name,
                     producedHeat: producedHeat,
                     consumedElectricity: consumedElectricity,
                     cost: cost,

@@ -32,7 +32,9 @@ class AssetManager
     public bool Loaded { get; private set; } = false;
     public void JsonImport(string json)
     {
+        Loaded = false;
         Assets = JsonSerializer.Deserialize<List<Asset>>(json) ?? throw new("Null json result");
+        Loaded = true;
     }
 
     public string JsonExport() => JsonSerializer.Serialize(Assets);

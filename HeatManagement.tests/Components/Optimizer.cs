@@ -33,7 +33,7 @@ public class OptimizerTests
             endTime: new DateTime(year: 2023, month: 07, day: 08, hour: 1, minute: 0, second: 0),
             results: [
                 new(
-                    unit:"GB",
+                    asset:"GB",
                     producedHeat:2,
                     consumedElectricity:0,
                     cost:1000,

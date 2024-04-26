@@ -4,12 +4,12 @@ using System.Text.Json;
 
 namespace HeatManagement;
 
-// Result data should be separated for each production unit and should contain important
+// Result data should be separated for each production asset and should contain important
 // information such as produced amount of heat, produced / consumed electricity,
 // production costs, consumption of primary energy and produced amount of CO2 
-public struct Result(string unit, double producedHeat, double consumedElectricity, double cost, double producedCO2, Dictionary<string, double> additionalResources)
+public struct Result(string asset, double producedHeat, double consumedElectricity, double cost, double producedCO2, Dictionary<string, double> additionalResources)
 {
-    private string unit = unit;
+    private string asset = asset;
     private double producedHeat = producedHeat;
     private double consumedElectricity = consumedElectricity;
     private double cost = cost;
@@ -17,7 +17,7 @@ public struct Result(string unit, double producedHeat, double consumedElectricit
     private Dictionary<string, double> additionalResources = additionalResources;
 
 
-    public string Unit { readonly get => unit; set => unit = value; }
+    public string Asset { readonly get => asset; set => asset = value; }
     public double ProducedHeat { readonly get => producedHeat; set => producedHeat = value; }
     public double ConsumedElectricity { readonly get => consumedElectricity; set => consumedElectricity = value; }
     public double Cost { readonly get => cost; set => cost = value; }

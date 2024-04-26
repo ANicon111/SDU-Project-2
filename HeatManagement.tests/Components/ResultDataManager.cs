@@ -59,7 +59,7 @@ public class ResultDataManagerTests
         };
         unitResults.Results.Add(
             new(
-                unit: "GB",
+                asset: "GB",
                 producedHeat: 2,
                 consumedElectricity: 0,
                 cost: 1200,
