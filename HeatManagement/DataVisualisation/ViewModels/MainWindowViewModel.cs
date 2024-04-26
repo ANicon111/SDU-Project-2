@@ -36,14 +36,25 @@ class MainWindowViewModel : ViewModelBase
     private bool canOpenViewer = false;
     public bool CanOpenViewer { get => canOpenViewer; set => this.RaiseAndSetIfChanged(ref canOpenViewer, value); }
 
-    public void GoToViewer()
+    public void GoToViewerGreeter()
     {
         CurrentPage = new ViewerGreeter();
     }
 
-    public void GoToEditor()
+    public void GoToEditorGreeter()
     {
         CurrentPage = new EditorGreeter();
+    }
+    public void GoToViewer()
+    {
+        CurrentPage = new Viewer();
+        new Optimizer(assetManager, sourceDataManager, resultDataManager).Optimize();
+        new ViewerViewModel(resultDataManager);
+    }
+
+    public void GoToEditor()
+    {
+        CurrentPage = new Editor();
     }
     public static async Task<string?> ReadFile(string title)
     {
@@ -68,8 +79,8 @@ class MainWindowViewModel : ViewModelBase
 
     void UpdateOpenButtonState()
     {
-        canOpenViewer = resultDataManager.Loaded || assetManager.Loaded && sourceDataManager.Loaded;
-        canOpenEditor = assetManager.Loaded || sourceDataManager.Loaded;
+        CanOpenViewer = resultDataManager.Loaded || assetManager.Loaded && sourceDataManager.Loaded;
+        CanOpenEditor = assetManager.Loaded || sourceDataManager.Loaded;
     }
 
     public async void OpenAssetsFile()

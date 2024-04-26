@@ -6,8 +6,14 @@
     x:Class="HeatManagement.Views.Greeter"
     xmlns:vm="using:HeatManagement.ViewModels"
     x:DataType="vm:MainWindowViewModel">
-    <StackPanel>
-        <Button Content="Viewer" Command="{Binding GoToViewer}"/>
-        <Button Content="Editor" Command="{Binding GoToEditor}"/>
-    </StackPanel>
+    <Grid ColumnDefinitions="*,*">
+        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Image Margin = "20" Height="180" Width="180" Source="avares://HeatManagement/DataVisualisation/Assets/viewer.png"/>
+            <Button Content="Viewer" Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Command="{Binding GoToViewerGreeter}"/>
+      </StackPanel>
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Image Margin="20" Height="180" Width="180" Source="avares://HeatManagement/DataVisualisation/Assets/editor.png"/>
+            <Button Content="Editor" Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="30" Command="{Binding GoToEditorGreeter}"/>
+        </StackPanel>
+        </Grid>
 </UserControl>
