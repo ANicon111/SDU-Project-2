@@ -11,13 +11,14 @@ class ViewerViewModel : ViewModelBase
     {
         GraphList = new Dictionary<string, List<double>>();
 
-        GraphList = new(){
+        GraphList = new()
+        {
             {"Cost",new(new double[resultDataManager.TimeResults.Count])},
             { "Electricity",new(new double[resultDataManager.TimeResults.Count])},
             { "CO2",new(new double[resultDataManager.TimeResults.Count])},
             { "Heat",new(new double[resultDataManager.TimeResults.Count])}
 
-    };
+        };
 
         for (int i = 0; i < resultDataManager.TimeResults.Count; i++)
         {
@@ -52,7 +53,8 @@ class ViewerViewModel : ViewModelBase
                 GraphList[$"{assetName}-CO2"][i] = producedCO2;
                 GraphList[$"{assetName}-Heat"][i] = producedHeat;
             }
-            // File.WriteAllText("debug", JsonSerializer.Serialize(GraphList));
         }
+
+        Console.WriteLine(JsonSerializer.Serialize(GraphList));
     }
 }
