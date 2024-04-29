@@ -6,6 +6,48 @@
     x:Class="HeatManagement.Views.Viewer"
     xmlns:vm="using:HeatManagement.ViewModels"
     x:DataType="vm:MainWindowViewModel">
-    viw placeholder
-    
+    <ScrollViewer>
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment = "Stretch">
+                 <Button Content="Cost"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="40">
+                <Image Source = "avares://HeatManagement/DataVisualisation/Assets/assets.png"/>
+                </Button>
+                <Button Content="Electricity"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="40"/>
+                <Button Content="CO2"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="40"/>
+                <Button Content="Heat"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="40"/>
+                <Button Content="EK"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="40"/>
+                <Button Content="GB"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="40"/>
+                <Button Content="GM"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="40"/>
+                <Button Content="OB"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    FontSize="40"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

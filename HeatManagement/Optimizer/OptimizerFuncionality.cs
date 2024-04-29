@@ -29,11 +29,13 @@ partial class Optimizer
                 assetsWithCostPerMWh.Add(new(asset, costPerMWh));
             }
             assetsWithCostPerMWh = [.. assetsWithCostPerMWh.OrderBy((asset) => asset.CostPerMWh)];
+            double currentDemand = source.HeatDemand;
 
             List<Result> results = [];
             foreach (var asset in assetsWithCostPerMWh)
             {
-                var producedHeat = Math.Min(source.HeatDemand, asset.Asset.HeatCapacity);
+                var producedHeat = Math.Min(currentDemand, asset.Asset.HeatCapacity);
+                currentDemand -= producedHeat;
                 var assetPercentageUsage = producedHeat / asset.Asset.HeatCapacity;
                 var consumedElectricity = asset.Asset.ElectricityCapacity * assetPercentageUsage;
                 var cost = (asset.Asset.HeatCapacity * asset.Asset.Cost - asset.Asset.ElectricityCapacity * source.ElectricityPrice) * assetPercentageUsage;

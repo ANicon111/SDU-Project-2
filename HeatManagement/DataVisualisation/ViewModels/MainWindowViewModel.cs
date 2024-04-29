@@ -49,12 +49,17 @@ class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = new Viewer();
         new Optimizer(assetManager, sourceDataManager, resultDataManager).Optimize();
-        new ViewerViewModel(resultDataManager);
+        _ = new ViewerViewModel(resultDataManager);
     }
 
     public void GoToEditor()
     {
-        CurrentPage = new Editor();
+        GoToAssetsEditor();
+    }
+
+    public void GoToAssetsEditor()
+    {
+        CurrentPage = new AssetEditor() { DataContext = new AssetEditorViewModel(assetManager) };
     }
     public static async Task<string?> ReadFile(string title)
     {

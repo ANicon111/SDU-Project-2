@@ -2,9 +2,9 @@ using Avalonia.Controls;
 
 namespace HeatManagement.Views;
 
-public partial class Editor : UserControl
+public partial class AssetEditor : UserControl
 {
-    public Editor()
+    public AssetEditor()
     {
         InitializeComponent();
     }
