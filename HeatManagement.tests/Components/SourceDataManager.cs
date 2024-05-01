@@ -94,9 +94,9 @@ public class SourceDataManagerTests
     public void CSVExportTest()
     {
         string expected = """
-            StartTime, EndTime, HeatDemand, ElectricityPrice
-            07/08/2023 00:00:00, 07/08/2023 01:00:00, 1.79, 752.03
-            07/08/2022 00:00:00, 07/08/2022 01:00:00, 1.05, 743.03
+            StartTime,EndTime,HeatDemand,ElectricityPrice
+            07/08/2023 00:00:00,07/08/2023 01:00:00,1.79,752.03
+            07/08/2022 00:00:00,07/08/2022 01:00:00,1.05,743.03
             """.Replace("\r\n", "\n");
         SourceDataManager sourceDataManager = new();
         sourceDataManager.DataAdd(
@@ -119,9 +119,9 @@ public class SourceDataManagerTests
     public void CSVImportTest()
     {
         string data = """
-            StartTime, EndTime, HeatDemand, ElectricityPrice
-            07/08/2023 00:00:00, 07/08/2023 01:00:00, 1.79, 752.03
-            07/08/2022 00:00:00, 07/08/2022 01:00:00, 1.05, 743.03
+            StartTime,EndTime,HeatDemand,ElectricityPrice
+            07/08/2023 00:00:00,07/08/2023 01:00:00,1.79,752.03
+            07/08/2022 00:00:00,07/08/2022 01:00:00,1.05,743.03
             """.Replace("\r\n", "\n");
 
         SourceDataManager sourceDataManager = new();
@@ -131,14 +131,14 @@ public class SourceDataManagerTests
         string actual = sourceDataManager.JsonExport();
 
         sourceDataManager1.DataAdd(
-            startTime: new DateTime(year: 2023, month: 07, day: 08, hour: 0, minute: 0, second: 0),
-            endTime: new DateTime(year: 2023, month: 07, day: 08, hour: 1, minute: 0, second: 0),
+            startTime: new DateTime(year: 2023, month: 08, day: 07, hour: 0, minute: 0, second: 0),
+            endTime: new DateTime(year: 2023, month: 08, day: 07, hour: 1, minute: 0, second: 0),
             heatDemand: 1.79,
             electricityPrice: 752.03
         );
         sourceDataManager1.DataAdd(
-            startTime: new DateTime(year: 2022, month: 07, day: 08, hour: 0, minute: 0, second: 0),
-            endTime: new DateTime(year: 2022, month: 07, day: 08, hour: 1, minute: 0, second: 0),
+            startTime: new DateTime(year: 2022, month: 08, day: 07, hour: 0, minute: 0, second: 0),
+            endTime: new DateTime(year: 2022, month: 08, day: 07, hour: 1, minute: 0, second: 0),
             heatDemand: 1.05,
             electricityPrice: 743.03
         );

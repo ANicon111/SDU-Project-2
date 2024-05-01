@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 
 namespace HeatManagement.ViewModels;
 class ViewerViewModel : ViewModelBase
 {
+    public ObservableCollection<ViewerButtonViewModel> ViewerButtonValues { get; } = [];
     Dictionary<string, List<double>> GraphList;
     public ViewerViewModel(ResultDataManager resultDataManager)
     {
@@ -56,5 +60,23 @@ class ViewerViewModel : ViewModelBase
         }
 
         Console.WriteLine(JsonSerializer.Serialize(GraphList));
+    }
+}
+
+class ViewerButtonViewModel : ViewModelBase
+{
+    public string AssetName { get; }
+    public Bitmap Image { get; }
+
+
+    public ViewerButtonViewModel(string assetName, string imagePath)
+    {
+        AssetName = assetName;
+        Image = new(AssetLoader.Open(new Uri("avares://HeatManagement/DataVisualisation/Assets/Resources/unknown.png")));
+        try
+        {
+            Image = new(imagePath);
+        }
+        catch { }
     }
 }

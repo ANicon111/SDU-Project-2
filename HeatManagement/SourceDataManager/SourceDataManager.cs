@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 
@@ -45,34 +46,39 @@ public class SourceDataManager
         int rowCount = SourceData.Count;
 
         string[] rows = new string[rowCount + 1];
-        rows[0] = "StartTime, EndTime, HeatDemand, ElectricityPrice";
+        rows[0] = "StartTime,EndTime,HeatDemand,ElectricityPrice";
 
         for (int i = 0; i < rowCount; ++i)
         {
             Source source = SourceData[i];
-            rows[i + 1] = FormattableString.Invariant($"{source.StartTime}, {source.EndTime}, {source.HeatDemand}, {source.ElectricityPrice}");
+            rows[i + 1] = FormattableString.Invariant($"{source.StartTime},{source.EndTime},{source.HeatDemand},{source.ElectricityPrice}");
         }
         return string.Join('\n', rows);
     }
     public void CSVImport(string stringCSV)
     {
         Loaded = false;
-        string[] rows = stringCSV.Split("\n");
-        if (rows[0] != "StartTime, EndTime, HeatDemand, ElectricityPrice")
+        string[] rows = stringCSV.Replace("\r\n", "\n").Split("\n");
+        /* spell-checker: disable */
+        if (rows[0].Replace(" ", "").ToLower() != "starttime,endtime,heatdemand,electricityprice")
+        /* spell-checker: enable */
         {
-            throw new Exception("Invalid CSV file");
+            throw new Exception($"Invalid CSV header");
         }
 
         for (int i = 1; i < rows.Length; ++i)
         {
-            string[] rowElements = rows[i].Split(",");
+            if (!string.IsNullOrWhiteSpace(rows[i]))
+            {
+                string[] rowElements = rows[i].Split(",");
 
-            DateTime startTime = DateTime.Parse(rowElements[0]);
-            DateTime endTime = DateTime.Parse(rowElements[1]);
-            double heatDemand = double.Parse(rowElements[2]);
-            double electricityPrice = double.Parse(rowElements[3]);
+                DateTime startTime = DateTime.Parse(rowElements[0]);
+                DateTime endTime = DateTime.Parse(rowElements[1]);
+                double heatDemand = double.Parse(rowElements[2], CultureInfo.InvariantCulture);
+                double electricityPrice = double.Parse(rowElements[3], CultureInfo.InvariantCulture);
 
-            SourceData.Add(new Source(startTime, endTime, heatDemand, electricityPrice));
+                SourceData.Add(new Source(startTime, endTime, heatDemand, electricityPrice));
+            }
         }
         Loaded = true;
     }

@@ -2,6 +2,7 @@ using Avalonia.Controls;
 namespace HeatManagement.ViewModels;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Avalonia.Interactivity;
@@ -47,9 +48,11 @@ class MainWindowViewModel : ViewModelBase
     }
     public void GoToViewer()
     {
-        CurrentPage = new Viewer();
         new Optimizer(assetManager, sourceDataManager, resultDataManager).Optimize();
-        _ = new ViewerViewModel(resultDataManager);
+        CurrentPage = new Viewer()
+        {
+            DataContext = new ViewerViewModel(resultDataManager)
+        };
     }
 
     public void GoToEditor()
@@ -61,7 +64,7 @@ class MainWindowViewModel : ViewModelBase
     {
         CurrentPage = new AssetEditor() { DataContext = new AssetEditorViewModel(assetManager) };
     }
-    public static async Task<string?> ReadFile(string title)
+    public static async Task<(string, string)?> ReadFile(string title)
     {
         var files = await App.TopLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
@@ -73,7 +76,7 @@ class MainWindowViewModel : ViewModelBase
         {
             using var stream = await files[0].OpenReadAsync();
             using var streamReader = new StreamReader(stream);
-            return streamReader.ReadToEnd();
+            return (streamReader.ReadToEnd(), files[0].Name.Split('.').Last());
         }
         return null;
     }
@@ -95,7 +98,7 @@ class MainWindowViewModel : ViewModelBase
 
         try
         {
-            string? fileContent = await ReadFile("Open Asset File");
+            (string, string)? fileContent = await ReadFile("Open Asset File");
 
             if (fileContent == null)
             {
@@ -103,7 +106,9 @@ class MainWindowViewModel : ViewModelBase
                 return;
             }
 
-            assetManager.JsonImport(fileContent!);
+            (string text, string extension) = fileContent.Value;
+
+            assetManager.JsonImport(text);
             AssetsSuccess = "File opened successfully";
         }
         catch (FileNotFoundException)
@@ -132,7 +137,7 @@ class MainWindowViewModel : ViewModelBase
 
         try
         {
-            string? fileContent = await ReadFile("Open Source Data File");
+            (string, string)? fileContent = await ReadFile("Open Source Data File");
 
             if (fileContent == null)
             {
@@ -140,7 +145,17 @@ class MainWindowViewModel : ViewModelBase
                 return;
             }
 
-            sourceDataManager.JsonImport(fileContent!);
+            (string text, string extension) = fileContent.Value;
+
+            if (extension.ToLower() == "json")
+            {
+                sourceDataManager.JsonImport(text);
+            }
+            else
+            {
+                sourceDataManager.CSVImport(text);
+            }
+
             SourceSuccess = "File opened successfully";
         }
         catch (FileNotFoundException)
@@ -169,7 +184,7 @@ class MainWindowViewModel : ViewModelBase
 
         try
         {
-            string? fileContent = await ReadFile("Open Result Data File");
+            (string, string)? fileContent = await ReadFile("Open Result Data File");
 
             if (fileContent == null)
             {
@@ -177,7 +192,9 @@ class MainWindowViewModel : ViewModelBase
                 return;
             }
 
-            resultDataManager.JsonImport(fileContent!);
+            (string text, string extension) = fileContent.Value;
+
+            resultDataManager.JsonImport(text);
             ResultSuccess = "File opened successfully";
         }
         catch (FileNotFoundException)

@@ -18,7 +18,7 @@
                                 <Image Source="{Binding Image}"/>
                             </Viewbox>
                             <TextBlock Grid.Column="1" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding AssetName}" FontSize="40"/>
-                            <Button Grid.Column="2" HorizontalAlignment="Right" FontSize="30" Content="Delete" />
+                            <Button Grid.Column="2" HorizontalAlignment="Right" FontSize="30" Content="Delete" Command="{Binding Delete}"/>
                         </Grid>
                         </Border>
                     </DataTemplate>
