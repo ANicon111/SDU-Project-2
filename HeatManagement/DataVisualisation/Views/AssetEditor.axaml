@@ -7,22 +7,23 @@
     xmlns:vm="using:HeatManagement.ViewModels"
     x:DataType="vm:AssetEditorViewModel">
     <ScrollViewer>
-        <ItemsControl ItemsSource="{Binding AssetButtonValues}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding Image}" Height="30" Width="30" />
-                        <TextBlock Text="{Binding AssetName}" />
-                        <Button Content="Delete" />
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </ScrollViewer>   
-
+        <StackPanel>
+            <TextBlock Margin="10" Text="List of assets" FontSize="30" Foreground="#919c94" HorizontalAlignment="Center"/>
+            <ItemsControl ItemsSource="{Binding AssetButtonValues}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="2" BorderBrush="#414241">
+                        <Grid ColumnDefinitions="Auto,Auto,*">
+                            <Viewbox Stretch="UniformToFill" Width="130" Height="130" Grid.Column="0" HorizontalAlignment="Left">
+                                <Image Source="{Binding Image}"/>
+                            </Viewbox>
+                            <TextBlock Grid.Column="1" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding AssetName}" FontSize="40"/>
+                            <Button Grid.Column="2" HorizontalAlignment="Right" FontSize="30" Content="Delete" />
+                        </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>  
 </UserControl>
