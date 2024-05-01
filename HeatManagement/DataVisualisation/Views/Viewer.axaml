@@ -5,7 +5,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="HeatManagement.Views.Viewer"
     xmlns:vm="using:HeatManagement.ViewModels"
-    x:DataType="vm:MainWindowViewModel">
+    x:DataType="vm:ViewerViewModel">
     <ScrollViewer>
         <Grid HorizontalAlignment="Stretch">
             <Grid.RowDefinitions>
@@ -13,40 +13,24 @@
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment = "Stretch">
-                 <Button Content="Cost"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    FontSize="40">
-                <Image Source = "avares://HeatManagement/DataVisualisation/Assets/assets.png"/>
-                </Button>
-                <Button Content="Electricity"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    FontSize="40"/>
-                <Button Content="CO2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    FontSize="40"/>
-                <Button Content="Heat"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    FontSize="40"/>
-                <Button Content="EK"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    FontSize="40"/>
-                <Button Content="GB"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    FontSize="40"/>
-                <Button Content="GM"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    FontSize="40"/>
-                <Button Content="OB"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    FontSize="40"/>
+                <ItemsControl ItemsSource="{Binding ViewerButtonValues}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button 
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding Image}" Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding AssetName}" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
         </Grid>
     </ScrollViewer>

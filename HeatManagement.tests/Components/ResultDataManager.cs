@@ -12,7 +12,7 @@ public class ResultDataManagerTests
                 "EndTime": "2023-02-08T03:00:00",
                 "Results": [
                     {
-                        "Unit": "GB",
+                        "Asset": "GB",
                         "ProducedHeat": 2,
                         "ConsumedElectricity": 0,
                         "Cost": 1200,
@@ -28,7 +28,7 @@ public class ResultDataManagerTests
                 "EndTime": "2023-02-08T04:00:00",
                 "Results": [
                     {
-                        "Unit": "OB",
+                        "Asset": "OB",
                         "ProducedHeat": 2,
                         "ConsumedElectricity": 0,
                         "Cost": 1200,
@@ -44,7 +44,6 @@ public class ResultDataManagerTests
         ResultDataManager resultDataManager = new();
         resultDataManager.JsonImport(expected);
         string actual = resultDataManager.JsonExport();
-        Console.Write(actual);
         Assert.Equal(expected, actual);
     }
 
@@ -79,7 +78,7 @@ public class ResultDataManagerTests
                 "EndTime": "2023-02-08T03:00:00",
                 "Results": [
                     {
-                        "Unit": "GB",
+                        "Asset": "GB",
                         "ProducedHeat": 2,
                         "ConsumedElectricity": 0,
                         "Cost": 1200,
@@ -93,8 +92,6 @@ public class ResultDataManagerTests
         ]
         """.Replace(" ", "").Replace("\n", "").Replace("\r", "");
         string actual = resultDataManager.JsonExport();
-        Console.WriteLine(expected);
-        Console.WriteLine(actual);
         Assert.Equal(expected, actual);
     }
 
@@ -110,7 +107,7 @@ public class ResultDataManagerTests
                     "EndTime": "2023-02-08T03:00:00",
                     "Results": [
                         {
-                            "Unit": "GB",
+                            "Asset": "GB",
                             "ProducedHeat": 2,
                             "ConsumedElectricity": 0,
                             "Cost": 1200,
@@ -126,7 +123,7 @@ public class ResultDataManagerTests
                     "EndTime": "2023-02-08T04:00:00",
                     "Results": [
                         {
-                            "Unit": "OB",
+                            "Asset": "OB",
                             "ProducedHeat": 2,
                             "ConsumedElectricity": 0,
                             "Cost": 1200,
@@ -148,7 +145,7 @@ public class ResultDataManagerTests
                 "EndTime": "2023-02-08T03:00:00",
                 "Results": [
                     {
-                        "Unit": "GB",
+                        "Asset": "GB",
                         "ProducedHeat": 2,
                         "ConsumedElectricity": 0,
                         "Cost": 1200,
