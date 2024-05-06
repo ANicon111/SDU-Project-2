@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="HeatManagement.Views.SourceDataEditor"
+    xmlns:vm="using:HeatManagement.ViewModels"
+    x:DataType="vm:SourceDataEditorViewModel">
+    <Grid RowDefinitions="*,auto" ColumnDefinitions="*,*,*">
+        <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3">
+            <StackPanel>
+                <TextBlock Margin="10" Text="List of source data" FontSize="30" Foreground="#919c94" HorizontalAlignment="Center"/>
+                <ItemsControl ItemsSource="{Binding SourceDataButtonValues}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="2" BorderBrush="#414241">
+                                <Grid ColumnDefinitions="Auto, Auto, *">
+                                    <TextBlock Grid.Column="0" Margin="5" FontSize="30" Text="{Binding StartTime}"/>
+                                    <TextBlock Grid.Column="1" Margin="5" FontSize="30" Text="{Binding EndTime}"/>
+                                    <Button Grid.Column="2" Command="{Binding Delete}" HorizontalAlignment="Right" FontSize="25" Background="#db5344" Cursor="Hand">Delete</Button>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+        <Button FontSize="30" Content="New source data" HorizontalAlignment="Stretch" Command="{Binding OpenSourceDataAdder}" Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Center" Cursor="Hand"/>
+        <Button FontSize="30" Content="Import API data" HorizontalAlignment="Stretch" Command="{Binding OpenImport}" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Center" Cursor="Hand"/>
+        <Button FontSize="30" Content="Export source data" HorizontalAlignment="Stretch" Command="{Binding ExportSourceData}" Grid.Row="1" Grid.Column="2" HorizontalContentAlignment="Center" Cursor="Hand"/>
+        <StackPanel IsVisible="{Binding ImportOpen}" Grid.RowSpan="3" Grid.ColumnSpan="3" Background="Black">
+            <Panel HorizontalAlignment="Stretch">
+                <TextBlock Margin="10" Text="Import source data from API" FontSize="30" HorizontalAlignment="Center"/>
+                <Button FontSize="30" Content="Close" Foreground="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding CloseImport}" Cursor="Hand"/>
+            </Panel>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Start Time (11.05.2024 17:00:00)" Text="{Binding ImportStartTime, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="End Time (11.05.2024 18:00:00)" Text="{Binding ImportEndTime, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Center" Foreground="Red" Text="{Binding ImportSourceError}"/>
+        </StackPanel>
+        <Button Grid.Row="1" IsVisible="{Binding ImportOpen}" Grid.ColumnSpan="3" FontSize="30" Content="Import data" HorizontalAlignment="Stretch" Command="{Binding ImportData}"  HorizontalContentAlignment="Center" Cursor="Hand"/>
+        <StackPanel IsVisible="{Binding NewSourceOpen}" Grid.RowSpan="3" Grid.ColumnSpan="3" Background="Black">
+            <Panel HorizontalAlignment="Stretch">
+                <TextBlock Margin="10" Text="Add source data" FontSize="30" HorizontalAlignment="Center"/>
+                <Button FontSize="30" Content="Close" Foreground="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding CloseSourceDataAdder}" Cursor="Hand"/>
+            </Panel>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Start Time (11.05.2024 17:00:00)" Text="{Binding NewStartTime, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="End Time (11.05.2024 18:00:00)" Text="{Binding NewEndTime, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Electricity Price (3.6)" Text="{Binding NewElectricityPrice, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Heat Demand (2.2)" Text="{Binding NewHeatDemand, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Center" Foreground="Red" Text="{Binding NewSourceError}"/>
+        </StackPanel>
+        <Button Grid.Row="1" IsVisible="{Binding NewSourceOpen}" Grid.ColumnSpan="3" FontSize="30" Content="Add source data" HorizontalAlignment="Stretch" Command="{Binding AddSourceData}"  HorizontalContentAlignment="Center" Cursor="Hand"/>
+    </Grid>
+</UserControl>

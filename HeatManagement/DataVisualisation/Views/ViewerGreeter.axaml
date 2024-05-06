@@ -10,18 +10,18 @@
         <TextBlock Margin ="20" Grid.Column="1" Grid.Row="0" FontSize="50" Foreground="#919c94" HorizontalAlignment="Center" VerticalAlignment="Top" Text="Viewer"/>
         <StackPanel Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Image Margin="20" Width ="150" Height="150" Source="avares://HeatManagement/DataVisualisation/Assets/folder.png"/>
-                <Button Content="Load Asset File" FontSize="35" HorizontalAlignment="Center"  Command="{Binding OpenAssetsFile}"/>
+                <Button Content="Load Asset File" FontSize="35" HorizontalAlignment="Center"  Command="{Binding OpenAssetsFile}" Cursor="Hand"/>
                 <TextBlock Margin="5" HorizontalAlignment="Center" FontSize="20" Foreground="Green" Text="{Binding AssetsSuccess}"/>
                 <TextBlock Margin="5" HorizontalAlignment="Center" FontSize="20" Foreground="Red" Text="{Binding AssetsError}"/>
       </StackPanel>
         <StackPanel Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Image Margin="20" Width ="150" Height="150" Source="avares://HeatManagement/DataVisualisation/Assets/folder.png"/>
-            <Button Content="Load Source File" FontSize="35" HorizontalAlignment="Center" Command="{Binding OpenSourceFile}"/>
+            <Button Content="Load Source File" FontSize="35" HorizontalAlignment="Center" Command="{Binding OpenSourceFile}" Cursor="Hand"/>
             <TextBlock Margin="5" HorizontalAlignment="Center" FontSize="20" Foreground="Green" Text="{Binding SourceSuccess}"/>
             <TextBlock Margin="5" HorizontalAlignment="Center" FontSize="20" Foreground="Red" Text="{Binding SourceError}"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center">
-            <Button Content="Start" FontSize="35" Command="{Binding GoToViewer}"/>
+            <Button Content="Start" FontSize="35" Command="{Binding GoToViewer}" IsEnabled="{Binding CanOpenViewer}" Cursor="Hand"/>
         </StackPanel>
         </Grid>
 </UserControl>

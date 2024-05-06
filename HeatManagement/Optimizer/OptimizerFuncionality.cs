@@ -48,6 +48,7 @@ partial class Optimizer
                 }
                 results.Add(new(
                     asset: asset.Asset.Name,
+                    imagePath: asset.Asset.ImagePath,
                     producedHeat: producedHeat,
                     consumedElectricity: consumedElectricity,
                     cost: cost,

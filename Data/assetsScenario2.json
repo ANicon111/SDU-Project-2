@@ -7,7 +7,7 @@
         "ElectricityCapacity": 0,
         "CO2": 215,
         "AdditionalResources": {
-            "gas": 1.1
+            "Gas": 1.1
         }
     },
     {
@@ -18,7 +18,7 @@
         "ElectricityCapacity": 0,
         "CO2": 265,
         "AdditionalResources": {
-            "oil": 1.2
+            "Oil": 1.2
         }
     },
     {
@@ -29,7 +29,7 @@
         "ElectricityCapacity": 2.7,
         "CO2": 640,
         "AdditionalResources": {
-            "gas": 1.9
+            "Gas": 1.9
         }
     },
     {

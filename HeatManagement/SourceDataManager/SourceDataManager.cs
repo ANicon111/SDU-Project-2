@@ -51,7 +51,7 @@ public class SourceDataManager
         for (int i = 0; i < rowCount; ++i)
         {
             Source source = SourceData[i];
-            rows[i + 1] = FormattableString.Invariant($"{source.StartTime},{source.EndTime},{source.HeatDemand},{source.ElectricityPrice}");
+            rows[i + 1] = FormattableString.Invariant($"{source.StartTime:s},{source.EndTime:s},{source.HeatDemand},{source.ElectricityPrice}");
         }
         return string.Join('\n', rows);
     }

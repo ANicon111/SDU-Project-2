@@ -7,9 +7,10 @@ namespace HeatManagement;
 // Result data should be separated for each production asset and should contain important
 // information such as produced amount of heat, produced / consumed electricity,
 // production costs, consumption of primary energy and produced amount of CO2 
-public struct Result(string asset, double producedHeat, double consumedElectricity, double cost, double producedCO2, Dictionary<string, double> additionalResources)
+public struct Result(string asset, string imagePath, double producedHeat, double consumedElectricity, double cost, double producedCO2, Dictionary<string, double> additionalResources)
 {
     private string asset = asset;
+    private string imagePath = imagePath;
     private double producedHeat = producedHeat;
     private double consumedElectricity = consumedElectricity;
     private double cost = cost;
@@ -18,6 +19,7 @@ public struct Result(string asset, double producedHeat, double consumedElectrici
 
 
     public string Asset { readonly get => asset; set => asset = value; }
+    public string ImagePath { readonly get => imagePath; set => imagePath = value; }
     public double ProducedHeat { readonly get => producedHeat; set => producedHeat = value; }
     public double ConsumedElectricity { readonly get => consumedElectricity; set => consumedElectricity = value; }
     public double Cost { readonly get => cost; set => cost = value; }
