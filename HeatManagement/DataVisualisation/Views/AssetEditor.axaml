@@ -6,24 +6,43 @@
     x:Class="HeatManagement.Views.AssetEditor"
     xmlns:vm="using:HeatManagement.ViewModels"
     x:DataType="vm:AssetEditorViewModel">
-    <ScrollViewer>
-        <StackPanel>
-            <TextBlock Margin="10" Text="List of assets" FontSize="30" Foreground="#919c94" HorizontalAlignment="Center"/>
-            <ItemsControl ItemsSource="{Binding AssetButtonValues}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderThickness="2" BorderBrush="#414241">
-                        <Grid ColumnDefinitions="Auto,Auto,*">
-                            <Viewbox Stretch="UniformToFill" Width="130" Height="130" Grid.Column="0" HorizontalAlignment="Left">
-                                <Image Source="{Binding Image}"/>
-                            </Viewbox>
-                            <TextBlock Grid.Column="1" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding AssetName}" FontSize="40"/>
-                            <Button Grid.Column="2" HorizontalAlignment="Right" FontSize="30" Content="Delete" Command="{Binding Delete}"/>
-                        </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+    <Grid RowDefinitions="*,auto" ColumnDefinitions="*,*">
+        <ScrollViewer Grid.Row="0" Grid.ColumnSpan="2">
+            <StackPanel>
+                <TextBlock Margin="10" Text="List of assets" FontSize="30" Foreground="#919c94" HorizontalAlignment="Center"/>
+                <ItemsControl ItemsSource="{Binding AssetButtonValues}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="2" BorderBrush="#414241">
+                            <Grid ColumnDefinitions="Auto,Auto,*">
+                                <Viewbox Stretch="UniformToFill" Width="130" Height="130" Grid.Column="0" HorizontalAlignment="Left">
+                                    <Image Source="{Binding Image}"/>
+                                </Viewbox>
+                                <TextBlock Grid.Column="1" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{Binding AssetName}" FontSize="40"/>
+                                <Button Grid.Column="2" HorizontalAlignment="Right" FontSize="30" Content="Delete" Command="{Binding Delete}" Background="#db5344" Cursor="Hand"/>
+                            </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+        <Button FontSize="30" Content="New asset" HorizontalAlignment="Stretch" Command="{Binding OpenAssetAdder}" Grid.Row="1" Grid.Column="0" HorizontalContentAlignment="Center" Cursor="Hand"/>
+        <Button FontSize="30" Content="Export assets" HorizontalAlignment="Stretch" Command="{Binding ExportAssets}" Grid.Row="1" Grid.Column="1" HorizontalContentAlignment="Center" Cursor="Hand"/>
+        <StackPanel IsVisible="{Binding NewAssetOpen}" Grid.RowSpan="3" Grid.ColumnSpan="2" Background="Black">
+            <Panel HorizontalAlignment="Stretch">
+                <TextBlock Margin="10" Text="Add asset" FontSize="30" HorizontalAlignment="Center"/>
+                <Button FontSize="30" Content="Close" Foreground="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding CloseAssetAdder}" Cursor="Hand"/>
+            </Panel>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Name (AssetName)" Text="{Binding NewAssetName, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Cost (1200.7)" Text="{Binding NewAssetCost, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Peak heat generation (3.6)" Text="{Binding NewAssetHeat, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Peak electricity production/consumtion (2.2)" Text="{Binding NewAssetElectricity, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="CO2 emissions in kg per MWh of heat produced (230.3)" Text="{Binding NewAssetCO2, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Asset image path (/path/to/image)" Text="{Binding NewImagePath, Mode=TwoWay}"/>
+            <TextBox HorizontalAlignment="Stretch" Watermark="Additional resource usage per MWh of heat produced (oil: 2.3, gas 3.1)" Text="{Binding NewAssetAdditionalResources, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Center" Foreground="Red" Text="{Binding NewAssetError}"/>
         </StackPanel>
-    </ScrollViewer>  
+        <Button Grid.Row="1" IsVisible="{Binding NewAssetOpen}" Grid.ColumnSpan="2" FontSize="30" Content="Add asset" HorizontalAlignment="Stretch" Command="{Binding AddAsset}"  HorizontalContentAlignment="Center" Cursor="Hand"/>
+    </Grid>
 </UserControl>

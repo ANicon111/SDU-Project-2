@@ -10,7 +10,7 @@ using Avalonia.Platform.Storage;
 using HeatManagement.Views;
 using ReactiveUI;
 
-class ViewModelBase : ReactiveObject;
+public class ViewModelBase : ReactiveObject;
 
 class MainWindowViewModel : ViewModelBase
 {
@@ -44,20 +44,38 @@ class MainWindowViewModel : ViewModelBase
 
     public void GoToEditorGreeter()
     {
+
         CurrentPage = new EditorGreeter();
     }
+
     public void GoToViewer()
     {
-        new Optimizer(assetManager, sourceDataManager, resultDataManager).Optimize();
-        CurrentPage = new Viewer()
+        if (CanOpenViewer == true)
         {
-            DataContext = new ViewerViewModel(resultDataManager)
-        };
+            new Optimizer(assetManager, sourceDataManager, resultDataManager).Optimize();
+            CurrentPage = new Viewer()
+            {
+                DataContext = new ViewerViewModel(resultDataManager)
+            };
+        }
     }
 
     public void GoToEditor()
     {
-        GoToAssetsEditor();
+
+        if (assetManager.Loaded == true || assetManager.Loaded && sourceDataManager.Loaded)
+        {
+            GoToAssetsEditor();
+        }
+        if (sourceDataManager.Loaded == true)
+        {
+            GoToSourceDataEditor();
+        }
+    }
+
+    public void GoToSourceDataEditor()
+    {
+        CurrentPage = new SourceDataEditor() { DataContext = new SourceDataEditorViewModel(sourceDataManager) };
     }
 
     public void GoToAssetsEditor()

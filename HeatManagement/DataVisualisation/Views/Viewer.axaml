@@ -6,32 +6,46 @@
     x:Class="HeatManagement.Views.Viewer"
     xmlns:vm="using:HeatManagement.ViewModels"
     x:DataType="vm:ViewerViewModel">
-    <ScrollViewer>
-        <Grid HorizontalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment = "Stretch">
-                <ItemsControl ItemsSource="{Binding ViewerButtonValues}">
-                    <ItemsControl.ItemTemplate>
+    <Grid RowDefinitions="*,auto" ColumnDefinitions="*,*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <ScrollViewer Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Stretch">
+            <StackPanel Orientation="Vertical">
+                <ListBox SelectionMode="Multiple, AlwaysSelected" ItemsSource="{Binding ViewerButtonValues}" SelectedItems="{Binding SelectedGraphs, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Button 
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Source="{Binding Image}" Width="30" Height="30" VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding AssetName}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Button>
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="{Binding Image}" Margin="10" Width="75" Height="75" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                <TextBlock Grid.Column="1" FontSize="30" Text="{Binding GraphName}" Foreground="{Binding Color}" VerticalAlignment="Center"/>
+                            </Grid>
                         </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </StackPanel>
+        </ScrollViewer>
+        <Button Grid.Row="1" Grid.Column="0" Content="Open" FontSize="30" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding OpenGraphs}" Cursor="Hand"/>
+        <Button Grid.Row="1" Grid.Column="1" Content="Export" FontSize="30" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Command="{Binding ExportGraphs}" Cursor="Hand"/>
+        <Grid Grid.RowSpan="2" Grid.ColumnSpan="2" RowDefinitions="auto,*" IsVisible="{Binding GraphOpen}" Background="Black">
+            <Panel Grid.Row="0">
+                <ItemsControl ItemsSource="{Binding SelectedGraphTitles}" HorizontalAlignment="Left"/>
+                <ItemsControl ItemsSource="{Binding SelectedGraphValues}" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding SelectedGraphTime}" HorizontalAlignment="Right" Margin ="0,0,105,0"/>
+            </Panel>
+            <Border Name="GraphArea" Grid.Row="1"/>
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Visible">
+                <Viewbox Stretch="Fill" StretchDirection="Both" Height="{Binding #GraphArea.Bounds.Height}" Width="{Binding GraphWidth}">
+                    <ItemsControl ItemsSource="{Binding GraphLines}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Panel Background="#0000" PointerPressed="PointerPressedHandler" Cursor="Hand"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </Viewbox>
+            </ScrollViewer>
+            <Button FontSize="30" Content="Close" Foreground="Red" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding CloseGraph}" Cursor="Hand"/> 
         </Grid>
-    </ScrollViewer>
+    </Grid>
 </UserControl>
