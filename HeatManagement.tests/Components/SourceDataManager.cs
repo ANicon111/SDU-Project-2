@@ -95,8 +95,8 @@ public class SourceDataManagerTests
     {
         string expected = """
             StartTime,EndTime,HeatDemand,ElectricityPrice
-            07/08/2023 00:00:00,07/08/2023 01:00:00,1.79,752.03
-            07/08/2022 00:00:00,07/08/2022 01:00:00,1.05,743.03
+            2023-07-08T00:00:00,2023-07-08T01:00:00,1.79,752.03
+            2022-07-08T00:00:00,2022-07-08T01:00:00,1.05,743.03
             """.Replace("\r\n", "\n");
         SourceDataManager sourceDataManager = new();
         sourceDataManager.DataAdd(
