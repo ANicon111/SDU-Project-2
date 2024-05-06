@@ -13,6 +13,7 @@ public class ResultDataManagerTests
                 "Results": [
                     {
                         "Asset": "GB",
+                        "ImagePath": "Assets/GB.png",
                         "ProducedHeat": 2,
                         "ConsumedElectricity": 0,
                         "Cost": 1200,
@@ -29,6 +30,7 @@ public class ResultDataManagerTests
                 "Results": [
                     {
                         "Asset": "OB",
+                        "ImagePath": "Assets/OB.png",
                         "ProducedHeat": 2,
                         "ConsumedElectricity": 0,
                         "Cost": 1200,
@@ -59,6 +61,7 @@ public class ResultDataManagerTests
         unitResults.Results.Add(
             new(
                 asset: "GB",
+                imagePath: "Assets/GB.png",
                 producedHeat: 2,
                 consumedElectricity: 0,
                 cost: 1200,
@@ -79,6 +82,7 @@ public class ResultDataManagerTests
                 "Results": [
                     {
                         "Asset": "GB",
+                        "ImagePath": "Assets/GB.png",
                         "ProducedHeat": 2,
                         "ConsumedElectricity": 0,
                         "Cost": 1200,
@@ -108,6 +112,7 @@ public class ResultDataManagerTests
                     "Results": [
                         {
                             "Asset": "GB",
+                            "ImagePath": "Assets/GB.png",
                             "ProducedHeat": 2,
                             "ConsumedElectricity": 0,
                             "Cost": 1200,
@@ -124,6 +129,7 @@ public class ResultDataManagerTests
                     "Results": [
                         {
                             "Asset": "OB",
+                            "ImagePath": "Assets/OB.png",
                             "ProducedHeat": 2,
                             "ConsumedElectricity": 0,
                             "Cost": 1200,
@@ -146,6 +152,7 @@ public class ResultDataManagerTests
                 "Results": [
                     {
                         "Asset": "GB",
+                        "ImagePath": "Assets/GB.png",
                         "ProducedHeat": 2,
                         "ConsumedElectricity": 0,
                         "Cost": 1200,

@@ -67,7 +67,7 @@ public class SourceDataManager
         }
 
         for (int i = 1; i < rows.Length; ++i)
-        {.ConfigureAwait(false)
+        {
             if (!string.IsNullOrWhiteSpace(rows[i]))
             {
                 string[] rowElements = rows[i].Split(",");

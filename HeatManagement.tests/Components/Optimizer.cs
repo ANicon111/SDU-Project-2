@@ -34,6 +34,7 @@ public class OptimizerTests
             results: [
                 new(
                     asset:"GB",
+                    imagePath:"Assets/GB.png",
                     producedHeat:2,
                     consumedElectricity:0,
                     cost:1000,
