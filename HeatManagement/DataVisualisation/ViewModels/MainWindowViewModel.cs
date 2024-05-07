@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 namespace HeatManagement.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -37,6 +38,10 @@ class MainWindowViewModel : ViewModelBase
     private bool canOpenViewer = false;
     public bool CanOpenViewer { get => canOpenViewer; set => this.RaiseAndSetIfChanged(ref canOpenViewer, value); }
 
+    public List<string> SortByOptions { get; } = ["Cost", "CO2", "Electricity Consumption", "Electricity Production", "Peak Heat Capacity"];
+    private string selectedSortByOption = "Cost";
+    public string SelectedSortByOption { get => selectedSortByOption; set => this.RaiseAndSetIfChanged(ref selectedSortByOption, value); }
+
     public void GoToViewerGreeter()
     {
         CurrentPage = new ViewerGreeter();
@@ -52,7 +57,18 @@ class MainWindowViewModel : ViewModelBase
     {
         if (CanOpenViewer == true)
         {
-            new Optimizer(assetManager, sourceDataManager, resultDataManager).Optimize();
+            Optimizer.SortBy sortBy = SelectedSortByOption switch
+            {
+                "Cost" => Optimizer.SortBy.Cost,
+                "CO2" => Optimizer.SortBy.CO2,
+                "Electricity Consumption" => Optimizer.SortBy.ElectricityConsumption,
+                "Electricity Production" => Optimizer.SortBy.ElectricityProduction,
+                "Peak Heat Capacity" => Optimizer.SortBy.HeatCapacity,
+                _ => Optimizer.SortBy.Cost,
+
+            };
+
+            new Optimizer(assetManager, sourceDataManager, resultDataManager).Optimize(sortBy);
             CurrentPage = new Viewer()
             {
                 DataContext = new ViewerViewModel(resultDataManager)

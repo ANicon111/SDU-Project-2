@@ -21,7 +21,14 @@
             <TextBlock Margin="5" HorizontalAlignment="Center" FontSize="20" Foreground="Red" Text="{Binding SourceError}"/>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center">
-            <Button Content="Start" FontSize="35" Command="{Binding GoToViewer}" IsEnabled="{Binding CanOpenViewer}" Cursor="Hand"/>
+            <ListBox HorizontalAlignment="Center" ItemsSource="{Binding SortByOptions}" SelectedItem="{Binding SelectedSortByOption}" IsEnabled="{Binding CanOpenViewer}" SelectionMode="AlwaysSelected">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            <Button HorizontalAlignment="Center" Content="Start" FontSize="35" Command="{Binding GoToViewer}" IsEnabled="{Binding CanOpenViewer}" Cursor="Hand"/>
         </StackPanel>
         </Grid>
 </UserControl>

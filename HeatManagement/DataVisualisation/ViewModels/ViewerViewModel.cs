@@ -181,7 +181,7 @@ class ViewerViewModel : ViewModelBase
     public void OpenGraphs()
     {
         var selectedGraphList = SelectedGraphs.Select((val) => (ValueList: GraphList[val.GraphName], val.Color));
-        double maxValue = selectedGraphList.Select((val) => val.ValueList.Max()).Max();
+        double maxValue = selectedGraphList.Select((val) => val.ValueList.Select((val) => Math.Abs(val)).Max()).Max();
         GraphLines.Clear();
         graphLength = selectedGraphList.First().ValueList.Count;
         GraphWidth = graphLength * 10;
