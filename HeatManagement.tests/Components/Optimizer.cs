@@ -47,7 +47,7 @@ public class OptimizerTests
         ));
 
         ResultDataManager actualResultDataManager = new();
-        new Optimizer(assetManager, sourceDataManager, actualResultDataManager).Optimize();
+        new Optimizer(assetManager, sourceDataManager, actualResultDataManager).Optimize(Optimizer.SortBy.Cost);
 
         Assert.Equal(expectedResultDataManager.JsonExport(), actualResultDataManager.JsonExport());
     }
